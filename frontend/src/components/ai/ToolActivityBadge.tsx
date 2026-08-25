@@ -33,11 +33,11 @@ export const ToolActivityBadge: React.FC<ToolActivityBadgeProps> = ({
     : 'Flowza AI is reasoning over your business data...';
 
   return (
-    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800 text-xs font-medium font-mono animate-pulse shadow-sm">
+    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 text-xs font-medium font-mono animate-pulse shadow-2xs">
       {isInvestigating ? (
-        <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600 dark:text-emerald-400" />
+        <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-600 dark:text-amber-400" />
       ) : (
-        <Database className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+        <Database className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
       )}
       <span>{label}</span>
     </div>

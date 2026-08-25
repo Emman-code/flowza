@@ -111,9 +111,9 @@ export const DashboardLayout: React.FC = () => {
             {/* AI Assistant Quick Pill */}
             <Link
               to="/assistant"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 transition-all cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 transition-all cursor-pointer"
             >
-              <Sparkles size={13} className="text-emerald-500" />
+              <Sparkles size={13} className="text-amber-500" />
               <span>AI Assistant</span>
             </Link>
 
@@ -123,26 +123,26 @@ export const DashboardLayout: React.FC = () => {
             {/* Theme Toggle */}
             <button
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
+              className="p-2 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/60 dark:hover:bg-neutral-800 transition-all cursor-pointer"
               aria-label="Toggle theme"
             >
-              {resolvedTheme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+              {resolvedTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
             {/* User Profile Dropdown Pill */}
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center space-x-2 p-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+                className="flex items-center space-x-2 p-1 rounded-lg hover:bg-neutral-200/60 dark:hover:bg-neutral-800/80 transition-colors cursor-pointer"
               >
-                <div className="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-bold flex items-center justify-center text-xs">
+                <div className="h-8 w-8 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-400 font-bold flex items-center justify-center text-xs font-mono">
                   {user?.full_name?.charAt(0) || 'U'}
                 </div>
                 <div className="hidden md:flex flex-col text-left">
-                  <span className="text-xs font-semibold text-slate-900 dark:text-slate-100 leading-tight">
+                  <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100 leading-tight">
                     {user?.full_name || 'Account'}
                   </span>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono leading-tight truncate max-w-[120px]">
+                  <span className="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono leading-tight truncate max-w-[120px]">
                     {user?.company?.company_name || user?.email}
                   </span>
                 </div>
@@ -155,19 +155,19 @@ export const DashboardLayout: React.FC = () => {
                     className="fixed inset-0 z-30"
                     onClick={() => setDropdownOpen(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white dark:bg-[#0E1015] border border-slate-200/80 dark:border-slate-800/80 shadow-xl p-1.5 z-40 space-y-1">
-                    <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800/60 mb-1">
-                      <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                  <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 shadow-xl p-1.5 z-40 space-y-1">
+                    <div className="px-3 py-2 border-b border-neutral-100 dark:border-neutral-800/60 mb-1">
+                      <p className="text-xs font-bold text-neutral-900 dark:text-white truncate">
                         {user?.full_name}
                       </p>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                      <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">
                         {user?.email}
                       </p>
                     </div>
                     <Link
                       to="/profile"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 transition-colors"
                     >
                       <UserIcon size={15} />
                       <span>Company Profile</span>
@@ -175,7 +175,7 @@ export const DashboardLayout: React.FC = () => {
                     <Link
                       to="/assistant"
                       onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors"
                     >
                       <Sparkles size={15} />
                       <span>Flowza AI Assistant</span>

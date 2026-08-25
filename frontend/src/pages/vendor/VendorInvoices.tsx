@@ -101,31 +101,31 @@ export const VendorInvoices: React.FC = () => {
       </div>
 
       {/* ── Financial Stats Overview Cards ─────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-          <div className="flex justify-between items-center text-slate-500">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono">
+        <div className="p-5 rounded-xl bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 shadow-xs space-y-2">
+          <div className="flex justify-between items-center text-neutral-500">
             <span className="text-xs font-bold uppercase tracking-wider">Total Billed</span>
-            <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400">
+            <div className="p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
               <FileText className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
+          <div className="text-2xl font-black text-neutral-950 dark:text-white">
             ₹{Number(stats?.total_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
           </div>
-          <span className="text-xxs font-semibold text-slate-400 block">{stats?.total_invoices || 0} Invoices Received</span>
+          <span className="text-xxs font-semibold text-neutral-400 block">{stats?.total_invoices || 0} Invoices Received</span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-          <div className="flex justify-between items-center text-emerald-600">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Settled</span>
-            <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600">
+        <div className="p-5 rounded-xl bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 shadow-xs space-y-2">
+          <div className="flex justify-between items-center text-neutral-500">
+            <span className="text-xs font-bold uppercase tracking-wider">Total Settled</span>
+            <div className="p-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-emerald-600 font-mono">
+          <div className="text-2xl font-black text-neutral-950 dark:text-white">
             ₹{Number(stats?.total_paid || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
           </div>
-          <span className="text-xxs font-semibold text-emerald-600/80 block">{stats?.paid_count || 0} Settled Bills</span>
+          <span className="text-xxs font-semibold text-neutral-400 block">{stats?.paid_count || 0} Settled Bills</span>
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">

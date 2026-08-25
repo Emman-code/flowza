@@ -42,7 +42,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   }, [input]);
 
   return (
-    <div className="relative w-full bg-white dark:bg-[#14171F] rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-sm focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 transition-all">
+    <div className="relative w-full bg-white dark:bg-[#14171F] rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-xs focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20 transition-all">
       <div className="flex items-end p-2.5 sm:p-3">
         <textarea
           ref={textareaRef}
@@ -53,7 +53,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           maxLength={1500}
-          className="w-full resize-none bg-transparent border-0 focus:ring-0 focus:outline-hidden text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 max-h-36 leading-relaxed py-1.5 px-1 disabled:opacity-50"
+          className="w-full resize-none bg-transparent border-0 focus:ring-0 focus:outline-hidden text-xs sm:text-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 max-h-36 leading-relaxed py-1.5 px-1 disabled:opacity-50"
         />
 
         <div className="flex items-center gap-2 pl-2 shrink-0">
@@ -61,7 +61,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             type="button"
             onClick={handleSubmit}
             disabled={!input.trim() || isLoading}
-            className="p-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs"
+            className="p-2.5 rounded-lg bg-neutral-950 hover:bg-neutral-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-neutral-950 transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs"
             title="Send inquiry"
           >
             {isLoading ? (
@@ -73,9 +73,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center justify-between px-3 pb-2 pt-0 text-[10px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800/60 font-mono">
+      <div className="flex items-center justify-between px-3 pb-2 pt-0 text-[10px] text-neutral-400 dark:text-neutral-500 border-t border-neutral-100 dark:border-neutral-800/60 font-mono">
         <div className="flex items-center gap-1">
-          <Sparkles className="w-3 h-3 text-emerald-500" />
+          <Sparkles className="w-3 h-3 text-amber-500" />
           <span>Press <strong>Enter</strong> to send</span>
         </div>
         <span>{input.length}/1500</span>

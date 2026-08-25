@@ -23,11 +23,11 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       <div className="w-full px-2">
         <div className="relative flex justify-between items-center w-full">
           {/* Connection line */}
-          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0" />
+          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-neutral-200 dark:bg-neutral-800 -translate-y-1/2 z-0" />
           
           {/* Active colored line */}
           <div
-            className="absolute top-1/2 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 -translate-y-1/2 z-0 transition-all duration-300 ease-in-out"
+            className="absolute top-1/2 left-0 h-0.5 bg-amber-500 -translate-y-1/2 z-0 transition-all duration-300 ease-in-out"
             style={{ width: `${(currentStep / Math.max(1, steps.length - 1)) * 100}%` }}
           />
 
@@ -38,15 +38,15 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
               <div key={idx} className="relative z-10 flex flex-col items-center">
                 <div
                   className={clsx(
-                    'h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all duration-300 ease-in-out select-none shadow-sm',
-                    isCompleted && 'bg-blue-600 border-blue-600 text-white',
-                    isActive && 'bg-white border-blue-600 text-blue-600 dark:bg-slate-900 ring-4 ring-blue-500/20',
-                    !isCompleted && !isActive && 'bg-slate-100 border-slate-300 text-slate-400 dark:bg-slate-800 dark:border-slate-700'
+                    'h-8 w-8 rounded-full flex items-center justify-center text-xs font-mono font-bold border-2 transition-all duration-300 ease-in-out select-none shadow-xs',
+                    isCompleted && 'bg-amber-500 border-amber-500 text-neutral-950',
+                    isActive && 'bg-white border-amber-500 text-amber-600 dark:bg-neutral-900 ring-4 ring-amber-500/20',
+                    !isCompleted && !isActive && 'bg-neutral-100 border-neutral-300 text-neutral-400 dark:bg-neutral-800 dark:border-neutral-700'
                   )}
                 >
                   {isCompleted ? (
                     <svg
-                      className="h-4 w-4"
+                      className="h-3.5 w-3.5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -80,16 +80,16 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 <span
                   className={clsx(
                     'text-xs font-semibold block truncate',
-                    isActive && 'text-blue-600 dark:text-blue-400 font-bold',
-                    isCompleted && 'text-slate-700 dark:text-slate-300',
-                    !isActive && !isCompleted && 'text-slate-400 dark:text-slate-500'
+                    isActive && 'text-amber-600 dark:text-amber-400 font-bold',
+                    isCompleted && 'text-neutral-700 dark:text-neutral-300',
+                    !isActive && !isCompleted && 'text-neutral-400 dark:text-neutral-500'
                   )}
                   title={step.title}
                 >
                   {step.title}
                 </span>
                 {step.description && (
-                  <span className="text-xxs text-slate-400 dark:text-slate-500 block truncate hidden md:block">
+                  <span className="text-[10px] text-neutral-400 dark:text-neutral-500 block truncate hidden md:block">
                     {step.description}
                   </span>
                 )}
@@ -100,7 +100,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
       </div>
 
       {/* Step Form Content */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm">
+      <div className="bg-white dark:bg-[#14161F] border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 shadow-xs">
         {children}
       </div>
     </div>

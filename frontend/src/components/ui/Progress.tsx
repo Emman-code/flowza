@@ -30,11 +30,11 @@ export const Progress: React.FC<ProgressProps> = ({
   };
 
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-blue-600 to-indigo-600',
-    success: 'bg-gradient-to-r from-emerald-500 to-teal-500',
-    warning: 'bg-gradient-to-r from-amber-500 to-orange-500',
-    error: 'bg-gradient-to-r from-red-500 to-rose-600',
-    info: 'bg-gradient-to-r from-cyan-500 to-blue-500',
+    primary: 'bg-amber-500',
+    success: 'bg-emerald-500',
+    warning: 'bg-amber-500',
+    error: 'bg-red-500',
+    info: 'bg-neutral-900 dark:bg-neutral-100',
   };
 
   return (

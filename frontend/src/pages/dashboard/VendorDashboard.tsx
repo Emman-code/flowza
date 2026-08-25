@@ -107,8 +107,8 @@ export const VendorDashboard: React.FC = () => {
           <div className="flex items-center gap-3 self-start sm:self-center">
             <button
               type="button"
-              onClick={() => navigate('/ai', { state: { initialPrompt: 'Analyze my procurement spend, top suppliers, and pending orders this month.' } })}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
+              onClick={() => navigate('/assistant', { state: { initialPrompt: 'Analyze my procurement spend, top suppliers, and pending orders this month.' } })}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 text-xs font-mono font-semibold shadow-xs transition-all cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Ask Flowza AI</span>

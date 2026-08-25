@@ -125,22 +125,22 @@ export const FlowzaAssistant: React.FC = () => {
   return (
     <div className="flex flex-col h-[calc(100dvh-5.5rem)] max-w-5xl mx-auto py-1">
       {/* Top Header Card */}
-      <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white dark:bg-[#0E1015] border border-slate-200/80 dark:border-slate-800/80 shadow-xs mb-3 shrink-0">
+      <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 shadow-xs mb-3 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-sm shrink-0">
-            <Sparkles className="w-5 h-5" />
+          <div className="w-9 h-9 rounded-lg bg-neutral-950 dark:bg-amber-500 text-white dark:text-neutral-950 flex items-center justify-center font-bold shadow-xs shrink-0">
+            <Sparkles className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-base font-bold text-slate-900 dark:text-white font-heading">
+              <h1 className="text-base font-bold text-neutral-950 dark:text-white font-heading">
                 Flowza AI Business Copilot
               </h1>
-              <Badge variant="emerald" dot className="uppercase text-[10px]">
+              <Badge variant="amber" dot className="uppercase text-[10px] font-mono">
                 Active
               </Badge>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Role: <span className="font-semibold text-slate-700 dark:text-slate-300 capitalize">{user?.role?.name || 'User'}</span>
+            <p className="text-xs text-neutral-500 font-mono">
+              Role: <span className="font-semibold text-neutral-700 dark:text-neutral-300 capitalize">{user?.role?.name || 'User'}</span>
               {user?.company?.company_name && ` • ${user.company.company_name}`}
             </p>
           </div>
@@ -151,7 +151,7 @@ export const FlowzaAssistant: React.FC = () => {
             <button
               type="button"
               onClick={handleClearChat}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 border border-neutral-200 dark:border-neutral-800 transition-colors cursor-pointer"
               title="Clear conversation"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -162,51 +162,51 @@ export const FlowzaAssistant: React.FC = () => {
       </div>
 
       {/* Main Conversation Container */}
-      <div className="flex-1 overflow-y-auto px-3 sm:px-5 py-4 rounded-2xl bg-white dark:bg-[#0E1015] border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-col justify-between">
+      <div className="flex-1 overflow-y-auto px-3 sm:px-5 py-4 rounded-xl bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 shadow-xs flex flex-col justify-between">
         {messages.length === 0 ? (
           /* Empty State Hero Greeting */
           <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto text-center py-6">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-4 shadow-sm">
-              <Bot className="w-7 h-7" />
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 mb-4 shadow-2xs">
+              <Bot className="w-6 h-6" />
             </div>
 
-            <h2 className="font-heading text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            <h2 className="font-heading text-xl sm:text-2xl font-bold text-neutral-950 dark:text-white mb-2">
               Welcome back, {user?.full_name?.split(' ')[0] || 'Partner'}!
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-6 max-w-lg leading-relaxed">
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-6 max-w-lg leading-relaxed">
               I am your Flowza AI business assistant. Ask me anything about your{' '}
               <strong>inventory levels</strong>, <strong>active purchase orders</strong>,{' '}
               <strong>sales & spend analytics</strong>, or <strong>unpaid invoices</strong>.
             </p>
 
             {/* Feature Highlights Banner */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full mb-6 text-left">
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 flex items-start gap-2.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full mb-6 text-left font-mono">
+              <div className="p-3.5 rounded-lg bg-[#F7F6F2] dark:bg-[#14161F] border border-neutral-200 dark:border-neutral-800 flex items-start gap-2.5">
+                <ShieldCheck className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">Strict Isolation</h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                    Company-scoped data boundaries enforced.
+                  <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100">Strict Isolation</h4>
+                  <p className="text-[10px] text-neutral-500 leading-snug">
+                    Company-scoped tenant data boundaries.
                   </p>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 flex items-start gap-2.5">
-                <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
+              <div className="p-3.5 rounded-lg bg-[#F7F6F2] dark:bg-[#14161F] border border-neutral-200 dark:border-neutral-800 flex items-start gap-2.5">
+                <Zap className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">Tool-Driven</h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+                  <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100">Tool-Driven</h4>
+                  <p className="text-[10px] text-neutral-500 leading-snug">
                     Live database verification with 0 hallucinations.
                   </p>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 flex items-start gap-2.5">
-                <Info className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mt-0.5 shrink-0" />
+              <div className="p-3.5 rounded-lg bg-[#F7F6F2] dark:bg-[#14161F] border border-neutral-200 dark:border-neutral-800 flex items-start gap-2.5">
+                <Info className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">Decimal Exact</h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                    Accurate monetary balances and stock counts.
+                  <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100">Decimal Exact</h4>
+                  <p className="text-[10px] text-neutral-500 leading-snug">
+                    Accurate monetary balances & GST.
                   </p>
                 </div>
               </div>
@@ -229,7 +229,7 @@ export const FlowzaAssistant: React.FC = () => {
             {/* Investigating State Indicator */}
             {isLoading && (
               <div className="flex items-center gap-3 my-3">
-                <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm animate-pulse">
+                <div className="w-8 h-8 rounded-lg bg-neutral-950 dark:bg-amber-500 text-white dark:text-neutral-950 flex items-center justify-center shrink-0 shadow-xs animate-pulse">
                   <Bot className="w-4 h-4" />
                 </div>
                 <ToolActivityBadge toolName={activeTool} isInvestigating={true} />

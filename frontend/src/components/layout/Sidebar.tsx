@@ -36,13 +36,13 @@ export const Sidebar: React.FC = () => {
   const roleName = user?.role?.name || 'vendor';
 
   const getRoleBadge = () => {
-    const variants: Record<string, 'destructive' | 'indigo' | 'emerald'> = {
+    const variants: Record<string, 'destructive' | 'indigo' | 'amber'> = {
       admin: 'destructive',
       vendor: 'indigo',
-      supplier: 'emerald',
+      supplier: 'amber',
     };
     return (
-      <Badge variant={variants[roleName] || 'emerald'} dot className="uppercase text-[10px]">
+      <Badge variant={variants[roleName] || 'amber'} dot className="uppercase text-[10px] font-mono">
         {roleName}
       </Badge>
     );
@@ -119,7 +119,7 @@ export const Sidebar: React.FC = () => {
     {
       label: 'Flowza AI Assistant',
       path: '/assistant',
-      icon: <Sparkles size={18} className="text-emerald-500" />,
+      icon: <Sparkles size={18} className="text-amber-500" />,
       highlight: true,
     },
     {
@@ -146,7 +146,7 @@ export const Sidebar: React.FC = () => {
 
       {/* Sidebar Enclosure */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col justify-between bg-white dark:bg-[#0A0C10] border-r border-slate-200/80 dark:border-slate-800/80 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col justify-between bg-[#F7F6F2] dark:bg-[#0D0E12] border-r border-neutral-200 dark:border-neutral-800 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isCollapsed ? 'w-[72px]' : 'w-64'
         } ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
@@ -154,7 +154,7 @@ export const Sidebar: React.FC = () => {
       >
         {/* Top Header */}
         <div>
-          <div className="h-16 px-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60">
+          <div className="h-16 px-4 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800">
             <div className="flex items-center space-x-3 overflow-hidden">
               <FlowzaLogo size="xs" showText={!isCollapsed} />
             </div>
@@ -162,7 +162,7 @@ export const Sidebar: React.FC = () => {
             {/* Mobile Close Button */}
             <button
               onClick={close}
-              className="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              className="lg:hidden p-1.5 rounded-lg text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 cursor-pointer"
             >
               <X size={18} />
             </button>
@@ -170,8 +170,8 @@ export const Sidebar: React.FC = () => {
 
           {/* User Role Pill */}
           {!isCollapsed && (
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
-              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Role Access</span>
+            <div className="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+              <span className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Role Access</span>
               {getRoleBadge()}
             </div>
           )}
@@ -186,10 +186,10 @@ export const Sidebar: React.FC = () => {
                   if (window.innerWidth < 1024) close();
                 }}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs md:text-sm font-medium transition-all group cursor-pointer ${
+                  `flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs md:text-sm font-medium transition-all group cursor-pointer ${
                     isActive
-                      ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-800/60'
+                      ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-semibold'
+                      : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60'
                   } ${isCollapsed ? 'justify-center px-2' : ''}`
                 }
               >

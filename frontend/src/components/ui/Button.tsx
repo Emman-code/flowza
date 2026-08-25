@@ -12,17 +12,17 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', isLoading, trailingIcon, iconCircle = false, children, disabled, ...props }, ref) => {
-    const baseStyles = 'group relative inline-flex items-center justify-center font-medium rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950 transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none cursor-pointer select-none active:scale-[0.98]';
+    const baseStyles = 'group relative inline-flex items-center justify-center font-medium rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 transition-all duration-150 disabled:opacity-50 disabled:pointer-events-none cursor-pointer select-none active:scale-[0.98]';
     
     const variants = {
-      primary: 'bg-emerald-600 hover:bg-emerald-500 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500 dark:text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.08)] border border-emerald-500/30',
-      indigo: 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.08)] border border-indigo-500/30',
-      secondary: 'bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-900/90 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200/80 dark:border-slate-800 shadow-sm',
-      outline: 'border border-slate-200 dark:border-slate-800 bg-transparent text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900/60 shadow-sm',
-      ghost: 'bg-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100',
-      glass: 'glass-panel text-slate-900 dark:text-white hover:bg-white/90 dark:hover:bg-slate-800/90 shadow-sm',
-      destructive: 'bg-red-600 hover:bg-red-500 text-white shadow-sm border border-red-500/20',
-      link: 'bg-transparent text-emerald-600 dark:text-emerald-400 underline-offset-4 hover:underline p-0 focus:ring-transparent focus:ring-offset-0',
+      primary: 'bg-neutral-950 hover:bg-neutral-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-neutral-950 shadow-xs border border-neutral-800 dark:border-amber-400/30',
+      indigo: 'bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-neutral-950 shadow-xs',
+      secondary: 'bg-neutral-100 hover:bg-neutral-200/80 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 border border-neutral-200 dark:border-neutral-700 shadow-xs',
+      outline: 'border border-neutral-300 dark:border-neutral-700 bg-transparent text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 shadow-xs',
+      ghost: 'bg-transparent text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 hover:text-neutral-900 dark:hover:text-neutral-100',
+      glass: 'bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md text-neutral-900 dark:text-white hover:bg-white dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 shadow-xs',
+      destructive: 'bg-red-600 hover:bg-red-500 text-white shadow-xs border border-red-500/20',
+      link: 'bg-transparent text-amber-600 dark:text-amber-400 underline-offset-4 hover:underline p-0 focus:ring-transparent focus:ring-offset-0',
     };
 
     const sizes = {

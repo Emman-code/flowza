@@ -8,8 +8,8 @@ interface GuardProps {
 }
 
 const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] dark:bg-[#08090A]">
-    <div className="h-8 w-8 rounded-full border-2 border-slate-200 dark:border-slate-800 border-t-emerald-500 animate-spin" />
+  <div className="min-h-screen flex items-center justify-center bg-[#F7F6F2] dark:bg-[#0D0E12]">
+    <div className="h-8 w-8 rounded-full border-2 border-neutral-200 dark:border-neutral-800 border-t-amber-500 animate-spin" />
   </div>
 );
 

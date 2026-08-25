@@ -21,7 +21,7 @@ export const KPICard: React.FC<KPICardProps> = ({
   trendPct,
   trendLabel = 'vs prior period',
   description,
-  iconBgClass = 'bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 border-primary-200 dark:border-primary-800/60',
+  iconBgClass = 'bg-amber-500/10 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30',
   className = '',
 }) => {
   const hasTrend = trendPct !== undefined && trendPct !== null;
@@ -30,24 +30,24 @@ export const KPICard: React.FC<KPICardProps> = ({
 
   return (
     <Card
-      className={`p-5 transition-all duration-200 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600 ${className}`}
+      className={`p-5 transition-all duration-200 hover:shadow-xs hover:border-neutral-300 dark:hover:border-neutral-700 bg-white dark:bg-[#12141A] border-neutral-200 dark:border-neutral-800 ${className}`}
       role="region"
       aria-label={`${label}: ${value}`}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1.5 flex-1 min-w-0 pr-2">
-          <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-heading truncate">
+          <p className="text-[10px] font-mono font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider truncate">
             {label}
           </p>
           <div className="flex items-baseline gap-2 flex-wrap">
-            <h3 className="text-2xl sm:text-3xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tight">
+            <h3 className="text-2xl sm:text-3xl font-extrabold font-mono text-neutral-950 dark:text-white tracking-tight">
               {value}
             </h3>
           </div>
         </div>
 
         <div
-          className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border ${iconBgClass} shadow-sm`}
+          className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border ${iconBgClass} shadow-2xs`}
           aria-hidden="true"
         >
           {icon}
@@ -55,16 +55,16 @@ export const KPICard: React.FC<KPICardProps> = ({
       </div>
 
       {(hasTrend || description) && (
-        <div className="mt-3.5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+        <div className="mt-3.5 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs">
           {hasTrend && (
             <div className="flex items-center gap-1.5 font-medium">
               <span
-                className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md font-mono text-[11px] font-bold ${
+                className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[11px] font-bold ${
                   isPositive
-                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50'
+                    ? 'bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50'
                     : isNegative
                     ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50'
-                    : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                    : 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400'
                 }`}
               >
                 {isPositive ? (

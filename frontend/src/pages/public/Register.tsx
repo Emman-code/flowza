@@ -12,6 +12,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../..
 import { MultiStepForm } from '../../components/forms/MultiStepForm';
 import { toast } from 'sonner';
 import { ArrowLeft, User, Building, MapPin, Key, Sun, Moon, Store, Truck } from 'lucide-react';
+import { FlowzaLogo } from '../../components/common/FlowzaLogo';
 
 const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
@@ -328,40 +329,36 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 overflow-hidden">
-      {/* Background Glows */}
-      <div className="absolute top-10 left-10 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-600/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 bg-[#F7F6F2] dark:bg-[#0D0E12] text-neutral-900 dark:text-neutral-100 transition-colors duration-200">
       {/* Navigation top bar */}
       <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-20">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-white transition-colors font-heading"
+          className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors"
         >
-          <ArrowLeft size={16} /> Back to Flowza Overview
+          <ArrowLeft size={14} /> Back to Overview
         </Link>
         <button
           onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-          className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+          className="p-2 rounded text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 transition-all cursor-pointer"
           title="Toggle theme"
         >
-          {resolvedTheme === 'dark' ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} />}
+          {resolvedTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
         </button>
       </div>
 
       <div className="w-full max-w-2xl space-y-6 relative z-10 pt-8">
-        <Card className="glass-panel shadow-2xl border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden p-2">
+        <Card className="shadow-lg border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] rounded-xl overflow-hidden p-2">
           <CardHeader className="text-center space-y-3 pt-6 pb-4">
-            <div className="mx-auto h-12 w-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-emerald-400 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shadow-emerald-500/30 border border-emerald-300/30">
-              F
+            <div className="flex justify-center pb-1">
+              <FlowzaLogo size="lg" badge="B2B Network" />
             </div>
             <div>
-              <CardTitle className="text-2xl font-extrabold text-slate-900 dark:text-white font-heading">
-                Initialize Flowza Workspace
+              <CardTitle className="text-2xl font-extrabold text-neutral-950 dark:text-white font-heading">
+                Create Flowza Account
               </CardTitle>
-              <CardDescription className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Join verified B2B vendors & wholesale suppliers on the precision procurement network
+              <CardDescription className="text-xs text-neutral-500 font-mono mt-1">
+                Join verified retailers & wholesale suppliers coordinating purchase orders
               </CardDescription>
             </div>
           </CardHeader>
@@ -373,43 +370,42 @@ export const Register: React.FC = () => {
                   {/* Step 1: Account Role Selection Upfront */}
                   {step === 0 && (
                     <div className="space-y-4 animate-in fade-in duration-300">
-                      <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 border-b border-slate-200 dark:border-slate-800 pb-2 mb-4">
-                        <Key size={18} />
-                        <span className="font-bold text-sm font-heading">Step 1: Select Platform Role</span>
+                      <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 border-b border-neutral-200 dark:border-neutral-800 pb-2 mb-4 font-mono">
+                        <Key size={16} />
+                        <span className="font-bold text-xs uppercase tracking-wider">Step 1: Select Platform Role</span>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div
                           onClick={() => methods.setValue('role_name', 'vendor')}
-                          className={`p-5 rounded-2xl border-2 cursor-pointer transition-all ${
+                          className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${
                             selectedRole === 'vendor'
-                              ? 'border-emerald-500 bg-emerald-500/10 dark:bg-emerald-500/15 shadow-lg shadow-emerald-900/10'
-                              : 'border-slate-200 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-slate-700 bg-white dark:bg-slate-900'
+                              ? 'border-amber-500 bg-amber-500/10 text-neutral-950 dark:text-white shadow-xs'
+                              : 'border-neutral-200 dark:border-neutral-800 hover:border-amber-400 dark:hover:border-neutral-700 bg-white dark:bg-[#14161F]'
                           }`}
                         >
-                          <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3 border border-emerald-500/30">
-                            <Store size={22} />
+                          <div className="h-9 w-9 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+                            <Store size={20} />
                           </div>
-                          <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading">Vendor (Purchaser)</h3>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          <h3 className="text-base font-bold text-neutral-950 dark:text-white">Retailer (Buyer)</h3>
+                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                             Buy wholesale goods for retail stores, supermarkets, grocery shops, hotels, & restaurants.
-
                           </p>
                         </div>
 
                         <div
                           onClick={() => methods.setValue('role_name', 'supplier')}
-                          className={`p-5 rounded-2xl border-2 cursor-pointer transition-all ${
+                          className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${
                             selectedRole === 'supplier'
-                              ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/40 shadow-md'
-                              : 'border-slate-200 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-slate-700 bg-white dark:bg-slate-900'
+                              ? 'border-amber-500 bg-amber-500/10 text-neutral-950 dark:text-white shadow-xs'
+                              : 'border-neutral-200 dark:border-neutral-800 hover:border-amber-400 dark:hover:border-neutral-700 bg-white dark:bg-[#14161F]'
                           }`}
                         >
-                          <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
-                            <Truck size={22} />
+                          <div className="h-9 w-9 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+                            <Truck size={20} />
                           </div>
-                          <h3 className="text-base font-bold text-slate-900 dark:text-white">Supplier (Distributor)</h3>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          <h3 className="text-base font-bold text-neutral-950 dark:text-white">Wholesale Supplier</h3>
+                          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                             Supply bulk inventory to retail networks as a manufacturer, wholesaler, or distributor.
                           </p>
                         </div>
@@ -500,9 +496,9 @@ export const Register: React.FC = () => {
                 </MultiStepForm>
 
                 {/* Footer Controls */}
-                <div className="flex items-center justify-between gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex items-center justify-between gap-4 pt-4 border-t border-neutral-200 dark:border-neutral-800">
                   {step > 0 ? (
-                    <Button type="button" variant="outline" onClick={handleBack}>
+                    <Button type="button" variant="outline" onClick={handleBack} className="text-xs font-mono">
                       Back
                     </Button>
                   ) : (
@@ -510,21 +506,29 @@ export const Register: React.FC = () => {
                   )}
 
                   {step < stepsList.length - 1 ? (
-                    <Button type="button" onClick={handleNext} className="shadow-md">
-                      Next Step
-                    </Button>
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      className="px-5 py-2.5 rounded text-xs font-mono font-bold bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 transition-all cursor-pointer shadow-sm"
+                    >
+                      Next Step →
+                    </button>
                   ) : (
-                    <Button type="submit" isLoading={submitting} className="shadow-md bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
-                      Complete Registration
+                    <Button
+                      type="submit"
+                      isLoading={submitting}
+                      className="shadow-md font-mono text-xs font-bold bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400"
+                    >
+                      Complete Registration →
                     </Button>
                   )}
                 </div>
               </form>
             </FormProvider>
 
-            <div className="text-center text-xs text-slate-500 dark:text-slate-400 mt-6">
+            <div className="text-center text-xs text-neutral-500 mt-6 border-t border-neutral-100 dark:border-neutral-800/80 pt-4">
               Already have an account?{' '}
-              <Link to="/login" className="font-bold text-blue-600 dark:text-blue-400 hover:underline">
+              <Link to="/login" className="font-semibold text-amber-600 dark:text-amber-400 hover:underline">
                 Sign In
               </Link>
             </div>

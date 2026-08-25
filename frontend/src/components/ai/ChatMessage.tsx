@@ -101,7 +101,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     >
       {/* Assistant Avatar */}
       {!isUser && (
-        <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+        <div className="w-8 h-8 rounded-lg bg-neutral-950 dark:bg-amber-500 text-white dark:text-neutral-950 flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
           <Bot className="w-4 h-4" />
         </div>
       )}
@@ -113,12 +113,12 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         }`}
       >
         <div
-          className={`p-3.5 sm:p-4 rounded-2xl shadow-sm text-xs sm:text-sm ${
+          className={`p-3.5 sm:p-4 rounded-xl shadow-xs text-xs sm:text-sm ${
             isUser
-              ? 'bg-emerald-600 text-white rounded-br-none'
+              ? 'bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 rounded-br-none'
               : message.isError
               ? 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 rounded-bl-none'
-              : 'bg-white dark:bg-[#0E1015] border border-slate-200/90 dark:border-slate-800/90 text-slate-800 dark:text-slate-200 rounded-bl-none'
+              : 'bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 rounded-bl-none'
           }`}
         >
           {isUser ? (
@@ -132,14 +132,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
         {/* Data Sources Attribution Badge */}
         {!isUser && message.sources && message.sources.length > 0 && (
-          <div className="flex items-center gap-1.5 mt-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-            <Database className="w-3 h-3 text-slate-400" />
+          <div className="flex items-center gap-1.5 mt-2 text-[11px] text-neutral-500 font-mono">
+            <Database className="w-3 h-3 text-neutral-400" />
             <span>Consulted Sources:</span>
             <div className="flex flex-wrap gap-1">
               {message.sources.map((s, idx) => (
                 <span
                   key={idx}
-                  className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-semibold"
+                  className="px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-[10px] font-mono font-semibold"
                 >
                   {s}
                 </span>
@@ -156,7 +156,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                 key={idx}
                 type="button"
                 onClick={() => navigate(act.path)}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800 text-xs font-semibold transition-colors cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 text-amber-800 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800 text-xs font-mono font-semibold transition-colors cursor-pointer shadow-2xs"
               >
                 {ACTION_ICONS[act.icon || 'ArrowRight'] || <ArrowRight className="w-3 h-3" />}
                 <span>{act.label}</span>
@@ -166,14 +166,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         )}
 
         {/* Timestamp */}
-        <span className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 px-1 font-mono">
+        <span className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-1 px-1 font-mono">
           {message.timestamp}
         </span>
       </div>
 
       {/* User Avatar */}
       {isUser && (
-        <div className="w-8 h-8 rounded-xl bg-slate-800 dark:bg-slate-700 flex items-center justify-center text-white shrink-0 shadow-sm mt-0.5">
+        <div className="w-8 h-8 rounded-lg bg-neutral-800 dark:bg-neutral-700 flex items-center justify-center text-white shrink-0 shadow-2xs mt-0.5">
           <User className="w-4 h-4" />
         </div>
       )}

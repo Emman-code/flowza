@@ -269,7 +269,9 @@ export const App: React.FC = () => {
 
               {/* Flowza Agentic AI Assistant Routes */}
               <Route path="/ai" element={<FlowzaAssistant />} />
+              <Route path="/assistant" element={<FlowzaAssistant />} />
               <Route path="/dashboard/ai" element={<FlowzaAssistant />} />
+              <Route path="/dashboard/assistant" element={<FlowzaAssistant />} />
               <Route path="/dashboard/vendor/ai" element={<FlowzaAssistant />} />
               <Route path="/dashboard/supplier/ai" element={<FlowzaAssistant />} />
               <Route path="/dashboard/admin/ai" element={<FlowzaAssistant />} />

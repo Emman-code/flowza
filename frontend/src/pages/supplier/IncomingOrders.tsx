@@ -244,63 +244,63 @@ export const IncomingOrders: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              <h1 className="text-2xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-heading">
                 Incoming Retail Orders & Fulfillment
               </h1>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xxs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Fulfillment
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xxs font-mono font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" /> Live Fulfillment
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               Review, accept, pack, and ship procurement orders from your retail vendor network
             </p>
           </div>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="p-4 border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
-            <p className="text-xxs font-bold text-slate-500 uppercase tracking-wider">Total Received</p>
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-1 font-mono">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 font-mono">
+          <Card className="p-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A]">
+            <p className="text-xxs font-bold text-neutral-500 uppercase tracking-wider">Total Received</p>
+            <h3 className="text-2xl font-black text-neutral-950 dark:text-white mt-1">
               {stats?.total_orders ?? orders.length}
             </h3>
-            <p className="text-xxs text-slate-400 mt-0.5">All-time order requests</p>
+            <p className="text-xxs text-neutral-400 mt-0.5">All-time order requests</p>
           </Card>
-          <Card className="p-4 border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
-            <p className="text-xxs font-bold text-amber-500 uppercase tracking-wider">Awaiting Response</p>
-            <h3 className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1 font-mono">
+          <Card className="p-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A]">
+            <p className="text-xxs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Awaiting Response</p>
+            <h3 className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1">
               {stats?.pending_orders ?? 0}
             </h3>
-            <p className="text-xxs text-slate-400 mt-0.5">Pending accept/reject</p>
+            <p className="text-xxs text-neutral-400 mt-0.5">Pending accept/reject</p>
           </Card>
-          <Card className="p-4 border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
-            <p className="text-xxs font-bold text-blue-500 uppercase tracking-wider">In Fulfillment</p>
-            <h3 className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1 font-mono">
+          <Card className="p-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A]">
+            <p className="text-xxs font-bold text-neutral-500 uppercase tracking-wider">In Fulfillment</p>
+            <h3 className="text-2xl font-black text-neutral-900 dark:text-white mt-1">
               {(stats?.accepted_orders || 0) + (stats?.processing_orders || stats?.in_progress_orders || 0) + (stats?.packed_orders || 0)}
             </h3>
-            <p className="text-xxs text-slate-400 mt-0.5">Accepted, processing & packed</p>
+            <p className="text-xxs text-neutral-400 mt-0.5">Accepted, processing & packed</p>
           </Card>
-          <Card className="p-4 border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
-            <p className="text-xxs font-bold text-emerald-500 uppercase tracking-wider">Settled & Completed</p>
-            <h3 className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1 font-mono">
+          <Card className="p-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A]">
+            <p className="text-xxs font-bold text-neutral-500 uppercase tracking-wider">Settled & Completed</p>
+            <h3 className="text-2xl font-black text-neutral-900 dark:text-white mt-1">
               {stats?.completed_orders ?? 0}
             </h3>
-            <p className="text-xxs text-slate-400 mt-0.5">Inventory fulfilled</p>
+            <p className="text-xxs text-neutral-400 mt-0.5">Inventory fulfilled</p>
           </Card>
         </div>
 
         {/* Filter Tabs & Search Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-3">
           {/* Scrollable Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                    ? 'bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 shadow-xs'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60'
                 }`}
               >
                 {tab.label}
@@ -467,7 +467,7 @@ export const IncomingOrders: React.FC = () => {
                           <Button
                             size="sm"
                             onClick={() => handleOpenAccept(ord)}
-                            className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
+                            className="text-xs bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold"
                           >
                             <Check className="w-3.5 h-3.5 mr-1" /> Accept
                           </Button>
@@ -478,7 +478,7 @@ export const IncomingOrders: React.FC = () => {
                         <Button
                           size="sm"
                           onClick={() => statusMutation.mutate({ orderId: ord.raw_id, status: 'processing' })}
-                          className="text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold"
+                          className="text-xs bg-neutral-900 text-white dark:bg-neutral-800 hover:bg-neutral-800 font-mono font-bold"
                           disabled={statusMutation.isPending}
                         >
                           <Package className="w-3.5 h-3.5 mr-1" /> Start Processing
@@ -489,7 +489,7 @@ export const IncomingOrders: React.FC = () => {
                         <Button
                           size="sm"
                           onClick={() => statusMutation.mutate({ orderId: ord.raw_id, status: 'packed' })}
-                          className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
+                          className="text-xs bg-neutral-900 text-white dark:bg-neutral-800 hover:bg-neutral-800 font-mono font-bold"
                           disabled={statusMutation.isPending}
                         >
                           <Box className="w-3.5 h-3.5 mr-1" /> Mark Packed
@@ -500,7 +500,7 @@ export const IncomingOrders: React.FC = () => {
                         <Button
                           size="sm"
                           onClick={() => handleOpenShip(ord)}
-                          className="text-xs bg-teal-600 hover:bg-teal-700 text-white font-bold"
+                          className="text-xs bg-neutral-900 text-white dark:bg-neutral-800 hover:bg-neutral-800 font-mono font-bold"
                         >
                           <Truck className="w-3.5 h-3.5 mr-1" /> Mark Shipped
                         </Button>
@@ -511,7 +511,7 @@ export const IncomingOrders: React.FC = () => {
                           size="sm"
                           onClick={() => handleViewOrGenerateInvoice(ord)}
                           disabled={isGeneratingInvoice}
-                          className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
+                          className="text-xs bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold"
                         >
                           <FileText className="w-3.5 h-3.5 mr-1" /> Invoice
                         </Button>
@@ -534,16 +534,16 @@ export const IncomingOrders: React.FC = () => {
         >
           {selectedOrder && (
             <div className="space-y-4 pt-1">
-              <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                <span className="text-xxs font-bold text-emerald-400 uppercase tracking-wider block">Accepting:</span>
-                <p className="text-sm font-bold text-white mt-0.5">{selectedOrder.title}</p>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Vendor: {selectedOrder.vendor?.company_name} • Total: <strong className="text-emerald-400">{selectedOrder.formatted_total}</strong>
+              <div className="p-3.5 rounded-xl bg-neutral-100 dark:bg-[#14161F] border border-neutral-200 dark:border-neutral-800">
+                <span className="text-xxs font-mono font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">Accepting:</span>
+                <p className="text-sm font-bold text-neutral-950 dark:text-white mt-0.5">{selectedOrder.title}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                  Vendor: {selectedOrder.vendor?.company_name} • Total: <strong className="text-amber-600 dark:text-amber-400">{selectedOrder.formatted_total}</strong>
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1.5 font-mono">
                   Confirmation Note to Vendor (Optional)
                 </label>
                 <textarea
@@ -551,19 +551,19 @@ export const IncomingOrders: React.FC = () => {
                   value={acceptNote}
                   onChange={(e) => setAcceptNote(e.target.value)}
                   placeholder="e.g. Confirmed. We will pack and dispatch on schedule."
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950 p-3 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#14161F] p-3 text-xs text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-                <Button variant="outline" size="sm" onClick={() => setIsAcceptModalOpen(false)}>
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200 dark:border-neutral-800">
+                <Button variant="outline" size="sm" onClick={() => setIsAcceptModalOpen(false)} className="font-mono text-xs">
                   Cancel
                 </Button>
                 <Button
                   size="sm"
                   onClick={() => acceptMutation.mutate({ orderId: selectedOrder.raw_id, note: acceptNote })}
                   disabled={acceptMutation.isPending}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4"
+                  className="bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs px-4"
                 >
                   {acceptMutation.isPending ? 'Confirming...' : 'Confirm Acceptance ✓'}
                 </Button>

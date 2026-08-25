@@ -242,8 +242,8 @@ export const VendorOrders: React.FC = () => {
             <p className="text-xxs text-slate-400 mt-0.5">Processing, packed & in transit</p>
           </Card>
           <Card className="p-4 border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
-            <p className="text-xxs font-bold text-emerald-500 uppercase tracking-wider">Completed</p>
-            <h3 className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1 font-mono">
+            <p className="text-xxs font-mono font-bold text-neutral-500 uppercase tracking-wider">Completed</p>
+            <h3 className="text-2xl font-black text-neutral-900 dark:text-white mt-1 font-mono">
               {stats?.completed_orders ?? 0}
             </h3>
             <p className="text-xxs text-slate-400 mt-0.5">Delivered and signed off</p>
@@ -453,7 +453,7 @@ export const VendorOrders: React.FC = () => {
                               note: 'Goods inspected and accepted. Order settled.',
                             })
                           }
-                          className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
+                          className="text-xs font-mono font-bold bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400"
                           disabled={statusMutation.isPending}
                         >
                           <FileCheck className="w-3.5 h-3.5 mr-1" /> Complete & Settle
@@ -678,7 +678,7 @@ export const VendorOrders: React.FC = () => {
                           note: 'Final signoff completed.',
                         })
                       }
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs"
+                      className="bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs"
                     >
                       Complete & Settle
                     </Button>
