@@ -1,15 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import inventoryService from '../../services/inventoryService';
 import type { InventoryRecord } from '../../types';
+import { Button } from '@/components/ui/button';
+import { SkeletonTable } from '@/components/ui/skeleton';
+import { SearchNoResults, NoDataEmpty } from '@/components/ui/empty-state';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { useToast } from '@/components/ui/toast';
+import { DataTable, type Column, Pagination } from '@/components/ui/data-table';
+import { Search, X, Package, AlertCircle, CheckCircle2, TrendingUp } from 'lucide-react';
 
 // ─── Status helpers ────────────────────────────────────────────────────────────
 const STATUS_CONFIG = {
-    healthy: { label: 'In Stock', color: '#22c55e', bg: 'rgba(34,197,94,0.12)', icon: '●' },
-    low_stock: { label: 'Low Stock', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', icon: '▲' },
-    out_of_stock: { label: 'Out of Stock', color: '#ef4444', bg: 'rgba(239,68,68,0.12)', icon: '■' },
+    healthy: { label: 'In Stock', variant: 'success' as const, icon: CheckCircle2 },
+    low_stock: { label: 'Low Stock', variant: 'warning' as const, icon: AlertCircle },
+    out_of_stock: { label: 'Out of Stock', variant: 'destructive' as const, icon: Package },
 };
 
-function stockColor(status: string) {
+function stockStatus(status: string) {
     return STATUS_CONFIG[status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.healthy;
 }
 
@@ -24,82 +31,73 @@ function AdjustModal({ record, onClose, onSuccess }: AdjustModalProps) {
     const [adjustment, setAdjustment] = useState<string>('');
     const [reason, setReason] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const toast = useToast();
 
     const delta = parseInt(adjustment || '0', 10);
     const newQty = record.quantity_on_hand + delta;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
         if (!adjustment || isNaN(delta) || delta === 0) {
-            setError('Enter a non-zero adjustment.');
+            toast.error('Please enter a non-zero adjustment value.');
             return;
         }
         setLoading(true);
         try {
             await inventoryService.adjustStock(record.product_id, { adjustment: delta, reason: reason || undefined });
+            toast.success('Stock adjusted successfully', `Updated ${record.product?.name}`);
             onSuccess();
         } catch (err: any) {
-            setError(err?.response?.data?.error?.message ?? 'Adjustment failed.');
+            toast.error(err?.response?.data?.error?.message ?? 'Adjustment failed.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
-                <div style={styles.modalHeader}>
-                    <h3 style={styles.modalTitle}>Adjust Stock</h3>
-                    <button style={styles.closeBtn} onClick={onClose}>✕</button>
+        <ConfirmDialog
+            isOpen={true}
+            onClose={onClose}
+            onConfirm={handleSubmit}
+            title="Adjust Stock"
+            description={`Current on-hand: ${record.quantity_on_hand} ${record.product?.unit}`}
+            confirmLabel={loading ? 'Adjusting...' : 'Apply Adjustment'}
+            isLoading={loading}
+        >
+            <div className="space-y-4 mt-4">
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground">Adjustment (+ add / − remove)</label>
+                    <input
+                        type="number"
+                        value={adjustment}
+                        onChange={(e) => setAdjustment(e.target.value)}
+                        placeholder="e.g. 50 or -10"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        autoFocus
+                    />
                 </div>
-                <div style={styles.modalProductName}>{record.product?.name}</div>
-                <div style={styles.modalMeta}>
-                    Current on-hand: <strong>{record.quantity_on_hand}</strong> {record.product?.unit}
-                </div>
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                    <div style={styles.fieldGroup}>
-                        <label style={styles.fieldLabel}>Adjustment (+ add / − remove)</label>
-                        <input
-                            type="number"
-                            value={adjustment}
-                            onChange={e => setAdjustment(e.target.value)}
-                            placeholder="e.g. 50 or -10"
-                            style={styles.input}
-                        />
-                    </div>
-                    {adjustment !== '' && !isNaN(delta) && (
-                        <div style={{
-                            ...styles.previewBox,
-                            borderColor: newQty < 0 ? '#ef4444' : 'rgba(99,102,241,0.5)',
-                        }}>
-                            <span>New on-hand:</span>
-                            <span style={{ color: newQty < 0 ? '#ef4444' : '#a5b4fc', fontWeight: 700 }}>
+                {adjustment !== '' && !isNaN(delta) && (
+                    <div className={`rounded-md border p-3 ${newQty < 0 ? 'border-red-500 bg-red-50' : 'border-indigo-500 bg-indigo-50'}`}>
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-muted-foreground">New on-hand:</span>
+                            <span className={`font-bold ${newQty < 0 ? 'text-red-600' : 'text-indigo-600'}`}>
                                 {newQty} {record.product?.unit}
                             </span>
                         </div>
-                    )}
-                    <div style={styles.fieldGroup}>
-                        <label style={styles.fieldLabel}>Reason (optional)</label>
-                        <input
-                            type="text"
-                            value={reason}
-                            onChange={e => setReason(e.target.value)}
-                            placeholder="e.g. Stock received, Damaged, Counted"
-                            style={styles.input}
-                        />
                     </div>
-                    {error && <div style={styles.errorMsg}>{error}</div>}
-                    <div style={{ display: 'flex', gap: 12 }}>
-                        <button type="button" style={styles.cancelBtn} onClick={onClose}>Cancel</button>
-                        <button type="submit" style={styles.submitBtn} disabled={loading}>
-                            {loading ? 'Adjusting...' : 'Apply Adjustment'}
-                        </button>
-                    </div>
-                </form>
+                )}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-muted-foreground">Reason (optional)</label>
+                    <input
+                        type="text"
+                        value={reason}
+                        onChange={(e) => setReason(e.target.value)}
+                        placeholder="e.g. Stock received, Damaged, Counted"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                </div>
             </div>
-        </div>
+        </ConfirmDialog>
     );
 }
 
@@ -115,11 +113,10 @@ function EditLevelsModal({ record, onClose, onSuccess }: EditLevelsModalProps) {
     const [reorderLevel, setReorderLevel] = useState(String(record.reorder_level));
     const [reorderQty, setReorderQty] = useState(String(record.reorder_quantity));
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const toast = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
         setLoading(true);
         try {
             await inventoryService.updateInventory(record.product_id, {
@@ -127,50 +124,45 @@ function EditLevelsModal({ record, onClose, onSuccess }: EditLevelsModalProps) {
                 reorder_level: parseInt(reorderLevel, 10),
                 reorder_quantity: parseInt(reorderQty, 10),
             });
+            toast.success('Inventory levels updated successfully', `Updated ${record.product?.name}`);
             onSuccess();
         } catch (err: any) {
-            setError(err?.response?.data?.error?.message ?? 'Update failed.');
+            toast.error(err?.response?.data?.error?.message ?? 'Update failed.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
-                <div style={styles.modalHeader}>
-                    <h3 style={styles.modalTitle}>Edit Inventory Levels</h3>
-                    <button style={styles.closeBtn} onClick={onClose}>✕</button>
-                </div>
-                <div style={styles.modalProductName}>{record.product?.name}</div>
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                    {[
-                        { label: 'Quantity On Hand', value: onHand, set: setOnHand, help: 'Physical stock count' },
-                        { label: 'Reorder Level', value: reorderLevel, set: setReorderLevel, help: 'Alert when available drops below this' },
-                        { label: 'Reorder Quantity', value: reorderQty, set: setReorderQty, help: 'Typical batch size to order' },
-                    ].map(f => (
-                        <div key={f.label} style={styles.fieldGroup}>
-                            <label style={styles.fieldLabel}>{f.label}</label>
-                            <input
-                                type="number"
-                                min="0"
-                                value={f.value}
-                                onChange={e => f.set(e.target.value)}
-                                style={styles.input}
-                            />
-                            <span style={styles.fieldHint}>{f.help}</span>
-                        </div>
-                    ))}
-                    {error && <div style={styles.errorMsg}>{error}</div>}
-                    <div style={{ display: 'flex', gap: 12 }}>
-                        <button type="button" style={styles.cancelBtn} onClick={onClose}>Cancel</button>
-                        <button type="submit" style={styles.submitBtn} disabled={loading}>
-                            {loading ? 'Saving...' : 'Save Changes'}
-                        </button>
+        <ConfirmDialog
+            isOpen={true}
+            onClose={onClose}
+            onConfirm={handleSubmit}
+            title="Edit Inventory Levels"
+            description={`Editing: ${record.product?.name}`}
+            confirmLabel={loading ? 'Saving...' : 'Save Changes'}
+            isLoading={loading}
+        >
+            <div className="space-y-4 mt-4">
+                {[
+                    { label: 'Quantity On Hand', value: onHand, set: setOnHand, help: 'Physical stock count' },
+                    { label: 'Reorder Level', value: reorderLevel, set: setReorderLevel, help: 'Alert when available drops below this' },
+                    { label: 'Reorder Quantity', value: reorderQty, set: setReorderQty, help: 'Typical batch size to order' },
+                ].map((field) => (
+                    <div key={field.label} className="space-y-2">
+                        <label className="text-sm font-medium text-muted-foreground">{field.label}</label>
+                        <input
+                            type="number"
+                            min="0"
+                            value={field.value}
+                            onChange={(e) => field.set(e.target.value)}
+                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        />
+                        <span className="text-xs text-muted-foreground">{field.help}</span>
                     </div>
-                </form>
+                ))}
             </div>
-        </div>
+        </ConfirmDialog>
     );
 }
 
@@ -184,6 +176,7 @@ export default function InventoryManagement() {
     const [search, setSearch] = useState('');
     const [adjustTarget, setAdjustTarget] = useState<InventoryRecord | null>(null);
     const [editTarget, setEditTarget] = useState<InventoryRecord | null>(null);
+    const toast = useToast();
 
     const fetchInventory = useCallback(async () => {
         setLoading(true);
@@ -193,11 +186,13 @@ export default function InventoryManagement() {
             setInventory(res.data.items);
             setTotal(res.data.total);
         } catch (err: any) {
-            setError(err?.response?.data?.error?.message ?? 'Failed to load inventory.');
+            const errorMsg = err?.response?.data?.error?.message ?? 'Failed to load inventory.';
+            setError(errorMsg);
+            toast.error(errorMsg);
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [toast]);
 
     useEffect(() => { fetchInventory(); }, [fetchInventory]);
 
@@ -218,147 +213,199 @@ export default function InventoryManagement() {
         out_of_stock: inventory.filter(i => i.stock_status === 'out_of_stock').length,
     };
 
-    return (
-        <div style={styles.page}>
-            {/* Header */}
-            <div style={styles.pageHeader}>
+    const summaryCards = [
+        { key: 'all' as const, label: 'Total Products', icon: Package, variant: 'default' as const },
+        { key: 'healthy' as const, label: 'In Stock', icon: CheckCircle2, variant: 'success' as const },
+        { key: 'low_stock' as const, label: 'Low Stock', icon: AlertCircle, variant: 'warning' as const },
+        { key: 'out_of_stock' as const, label: 'Out of Stock', icon: TrendingUp, variant: 'destructive' as const },
+    ];
+
+    // Table columns definition
+    const columns: Column<InventoryRecord>[] = [
+        {
+            key: 'product',
+            title: 'Product',
+            render: (item) => (
                 <div>
-                    <h1 style={styles.pageTitle}>Inventory Management</h1>
-                    <p style={styles.pageSubtitle}>{total} product{total !== 1 ? 's' : ''} · Track, adjust, and manage your stock levels</p>
+                    <div className="font-semibold text-foreground">{item.product?.name ?? '—'}</div>
+                    <div className="text-xs text-muted-foreground">{item.product?.unit}</div>
+                </div>
+            ),
+        },
+        {
+            key: 'sku',
+            title: 'SKU',
+            render: (item) => (
+                <span className="font-mono text-xs text-muted-foreground">
+                    {item.product?.sku ?? <span className="opacity-40">—</span>}
+                </span>
+            ),
+        },
+        {
+            key: 'category',
+            title: 'Category',
+            render: (item) => (
+                <span className="text-sm text-muted-foreground">
+                    {item.product?.category ?? <span className="opacity-40">—</span>}
+                </span>
+            ),
+        },
+        {
+            key: 'quantity_on_hand',
+            title: 'On Hand',
+            render: (item) => <span className="font-semibold">{item.quantity_on_hand}</span>,
+        },
+        {
+            key: 'quantity_reserved',
+            title: 'Reserved',
+            render: (item) => <span className="text-amber-500">{item.quantity_reserved}</span>,
+        },
+        {
+            key: 'available_quantity',
+            title: 'Available',
+            render: (item) => (
+                <span className={`font-bold ${item.available_quantity > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {item.available_quantity}
+                </span>
+            ),
+        },
+        {
+            key: 'reorder_level',
+            title: 'Reorder At',
+            render: (item) => <span className="text-muted-foreground">{item.reorder_level}</span>,
+        },
+        {
+            key: 'stock_status',
+            title: 'Status',
+            render: (item) => {
+                const status = stockStatus(item.stock_status);
+                const Icon = status.icon;
+                return (
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-${status.variant}-100 text-${status.variant}-700`}>
+                        <Icon className="h-3 w-3" />
+                        {status.label}
+                    </span>
+                );
+            },
+        },
+        {
+            key: 'actions',
+            title: 'Actions',
+            render: (item) => (
+                <div className="flex gap-2">
+                    <Button
+                        size="xs"
+                        variant="outline"
+                        onClick={() => setAdjustTarget(item)}
+                    >
+                        ± Adjust
+                    </Button>
+                    <Button
+                        size="xs"
+                        variant="ghost"
+                        onClick={() => setEditTarget(item)}
+                    >
+                        ✎ Edit
+                    </Button>
+                </div>
+            ),
+        },
+    ];
+
+    return (
+        <div className="p-8 max-w-[1280px] mx-auto space-y-6">
+            {/* Header */}
+            <div className="flex justify-between items-start mb-6">
+                <div>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-600 bg-clip-text text-transparent">
+                        Inventory Management
+                    </h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        {total} product{total !== 1 ? 's' : ''} · Track, adjust, and manage your stock levels
+                    </p>
                 </div>
             </div>
 
             {/* Summary Cards */}
-            <div style={styles.summaryGrid}>
-                {[
-                    { key: 'all', label: 'Total Products', color: '#a5b4fc' },
-                    { key: 'healthy', label: 'In Stock', color: '#22c55e' },
-                    { key: 'low_stock', label: 'Low Stock', color: '#f59e0b' },
-                    { key: 'out_of_stock', label: 'Out of Stock', color: '#ef4444' },
-                ].map(card => (
-                    <button
-                        key={card.key}
-                        style={{
-                            ...styles.summaryCard,
-                            borderColor: filter === card.key ? card.color : 'rgba(255,255,255,0.08)',
-                            background: filter === card.key
-                                ? `linear-gradient(135deg, rgba(${hexToRgb(card.color)},0.15), rgba(${hexToRgb(card.color)},0.05))`
-                                : 'rgba(255,255,255,0.04)',
-                        }}
-                        onClick={() => setFilter(card.key as any)}
-                    >
-                        <div style={{ ...styles.summaryCount, color: card.color }}>
-                            {counts[card.key as keyof typeof counts]}
-                        </div>
-                        <div style={styles.summaryLabel}>{card.label}</div>
-                    </button>
-                ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {summaryCards.map((card) => {
+                    const Icon = card.icon;
+                    const isActive = filter === card.key;
+                    return (
+                        <button
+                            key={card.key}
+                            onClick={() => setFilter(card.key)}
+                            className={`p-4 rounded-lg border transition-all duration-200 text-left ${
+                                isActive 
+                                    ? `border-${card.variant} bg-${card.variant}/10 ring-2 ring-${card.variant}` 
+                                    : 'border-border bg-card hover:bg-accent'
+                            }`}
+                        >
+                            <div className="flex items-center gap-3 mb-2">
+                                <Icon className={`h-5 w-5 ${isActive ? `text-${card.variant}` : 'text-muted-foreground'}`} />
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                                    {card.label}
+                                </span>
+                            </div>
+                            <div className={`text-3xl font-bold ${isActive ? `text-${card.variant}` : 'text-foreground'}`}>
+                                {counts[card.key]}
+                            </div>
+                        </button>
+                    );
+                })}
             </div>
 
-            {/* Search */}
-            <div style={styles.searchBar}>
-                <span style={styles.searchIcon}>🔍</span>
+            {/* Search Bar */}
+            <div className="relative mb-6">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input
-                    style={styles.searchInput}
+                    type="text"
                     placeholder="Search by product name, SKU, or category..."
                     value={search}
-                    onChange={e => setSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full pl-10 pr-10 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 {search && (
-                    <button style={styles.clearBtn} onClick={() => setSearch('')}>✕</button>
+                    <button
+                        onClick={() => setSearch('')}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground"
+                    >
+                        <X className="h-4 w-4" />
+                    </button>
                 )}
             </div>
 
             {/* Table */}
             {loading ? (
-                <div style={styles.centerMsg}>
-                    <div style={styles.spinner} />
-                    <p style={{ color: '#94a3b8', marginTop: 16 }}>Loading inventory...</p>
+                <div className="flex flex-col items-center justify-center py-20">
+                    <div className="animate-spin h-9 w-9 border-4 border-indigo-200 border-t-indigo-600 rounded-full" />
+                    <p className="text-muted-foreground mt-4">Loading inventory...</p>
                 </div>
             ) : error ? (
-                <div style={styles.errorBanner}>{error}</div>
-            ) : filtered.length === 0 ? (
-                <div style={styles.emptyState}>
-                    <div style={styles.emptyIcon}>📦</div>
-                    <p style={styles.emptyText}>
-                        {search || filter !== 'all' ? 'No products match your filters.' : 'No products in your catalog yet.'}
-                    </p>
-                    {(search || filter !== 'all') && (
-                        <button style={styles.resetBtn} onClick={() => { setSearch(''); setFilter('all'); }}>Clear filters</button>
-                    )}
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+                    {error}
                 </div>
+            ) : filtered.length === 0 ? (
+                search || filter !== 'all' ? (
+                    <SearchNoResults query={search || filter} onClearSearch={() => { setSearch(''); setFilter('all'); }} />
+                ) : (
+                    <NoDataEmpty entity="products" />
+                )
             ) : (
-                <div style={styles.tableWrap}>
-                    <table style={styles.table}>
-                        <thead>
-                            <tr>
-                                {['Product', 'SKU', 'Category', 'On Hand', 'Reserved', 'Available', 'Reorder At', 'Status', 'Actions'].map(h => (
-                                    <th key={h} style={styles.th}>{h}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filtered.map((inv, idx) => {
-                                const sc = stockColor(inv.stock_status);
-                                return (
-                                    <tr key={inv.id} style={{ ...styles.tr, background: idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)' }}>
-                                        <td style={styles.td}>
-                                            <div style={styles.productName}>{inv.product?.name ?? '—'}</div>
-                                            <div style={styles.productUnit}>{inv.product?.unit}</div>
-                                        </td>
-                                        <td style={{ ...styles.td, color: '#94a3b8', fontFamily: 'monospace', fontSize: 12 }}>
-                                            {inv.product?.sku ?? <span style={{ opacity: 0.4 }}>—</span>}
-                                        </td>
-                                        <td style={{ ...styles.td, color: '#94a3b8', fontSize: 13 }}>
-                                            {inv.product?.category ?? <span style={{ opacity: 0.4 }}>—</span>}
-                                        </td>
-                                        <td style={{ ...styles.td, fontWeight: 600, color: '#e2e8f0' }}>
-                                            {inv.quantity_on_hand}
-                                        </td>
-                                        <td style={{ ...styles.td, color: '#f59e0b' }}>
-                                            {inv.quantity_reserved}
-                                        </td>
-                                        <td style={{ ...styles.td, fontWeight: 700, color: inv.available_quantity > 0 ? '#22c55e' : '#ef4444' }}>
-                                            {inv.available_quantity}
-                                        </td>
-                                        <td style={{ ...styles.td, color: '#94a3b8' }}>{inv.reorder_level}</td>
-                                        <td style={styles.td}>
-                                            <span style={{
-                                                padding: '3px 10px',
-                                                borderRadius: 20,
-                                                fontSize: 11,
-                                                fontWeight: 700,
-                                                letterSpacing: '0.03em',
-                                                color: sc.color,
-                                                background: sc.bg,
-                                                whiteSpace: 'nowrap',
-                                            }}>
-                                                {sc.icon} {sc.label}
-                                            </span>
-                                        </td>
-                                        <td style={styles.td}>
-                                            <div style={{ display: 'flex', gap: 8 }}>
-                                                <button
-                                                    style={styles.actionBtnPrimary}
-                                                    onClick={() => setAdjustTarget(inv)}
-                                                    title="Adjust stock"
-                                                >
-                                                    ± Adjust
-                                                </button>
-                                                <button
-                                                    style={styles.actionBtnSecondary}
-                                                    onClick={() => setEditTarget(inv)}
-                                                    title="Edit levels"
-                                                >
-                                                    ✎ Edit
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+                <div className="space-y-4">
+                    <DataTable
+                        data={filtered}
+                        columns={columns}
+                        stickyHeader
+                        density="comfortable"
+                        emptyState={<NoDataEmpty entity="products" />}
+                    />
+                    <Pagination
+                        currentPage={1}
+                        totalPages={Math.ceil(filtered.length / 20)}
+                        onPageChange={() => {}}
+                        totalItems={filtered.length}
+                    />
                 </div>
             )}
 
@@ -388,320 +435,3 @@ function hexToRgb(hex: string) {
     const b = parseInt(hex.slice(5, 7), 16);
     return `${r},${g},${b}`;
 }
-
-// ─── Styles ────────────────────────────────────────────────────────────────────
-const styles: Record<string, React.CSSProperties> = {
-    page: {
-        padding: '32px 28px',
-        maxWidth: 1280,
-        margin: '0 auto',
-        fontFamily: "'Inter', 'Segoe UI', sans-serif",
-    },
-    pageHeader: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: 28,
-    },
-    pageTitle: {
-        fontSize: 26,
-        fontWeight: 800,
-        background: 'linear-gradient(135deg, #c7d2fe, #818cf8)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        margin: 0,
-        lineHeight: 1.2,
-    },
-    pageSubtitle: {
-        color: '#64748b',
-        margin: '6px 0 0',
-        fontSize: 14,
-    },
-    summaryGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 14,
-        marginBottom: 22,
-    },
-    summaryCard: {
-        padding: '18px 20px',
-        borderRadius: 14,
-        border: '1px solid rgba(255,255,255,0.08)',
-        cursor: 'pointer',
-        textAlign: 'left',
-        transition: 'all 0.2s ease',
-        color: 'inherit',
-    },
-    summaryCount: {
-        fontSize: 30,
-        fontWeight: 800,
-        lineHeight: 1,
-        marginBottom: 4,
-    },
-    summaryLabel: {
-        fontSize: 12,
-        color: '#64748b',
-        fontWeight: 500,
-        textTransform: 'uppercase',
-        letterSpacing: '0.06em',
-    },
-    searchBar: {
-        display: 'flex',
-        alignItems: 'center',
-        background: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: 10,
-        padding: '0 14px',
-        marginBottom: 20,
-        gap: 10,
-    },
-    searchIcon: { fontSize: 14, opacity: 0.5 },
-    searchInput: {
-        flex: 1,
-        background: 'none',
-        border: 'none',
-        outline: 'none',
-        color: '#e2e8f0',
-        fontSize: 14,
-        padding: '12px 0',
-        fontFamily: 'inherit',
-    },
-    clearBtn: {
-        background: 'none',
-        border: 'none',
-        color: '#64748b',
-        cursor: 'pointer',
-        fontSize: 14,
-        padding: 4,
-    },
-    tableWrap: {
-        overflowX: 'auto',
-        borderRadius: 14,
-        border: '1px solid rgba(255,255,255,0.08)',
-        background: 'rgba(255,255,255,0.03)',
-    },
-    table: {
-        width: '100%',
-        borderCollapse: 'collapse',
-    },
-    th: {
-        padding: '12px 16px',
-        textAlign: 'left',
-        fontSize: 11,
-        fontWeight: 700,
-        textTransform: 'uppercase',
-        letterSpacing: '0.06em',
-        color: '#475569',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-        whiteSpace: 'nowrap',
-    },
-    tr: {
-        transition: 'background 0.15s',
-    },
-    td: {
-        padding: '14px 16px',
-        fontSize: 13,
-        color: '#e2e8f0',
-        verticalAlign: 'middle',
-        borderBottom: '1px solid rgba(255,255,255,0.04)',
-    },
-    productName: {
-        fontWeight: 600,
-        color: '#c7d2fe',
-        fontSize: 13,
-    },
-    productUnit: {
-        color: '#475569',
-        fontSize: 11,
-        marginTop: 2,
-    },
-    actionBtnPrimary: {
-        padding: '5px 12px',
-        fontSize: 12,
-        fontWeight: 600,
-        borderRadius: 7,
-        border: '1px solid rgba(99,102,241,0.5)',
-        background: 'rgba(99,102,241,0.15)',
-        color: '#a5b4fc',
-        cursor: 'pointer',
-        transition: 'all 0.15s',
-        whiteSpace: 'nowrap',
-    },
-    actionBtnSecondary: {
-        padding: '5px 12px',
-        fontSize: 12,
-        fontWeight: 600,
-        borderRadius: 7,
-        border: '1px solid rgba(255,255,255,0.1)',
-        background: 'rgba(255,255,255,0.05)',
-        color: '#94a3b8',
-        cursor: 'pointer',
-        transition: 'all 0.15s',
-        whiteSpace: 'nowrap',
-    },
-    centerMsg: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 80,
-    },
-    spinner: {
-        width: 36,
-        height: 36,
-        border: '3px solid rgba(99,102,241,0.2)',
-        borderTop: '3px solid #818cf8',
-        borderRadius: '50%',
-        animation: 'spin 0.8s linear infinite',
-    },
-    errorBanner: {
-        background: 'rgba(239,68,68,0.12)',
-        border: '1px solid rgba(239,68,68,0.3)',
-        borderRadius: 10,
-        padding: '16px 20px',
-        color: '#fca5a5',
-        fontSize: 14,
-    },
-    emptyState: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '60px 20px',
-        color: '#475569',
-    },
-    emptyIcon: { fontSize: 48, marginBottom: 16 },
-    emptyText: { fontSize: 15, marginBottom: 16 },
-    resetBtn: {
-        padding: '8px 20px',
-        borderRadius: 8,
-        border: '1px solid rgba(99,102,241,0.4)',
-        background: 'rgba(99,102,241,0.15)',
-        color: '#a5b4fc',
-        cursor: 'pointer',
-        fontSize: 13,
-    },
-    // Modal styles
-    overlay: {
-        position: 'fixed',
-        inset: 0,
-        background: 'rgba(0,0,0,0.65)',
-        backdropFilter: 'blur(6px)',
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-    },
-    modal: {
-        background: 'linear-gradient(135deg, #1e1e3a, #111827)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: 18,
-        padding: 28,
-        width: '100%',
-        maxWidth: 460,
-        boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
-    },
-    modalHeader: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    modalTitle: {
-        fontSize: 18,
-        fontWeight: 700,
-        color: '#c7d2fe',
-        margin: 0,
-    },
-    closeBtn: {
-        background: 'none',
-        border: 'none',
-        color: '#64748b',
-        cursor: 'pointer',
-        fontSize: 18,
-        lineHeight: 1,
-    },
-    modalProductName: {
-        fontSize: 14,
-        color: '#94a3b8',
-        marginBottom: 20,
-        paddingBottom: 16,
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-    },
-    modalMeta: {
-        fontSize: 13,
-        color: '#94a3b8',
-        marginBottom: 16,
-    },
-    fieldGroup: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 6,
-    },
-    fieldLabel: {
-        fontSize: 12,
-        fontWeight: 600,
-        color: '#64748b',
-        textTransform: 'uppercase',
-        letterSpacing: '0.05em',
-    },
-    fieldHint: {
-        fontSize: 11,
-        color: '#475569',
-    },
-    input: {
-        background: 'rgba(255,255,255,0.06)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: 9,
-        padding: '10px 14px',
-        color: '#e2e8f0',
-        fontSize: 14,
-        outline: 'none',
-        fontFamily: 'inherit',
-        width: '100%',
-        boxSizing: 'border-box',
-    },
-    previewBox: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '10px 14px',
-        borderRadius: 9,
-        border: '1px solid rgba(99,102,241,0.4)',
-        background: 'rgba(99,102,241,0.08)',
-        fontSize: 14,
-        color: '#94a3b8',
-    },
-    errorMsg: {
-        background: 'rgba(239,68,68,0.12)',
-        border: '1px solid rgba(239,68,68,0.2)',
-        borderRadius: 8,
-        padding: '10px 14px',
-        color: '#fca5a5',
-        fontSize: 13,
-    },
-    cancelBtn: {
-        flex: 1,
-        padding: '11px',
-        borderRadius: 9,
-        border: '1px solid rgba(255,255,255,0.1)',
-        background: 'rgba(255,255,255,0.05)',
-        color: '#94a3b8',
-        cursor: 'pointer',
-        fontSize: 14,
-        fontFamily: 'inherit',
-    },
-    submitBtn: {
-        flex: 2,
-        padding: '11px',
-        borderRadius: 9,
-        border: 'none',
-        background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-        color: '#fff',
-        cursor: 'pointer',
-        fontSize: 14,
-        fontWeight: 700,
-        fontFamily: 'inherit',
-        boxShadow: '0 4px 14px rgba(79,70,229,0.35)',
-    },
-};
