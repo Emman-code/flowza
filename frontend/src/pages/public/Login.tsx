@@ -69,8 +69,8 @@ export const Login: React.FC = () => {
   };
 
   const quickFill = (email: string, pass: string = 'Password123!') => {
-    methods.setValue('email', email);
-    methods.setValue('password', pass);
+    methods.setValue('email', email, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+    methods.setValue('password', pass, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
   };
 
   return (

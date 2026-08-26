@@ -32,14 +32,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     return text.split('\n').map((line, idx) => {
       if (line.startsWith('### ')) {
         return (
-          <h4 key={idx} className="text-sm font-bold text-slate-900 dark:text-white mt-2.5 mb-1">
+          <h4 key={idx} className="text-sm font-extrabold text-neutral-950 dark:text-white mt-3 mb-1.5 font-heading">
             {line.replace('### ', '')}
           </h4>
         );
       }
       if (line.startsWith('## ')) {
         return (
-          <h3 key={idx} className="text-base font-bold text-slate-900 dark:text-white mt-3 mb-1.5">
+          <h3 key={idx} className="text-base font-extrabold text-neutral-950 dark:text-white mt-3.5 mb-2 font-heading">
             {line.replace('## ', '')}
           </h3>
         );
@@ -47,17 +47,21 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       if (line.startsWith('- ') || line.startsWith('* ')) {
         const itemText = line.substring(2);
         return (
-          <li key={idx} className="ml-4 list-disc text-xs sm:text-sm text-slate-700 dark:text-slate-300 my-0.5 leading-relaxed">
-            {renderBoldAndCode(itemText)}
-          </li>
+          <div key={idx} className="flex items-start gap-2.5 my-1 text-xs sm:text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
+            <div className="flex-1 min-w-0">{renderBoldAndCode(itemText)}</div>
+          </div>
         );
       }
-      if (/^\d+\.\s/.test(line)) {
-        const itemText = line.replace(/^\d+\.\s/, '');
+      const matchNum = line.match(/^(\d+)\.\s(.*)$/);
+      if (matchNum) {
+        const num = matchNum[1];
+        const itemText = matchNum[2];
         return (
-          <li key={idx} className="ml-4 list-decimal text-xs sm:text-sm text-slate-700 dark:text-slate-300 my-0.5 leading-relaxed">
-            {renderBoldAndCode(itemText)}
-          </li>
+          <div key={idx} className="flex items-start gap-2 my-1 text-xs sm:text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed">
+            <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 shrink-0 min-w-4">{num}.</span>
+            <div className="flex-1 min-w-0">{renderBoldAndCode(itemText)}</div>
+          </div>
         );
       }
       if (line.trim() === '') {
@@ -65,7 +69,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       }
 
       return (
-        <p key={idx} className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 my-1 leading-relaxed">
+        <p key={idx} className="text-xs sm:text-sm text-neutral-800 dark:text-neutral-200 my-1 leading-relaxed">
           {renderBoldAndCode(line)}
         </p>
       );
@@ -77,14 +81,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     return parts.map((part, pIdx) => {
       if (part.startsWith('**') && part.endsWith('**')) {
         return (
-          <strong key={pIdx} className="font-semibold text-slate-900 dark:text-white">
+          <strong key={pIdx} className="font-bold text-neutral-950 dark:text-white">
             {part.slice(2, -2)}
           </strong>
         );
       }
       if (part.startsWith('`') && part.endsWith('`')) {
         return (
-          <code key={pIdx} className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-mono">
+          <code key={pIdx} className="px-1.5 py-0.5 rounded-md bg-neutral-200/70 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-xs font-mono font-semibold border border-neutral-300/50 dark:border-neutral-700/50">
             {part.slice(1, -1)}
           </code>
         );
@@ -95,36 +99,36 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
   return (
     <div
-      className={`flex gap-3 sm:gap-4 my-3 sm:my-4 ${
+      className={`flex gap-3 sm:gap-3.5 my-3 sm:my-4 ${
         isUser ? 'justify-end' : 'justify-start'
       }`}
     >
       {/* Assistant Avatar */}
       {!isUser && (
-        <div className="w-8 h-8 rounded-lg bg-neutral-950 dark:bg-amber-500 text-white dark:text-neutral-950 flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+        <div className="w-8 h-8 rounded-xl bg-neutral-950 dark:bg-amber-500 text-white dark:text-neutral-950 flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
           <Bot className="w-4 h-4" />
         </div>
       )}
 
       {/* Message Bubble Container */}
       <div
-        className={`max-w-[88%] sm:max-w-[80%] flex flex-col ${
+        className={`max-w-[90%] sm:max-w-[82%] flex flex-col ${
           isUser ? 'items-end' : 'items-start'
         }`}
       >
         <div
-          className={`p-3.5 sm:p-4 rounded-xl shadow-xs text-xs sm:text-sm ${
+          className={`p-3.5 sm:p-4 rounded-2xl shadow-2xs text-xs sm:text-sm ${
             isUser
-              ? 'bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 rounded-br-none'
+              ? 'bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 rounded-br-xs'
               : message.isError
-              ? 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 rounded-bl-none'
-              : 'bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 rounded-bl-none'
+              ? 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 rounded-bl-xs'
+              : 'bg-[#F7F6F2] dark:bg-[#151822] border border-neutral-200/90 dark:border-neutral-800 text-neutral-900 dark:text-neutral-100 rounded-bl-xs'
           }`}
         >
           {isUser ? (
-            <p className="whitespace-pre-wrap leading-relaxed">{message.text}</p>
+            <p className="whitespace-pre-wrap leading-relaxed font-medium">{message.text}</p>
           ) : (
-            <div className="prose-sm max-w-none">
+            <div className="prose-sm max-w-none space-y-1">
               {renderFormattedContent(message.text)}
             </div>
           )}
