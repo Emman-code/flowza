@@ -1,469 +1,323 @@
-# Vendor AI - API Documentation
+# 📖 Flowza — REST & WebSocket API Specification
 
-## Base URL
-```
-http://localhost:8000/api
-```
+This document provides the complete API reference for the **Flowza B2B Procurement & Supply Chain Network** (API version `v1`).
 
-## Authentication
-Most endpoints require authentication using JWT Bearer tokens.
+---
 
-### Getting a Token
+## 🌐 Base URL & Endpoints
+
+| Environment | Protocol | Base URL |
+|---|---|---|
+| **Local Development** | HTTP / WS | `http://localhost:8001/api/v1` (`ws://localhost:8001/ws/{token}`) |
+| **Production (Render)** | HTTPS / WSS | `https://flowza-ri8d.onrender.com/api/v1` (`wss://flowza-ri8d.onrender.com/ws/{token}`) |
+
+Interactive OpenAPI documentation is available at `/docs` (Swagger UI) and `/redoc` (ReDoc).
+
+---
+
+## 🔐 Authentication & Security
+
+All protected endpoints require an **OAuth2 Bearer Token** passed in the HTTP `Authorization` header:
+
 ```http
-POST /auth/login
-Content-Type: application/x-www-form-urlencoded
-
-username=your_username&password=your_password
+Authorization: Bearer <your_jwt_access_token>
 ```
 
-Response:
+### Supported Roles
+* `vendor`: Retailer / purchasing business (can place orders, manage procurement carts, pay invoices).
+* `supplier`: Wholesale supplier / distributor (can manage catalog, inventory, accept orders, issue invoices).
+* `admin`: Platform governance and audit.
+
+---
+
+## 1. Authentication Endpoints (`/api/v1/auth`)
+
+### 1.1 Register New Account
+* **Method**: `POST`
+* **Path**: `/auth/register`
+* **Access**: Public
+* **Request Body**:
 ```json
 {
-  "access_token": "eyJhbGc...",
-  "token_type": "bearer"
+  "email": "retailer@example.com",
+  "password": "SecurePassword123!",
+  "full_name": "Rahul Sharma",
+  "phone": "+919876543210",
+  "role_name": "vendor",
+  "company_name": "Fresh Mart Supermarket",
+  "business_type": "Supermarket",
+  "gst_number": "29AAAAA0000A1Z5",
+  "country": "India",
+  "state": "Karnataka",
+  "city": "Bengaluru",
+  "address_line": "123 MG Road, Indiranagar"
 }
 ```
-
-### Using the Token
-Include the token in the Authorization header:
-```
-Authorization: Bearer eyJhbGc...
-```
-
----
-
-## Authentication Endpoints
-
-### Register User
-```http
-POST /auth/register
-Content-Type: application/json
-
-{
-  "username": "john_doe",
-  "email": "john@example.com",
-  "password": "secure_password",
-  "role": "vendor"
-}
-```
-
-**Roles**: `admin`, `official`, `vendor`
-
-### Login
-```http
-POST /auth/login
-Content-Type: application/x-www-form-urlencoded
-
-username=john_doe&password=secure_password
-```
-
-### Get Current User
-```http
-GET /auth/me
-Authorization: Bearer {token}
-```
-
----
-
-## Vendor Endpoints
-
-### Create Vendor
-```http
-POST /vendors
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "name": "Green Mart",
-  "owner_name": "John Doe",
-  "phone": "9876543210",
-  "category": "Vegetable",
-  "location": "123 Market Street, Delhi",
-  "sales": "0",
-  "status": "Active",
-  "location_lat": 28.6139,
-  "location_lng": 77.2090
-}
-```
-
-### Get All Vendors
-```http
-GET /vendors?skip=0&limit=100
-Authorization: Bearer {token}
-```
-
-### Get Vendor by ID
-```http
-GET /vendors/{vendor_id}
-Authorization: Bearer {token}
-```
-
-### Update Vendor
-```http
-PUT /vendors/{vendor_id}
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "status": "Inactive",
-  "sales": "50000"
-}
-```
-
-### Delete Vendor
-```http
-DELETE /vendors/{vendor_id}
-Authorization: Bearer {token}
-```
-
----
-
-## Inventory Endpoints
-
-### Create Inventory Item
-```http
-POST /inventory
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "vendor_id": 1,
-  "name": "Tomatoes",
-  "quantity": 50.5,
-  "unit": "kg",
-  "price": 40.0,
-  "expiry_date": "2024-12-31T00:00:00"
-}
-```
-
-### Get All Inventory
-```http
-GET /inventory?vendor_id=1&skip=0&limit=100
-Authorization: Bearer {token}
-```
-
-### Get Inventory Item
-```http
-GET /inventory/{item_id}
-Authorization: Bearer {token}
-```
-
-### Update Inventory Item
-```http
-PUT /inventory/{item_id}
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "quantity": 30.0,
-  "price": 45.0
-}
-```
-
-### Delete Inventory Item
-```http
-DELETE /inventory/{item_id}
-Authorization: Bearer {token}
-```
-
----
-
-## Sales Endpoints
-
-### Record Sale
-```http
-POST /sales
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "vendor_id": 1,
-  "total_amount": 1500.50,
-  "items_summary": "[{\"name\":\"Tomatoes\",\"quantity\":10,\"price\":40}]"
-}
-```
-
-### Get All Sales
-```http
-GET /sales?vendor_id=1&skip=0&limit=100
-Authorization: Bearer {token}
-```
-
----
-
-## Stock Request Endpoints
-
-### Create Stock Request
-```http
-POST /stock-requests
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "vendor_id": 1,
-  "product_name": "Tomatoes",
-  "quantity": 100.0,
-  "unit": "kg",
-  "current_stock": 10.0,
-  "preferred_delivery": "2024-01-15 10:00 AM"
-}
-```
-
-### Get All Stock Requests
-```http
-GET /stock-requests?vendor_id=1&status_filter=Requested
-Authorization: Bearer {token}
-```
-
-**Status values**: `Requested`, `Approved`, `In Transit`, `Delivered`
-
-### Get Stock Request
-```http
-GET /stock-requests/{request_id}
-Authorization: Bearer {token}
-```
-
-### Update Stock Request
-```http
-PUT /stock-requests/{request_id}
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "status": "Approved",
-  "handled_by": "Admin John",
-  "modified_quantity": 80.0,
-  "assigned_supplier": "Fresh Farms Ltd"
-}
-```
-
----
-
-## Analytics & AI Endpoints
-
-### Get Analytics Summary
-```http
-GET /analytics/summary
-Authorization: Bearer {token}
-```
-
-Response:
+* **Response `201 Created`**:
 ```json
 {
-  "total_revenue": 125000.50,
-  "total_vendors": 45,
-  "active_vendors": 42,
-  "low_stock_alerts": 8,
-  "pending_requests": 12,
-  "average_order_value": 2500.75
+  "access_token": "eyJhbGciOi...",
+  "token_type": "bearer",
+  "user": {
+    "id": "usr_991823",
+    "email": "retailer@example.com",
+    "full_name": "Rahul Sharma",
+    "role": { "name": "vendor" },
+    "company": { "id": "cmp_10293", "company_name": "Fresh Mart Supermarket" }
+  }
 }
 ```
 
-### Get Demand Prediction
-```http
-GET /analytics/demand-prediction?vendor_id=1&days_ahead=7
-Authorization: Bearer {token}
-```
+---
 
-Response:
+### 1.2 User Login
+* **Method**: `POST`
+* **Path**: `/auth/login`
+* **Access**: Public
+* **Request Body**:
 ```json
 {
-  "vendor_id": 1,
-  "predictions": [
+  "email": "vendor@supermarket.com",
+  "password": "Password123!"
+}
+```
+* **Response `200 OK`**:
+```json
+{
+  "access_token": "eyJhbGciOi...",
+  "token_type": "bearer",
+  "user": {
+    "id": "usr_10283",
+    "email": "vendor@supermarket.com",
+    "full_name": "Retail Purchasing Team",
+    "role": { "name": "vendor" },
+    "company": { "id": "cmp_902", "company_name": "Fresh Mart Supermarket" }
+  }
+}
+```
+
+---
+
+### 1.3 Get Current Authenticated Profile
+* **Method**: `GET`
+* **Path**: `/auth/me`
+* **Access**: Protected (Bearer Token)
+* **Response `200 OK`**: Returns current user object, role details, company profiles, and addresses.
+
+---
+
+## 2. Product Catalog (`/api/v1/products`)
+
+### 2.1 List Catalog Products
+* **Method**: `GET`
+* **Path**: `/products?page=1&size=20&search=rice&category=Grains&in_stock_only=true`
+* **Access**: Protected
+* **Response `200 OK`**:
+```json
+{
+  "items": [
     {
-      "date": "2024-01-16T00:00:00",
-      "predicted_demand": 2500.50,
-      "confidence": 0.85
+      "id": "prd_102",
+      "name": "Basmati Rice 25kg Bag",
+      "sku": "RIC-BAS-25KG",
+      "category": "Grains & Pulses",
+      "unit_price": 1850.00,
+      "hsn_code": "10063020",
+      "gst_rate": 5.0,
+      "moq": 5,
+      "supplier_company_id": "cmp_801",
+      "supplier_company_name": "Apex FMCG Wholesale",
+      "inventory": {
+        "on_hand": 100,
+        "reserved": 20,
+        "available": 80
+      }
     }
   ],
-  "model_trained": true
+  "total": 1,
+  "page": 1,
+  "size": 20
 }
 ```
 
-### Get AI Recommendations
-```http
-GET /analytics/recommendations?vendor_id=1
-Authorization: Bearer {token}
-```
+---
 
-Response:
+## 3. Inventory Management (`/api/v1/inventory`)
+
+### 3.1 Get Warehouse Stock Matrix (Supplier)
+* **Method**: `GET`
+* **Path**: `/inventory`
+* **Access**: Protected (`supplier`)
+* **Response `200 OK`**: Returns list of products with `on_hand`, `reserved`, `available`, `min_threshold`, and low-stock alerts.
+
+### 3.2 Manual Stock Adjustment
+* **Method**: `POST`
+* **Path**: `/inventory/adjust`
+* **Access**: Protected (`supplier`)
+* **Request Body**:
 ```json
 {
-  "vendor_id": 1,
-  "recommendations": [
+  "product_id": "prd_102",
+  "quantity_delta": 50,
+  "reason": "Restocked from manufacturing facility"
+}
+```
+
+---
+
+## 4. Procurement Cart & Checkout (`/api/v1/cart`)
+
+### 4.1 Get Active Cart
+* **Method**: `GET`
+* **Path**: `/cart`
+* **Access**: Protected (`vendor`)
+
+### 4.2 Add Item to Cart
+* **Method**: `POST`
+* **Path**: `/cart/items`
+* **Access**: Protected (`vendor`)
+* **Request Body**:
+```json
+{
+  "product_id": "prd_102",
+  "quantity": 10
+}
+```
+
+### 4.3 Atomic Checkout (Create Purchase Order)
+* **Method**: `POST`
+* **Path**: `/cart/checkout`
+* **Access**: Protected (`vendor`)
+* **Request Body**:
+```json
+{
+  "delivery_address_id": "addr_9012",
+  "delivery_instructions": "Deliver to rear dock before 4 PM",
+  "payment_terms": "Net 30 Days"
+}
+```
+* **Response `201 Created`**: Creates a new Purchase Order in `PENDING` status and locks the reserved inventory atomically.
+
+---
+
+## 5. Purchase Order Lifecycle (`/api/v1/orders`)
+
+### 5.1 List Orders
+* **Method**: `GET`
+* **Path**: `/orders?status=PENDING&page=1&size=20`
+* **Access**: Protected
+
+### 5.2 Get Order Details & Snapshot Line Items
+* **Method**: `GET`
+* **Path**: `/orders/{order_id}`
+* **Access**: Protected
+
+### 5.3 Accept Purchase Order (Supplier)
+* **Method**: `POST`
+* **Path**: `/orders/{order_id}/accept`
+* **Access**: Protected (`supplier`)
+* **Request Body**:
+```json
+{
+  "note": "Order confirmed. Stock allocated for packaging."
+}
+```
+
+### 5.4 Reject Purchase Order (Supplier)
+* **Method**: `POST`
+* **Path**: `/orders/{order_id}/reject`
+* **Access**: Protected (`supplier`)
+* **Request Body**:
+```json
+{
+  "reason": "Temporary logistics disruption in shipping zone"
+}
+```
+*(Automatically decrements `reserved` stock and restores `available` inventory)*
+
+### 5.5 Update Fulfillment Status
+* **Method**: `PATCH`
+* **Path**: `/orders/{order_id}/status`
+* **Access**: Protected (`supplier`, `vendor`)
+* **Valid Transitions**:
+  * Supplier: `processing` $\to$ `packed` $\to$ `shipped`
+  * Retailer: `delivered` $\to$ `completed`
+
+---
+
+## 6. GST Invoicing & Payments (`/api/v1/invoices`)
+
+### 6.1 Generate Tax Invoice
+* **Method**: `POST`
+* **Path**: `/invoices`
+* **Access**: Protected (`supplier`)
+* **Request Body**:
+```json
+{
+  "order_id": "ord_5521",
+  "due_date": "2026-09-25"
+}
+```
+* Automatically computes **CGST + SGST** (Intra-state) or **IGST** (Inter-state) based on company state registrations.
+
+### 6.2 Download Invoice PDF
+* **Method**: `GET`
+* **Path**: `/invoices/{invoice_id}/pdf`
+* **Access**: Protected
+* **Response**: `application/pdf` binary stream rendered on the fly via ReportLab.
+
+### 6.3 Record Payment Receipt
+* **Method**: `POST`
+* **Path**: `/invoices/{invoice_id}/pay`
+* **Access**: Protected
+* **Request Body**:
+```json
+{
+  "amount": 5145.00,
+  "payment_method": "NEFT / RTGS",
+  "transaction_reference": "UTR-20260826-0091"
+}
+```
+
+---
+
+## 7. Business Intelligence Analytics (`/api/v1/analytics`)
+
+* `GET /analytics/vendor/overview?preset=30d` — Retail procurement spend, trend charts, status distributions, and outstanding bills.
+* `GET /analytics/supplier/overview?preset=30d` — Gross invoiced revenue, receivables due, top retail accounts, and inventory health.
+* `GET /analytics/admin/overview?preset=30d` — Platform-wide gross trade volume, active trading companies, and ledger health.
+
+---
+
+## 8. Flowza AI Copilot (`/api/v1/ai`)
+
+### 8.1 Execute Chat Query
+* **Method**: `POST`
+* **Path**: `/ai/chat`
+* **Access**: Protected
+* **Request Body**:
+```json
+{
+  "message": "Which products are low in stock right now?",
+  "conversation_id": "conv_8812"
+}
+```
+* **Response `200 OK`**:
+```json
+{
+  "conversation_id": "conv_8812",
+  "message": "You currently have 2 products below their minimum stock threshold:\n- **Sunflower Oil 5L**: 15 units available (Threshold: 25)\n- **Basmati Rice 25kg**: 8 units available (Threshold: 20)",
+  "tool_calls": [
     {
-      "type": "low_stock",
-      "priority": "high",
-      "product": "Tomatoes",
-      "message": "Low stock alert: Tomatoes has only 5 units left",
-      "action": "Reorder 50 units"
+      "tool_name": "get_low_stock_products",
+      "arguments": {}
     }
   ],
-  "count": 5
-}
-```
-
----
-
-## Notification Endpoints
-
-### Create Notification
-```http
-POST /notifications
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "user_id": 1,
-  "vendor_id": null,
-  "title": "Low Stock Alert",
-  "message": "Tomatoes running low",
-  "type": "low_stock"
-}
-```
-
-### Get Notifications
-```http
-GET /notifications?user_id=1&unread_only=true
-Authorization: Bearer {token}
-```
-
-### Mark Notification as Read
-```http
-PUT /notifications/{notification_id}/read
-Authorization: Bearer {token}
-```
-
----
-
-## PDF Report Endpoints
-
-### Generate Inventory Report
-```http
-GET /reports/inventory/{vendor_id}
-Authorization: Bearer {token}
-```
-
-Returns PDF file.
-
-### Generate Sales Report
-```http
-GET /reports/sales/{vendor_id}?start_date=2024-01-01&end_date=2024-01-31
-Authorization: Bearer {token}
-```
-
-Returns PDF file.
-
-### Generate Analytics Report
-```http
-GET /reports/analytics
-Authorization: Bearer {token}
-```
-
-Returns PDF file with comprehensive analytics.
-
----
-
-## WebSocket Connection
-
-### Connect to WebSocket
-```javascript
-const ws = new WebSocket('ws://localhost:8000/ws/{user_id}');
-
-ws.onopen = () => {
-  console.log('Connected to WebSocket');
-};
-
-ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  console.log('Received:', data);
-};
-
-// Send heartbeat
-setInterval(() => {
-  ws.send('ping');
-}, 30000);
-```
-
-### WebSocket Message Types
-
-**Low Stock Alert:**
-```json
-{
-  "type": "low_stock",
-  "title": "Low Stock Alert",
-  "message": "Tomatoes is running low (5 units left)",
-  "vendor_id": 1,
-  "timestamp": "2024-01-15T10:30:00",
-  "priority": "high"
-}
-```
-
-**Stock Request Update:**
-```json
-{
-  "type": "stock_request_update",
-  "title": "Stock Request Update",
-  "message": "Stock request #123 is now Approved",
-  "request_id": 123,
-  "status": "Approved",
-  "timestamp": "2024-01-15T10:30:00",
-  "priority": "medium"
-}
-```
-
-**New Stock Request:**
-```json
-{
-  "type": "new_stock_request",
-  "title": "New Stock Request",
-  "message": "New stock request from Green Mart",
-  "request_id": 124,
-  "timestamp": "2024-01-15T10:30:00",
-  "priority": "medium"
-}
-```
-
----
-
-## Error Responses
-
-### 400 Bad Request
-```json
-{
-  "detail": "Email already registered"
-}
-```
-
-### 401 Unauthorized
-```json
-{
-  "detail": "Could not validate credentials"
-}
-```
-
-### 403 Forbidden
-```json
-{
-  "detail": "Not enough permissions"
-}
-```
-
-### 404 Not Found
-```json
-{
-  "detail": "Vendor not found"
-}
-```
-
-### 422 Validation Error
-```json
-{
-  "detail": [
+  "sources": ["Warehouse Inventory Ledger"],
+  "suggested_actions": [
     {
-      "loc": ["body", "email"],
-      "msg": "value is not a valid email address",
-      "type": "value_error.email"
+      "label": "Open Inventory Control",
+      "path": "/dashboard/supplier/inventory"
     }
   ]
 }
@@ -471,152 +325,21 @@ setInterval(() => {
 
 ---
 
-## Rate Limiting
+## 9. Real-Time WebSockets (`/ws/{token}`)
 
-Currently no rate limiting is implemented. For production, consider adding rate limiting middleware.
-
----
-
-## Data Models
-
-### User
-```typescript
+* **URL**: `ws://localhost:8001/ws/{jwt_token}` (or `wss://flowza-ri8d.onrender.com/ws/{jwt_token}`)
+* **Connection Protocol**: Clients authenticate by appending their JWT to the connection handshake URL.
+* **Incoming Events Broadcast**:
+```json
 {
-  id: number
-  username: string
-  email: string
-  role: "admin" | "official" | "vendor"
-  is_active: boolean
-  created_at: datetime
+  "type": "ORDER_STATUS_CHANGED",
+  "payload": {
+    "order_id": "ord_5521",
+    "order_number": "PO-2084",
+    "previous_status": "PENDING",
+    "new_status": "ACCEPTED",
+    "note": "Stock allocated for packaging."
+  },
+  "timestamp": "2026-08-26T10:45:00Z"
 }
 ```
-
-### Vendor
-```typescript
-{
-  id: number
-  name: string
-  owner_name: string
-  phone: string
-  category: string
-  location: string
-  location_lat?: number
-  location_lng?: number
-  sales: string
-  status: "Active" | "Inactive" | "Warning"
-  language: string
-  is_verified: boolean
-  created_at: datetime
-}
-```
-
-### InventoryItem
-```typescript
-{
-  id: number
-  vendor_id: number
-  name: string
-  quantity: number
-  unit: string
-  price: number
-  expiry_date?: datetime
-  last_updated: datetime
-}
-```
-
-### Sale
-```typescript
-{
-  id: number
-  vendor_id: number
-  total_amount: number
-  items_summary: string  // JSON string
-  timestamp: datetime
-}
-```
-
-### StockRequest
-```typescript
-{
-  id: number
-  vendor_id: number
-  product_name: string
-  quantity: number
-  unit: string
-  current_stock: number
-  preferred_delivery: string
-  status: "Requested" | "Approved" | "In Transit" | "Delivered"
-  requested_at: datetime
-  delivered_at?: datetime
-  handled_by?: string
-  modified_quantity?: number
-  assigned_supplier?: string
-}
-```
-
----
-
-## Best Practices
-
-1. **Always include Authorization header** for protected endpoints
-2. **Use HTTPS in production** to secure data transmission
-3. **Validate input data** on client side before sending to API
-4. **Handle errors gracefully** and show user-friendly messages
-5. **Implement retry logic** for failed requests
-6. **Use pagination** for large data sets (skip & limit parameters)
-7. **Cache frequently accessed data** to reduce API calls
-8. **Log API errors** for debugging
-9. **Set appropriate timeouts** for API requests
-10. **Use WebSockets** for real-time updates instead of polling
-
----
-
-## Testing with cURL
-
-### Login and Get Token
-```bash
-curl -X POST "http://localhost:8000/api/auth/login" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=admin&password=admin123"
-```
-
-### Get Vendors with Token
-```bash
-curl -X GET "http://localhost:8000/api/vendors" \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
-```
-
-### Create Vendor
-```bash
-curl -X POST "http://localhost:8000/api/vendors" \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Test Mart",
-    "owner_name": "Test Owner",
-    "phone": "1234567890",
-    "category": "Grocery",
-    "location": "Test Location",
-    "sales": "0",
-    "status": "Active"
-  }'
-```
-
----
-
-## Postman Collection
-
-A Postman collection with all endpoints is recommended for testing. Import the collection and set up environment variables:
-
-- `base_url`: http://localhost:8000/api
-- `token`: Your JWT token after login
-
----
-
-## Support
-
-For API issues or questions:
-- Check interactive docs at http://localhost:8000/docs
-- Review error messages in response
-- Check server logs for backend errors
-- Ensure all required fields are provided

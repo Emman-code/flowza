@@ -87,7 +87,7 @@ Configured in the Vercel Dashboard (**Project Settings $\to$ Environment Variabl
 ### Step 1: Connect Repository to Vercel
 1. Log in to [Vercel Dashboard](https://vercel.com).
 2. Click **Add New...** $\to$ **Project**.
-3. Select your GitHub repository (`Aravinth8926/Flowza` or your active fork).
+3. Select your GitHub repository (`Emman-code/flowza` or your active fork).
 
 ### Step 2: Configure Project Build Settings
 Configure the project parameters:
