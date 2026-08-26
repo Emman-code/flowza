@@ -283,6 +283,24 @@ export const App: React.FC = () => {
               <Route path="/dashboard/admin/notifications" element={<NotificationsPage />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Profile />} />
+
+              {/* Seamless Canonical Redirect Aliases */}
+              <Route path="/cart" element={<Navigate to="/dashboard/vendor/cart" replace />} />
+              <Route path="/vendor/cart" element={<Navigate to="/dashboard/vendor/cart" replace />} />
+              <Route path="/orders" element={<Navigate to="/dashboard/vendor/orders" replace />} />
+              <Route path="/vendor/orders" element={<Navigate to="/dashboard/vendor/orders" replace />} />
+              <Route path="/catalog" element={<Navigate to="/dashboard/vendor/products" replace />} />
+              <Route path="/products" element={<Navigate to="/dashboard/vendor/products" replace />} />
+              <Route path="/vendor/catalog" element={<Navigate to="/dashboard/vendor/products" replace />} />
+              <Route path="/vendor/products" element={<Navigate to="/dashboard/vendor/products" replace />} />
+              <Route path="/invoices" element={<Navigate to="/dashboard/vendor/invoices" replace />} />
+              <Route path="/vendor/invoices" element={<Navigate to="/dashboard/vendor/invoices" replace />} />
+              <Route path="/supplier/orders" element={<Navigate to="/dashboard/supplier/orders/incoming" replace />} />
+              <Route path="/supplier/incoming" element={<Navigate to="/dashboard/supplier/orders/incoming" replace />} />
+              <Route path="/supplier/invoices" element={<Navigate to="/dashboard/supplier/invoices" replace />} />
+              <Route path="/supplier/products" element={<Navigate to="/dashboard/supplier/products" replace />} />
+              <Route path="/supplier/inventory" element={<Navigate to="/dashboard/supplier/inventory" replace />} />
+              <Route path="/inventory" element={<Navigate to="/dashboard/supplier/inventory" replace />} />
             </Route>
 
             {/* Error Pages */}

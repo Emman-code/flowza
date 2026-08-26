@@ -1,561 +1,630 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  ShoppingCart,
+  Building2,
+  Trash2,
+  Plus,
+  Minus,
+  ArrowRight,
+  PackageCheck,
+  AlertTriangle,
+  FileText,
+  Calendar,
+  MapPin,
+  CheckCircle2,
+  X,
+  Loader2,
+  Sparkles,
+  Info,
+} from 'lucide-react';
 import cartService from '../../services/cartService';
 import type { Cart, CartItem, CheckoutResult } from '../../types';
+import { Button } from '../../components/ui/Button';
+import { Card } from '../../components/ui/Card';
+import { Badge } from '../../components/ui/Badge';
+import { Dialog } from '../../components/ui/Dialog';
+import { toast } from 'sonner';
 
-// ─── Checkout Success Modal ────────────────────────────────────────────────────
-interface SuccessModalProps {
-    result: CheckoutResult;
-    onClose: () => void;
+// ─── Checkout Confirmation Modal ──────────────────────────────────────────────
+interface CheckoutModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  targetCarts: Cart[];
+  onConfirm: (cartIds: string[], deliveryDate?: string, deliveryAddress?: string, notes?: string) => Promise<void>;
+  isLoading: boolean;
 }
 
-function CheckoutSuccessModal({ result, onClose }: SuccessModalProps) {
-    const navigate = useNavigate();
-    return (
-        <div style={overlay}>
-            <div style={successModal}>
-                <div style={successIcon}>🎉</div>
-                <h2 style={successTitle}>Order Placed!</h2>
-                <p style={successSub}>{result.message}</p>
-                <div style={successCard}>
-                    <div style={successRow}><span style={successLabel}>Order #</span><span style={successValue}>{result.order_number}</span></div>
-                    <div style={successRow}><span style={successLabel}>Supplier</span><span style={successValue}>{result.supplier_company}</span></div>
-                    <div style={successRow}><span style={successLabel}>Items</span><span style={successValue}>{result.item_count}</span></div>
-                    <div style={successRow}><span style={successLabel}>Total</span><span style={{ ...successValue, color: '#22c55e', fontWeight: 800, fontSize: 18 }}>₹{Number(result.total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span></div>
-                </div>
-                <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
-                    <button style={cancelBtn} onClick={onClose}>Continue Shopping</button>
-                    <button style={primaryBtnGreen} onClick={() => navigate('/vendor/orders')}>View Orders</button>
-                </div>
-            </div>
-        </div>
+function CheckoutModal({ isOpen, onClose, targetCarts, onConfirm, isLoading }: CheckoutModalProps) {
+  const [deliveryDate, setDeliveryDate] = useState('');
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [notes, setNotes] = useState('');
+
+  const totalItems = targetCarts.reduce((sum, c) => sum + c.item_count, 0);
+  const totalSubtotal = targetCarts.reduce((sum, c) => sum + Number(c.subtotal), 0);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await onConfirm(
+      targetCarts.map((c) => c.id),
+      deliveryDate || undefined,
+      deliveryAddress || undefined,
+      notes || undefined
     );
-}
+  };
 
-// ─── Cart Group (one per supplier) ────────────────────────────────────────────
-interface CartGroupProps {
-    cart: Cart;
-    onQuantityChange: (itemId: string, qty: number) => Promise<void>;
-    onRemoveItem: (itemId: string) => Promise<void>;
-    onCheckout: (cartId: string) => void;
-    loading: boolean;
-}
-
-function CartGroup({ cart, onQuantityChange, onRemoveItem, onCheckout, loading }: CartGroupProps) {
-    const [localQtys, setLocalQtys] = useState<Record<string, number>>({});
-
-    useEffect(() => {
-        const initial: Record<string, number> = {};
-        cart.items.forEach(i => { initial[i.id] = i.quantity; });
-        setLocalQtys(initial);
-    }, [cart.items]);
-
-    const handleQtyBlur = async (itemId: string) => {
-        const newQty = localQtys[itemId] ?? 1;
-        const current = cart.items.find(i => i.id === itemId);
-        if (current && newQty !== current.quantity && newQty >= 1) {
-            await onQuantityChange(itemId, newQty);
-        }
-    };
-
-    const hasPriceChanges = cart.has_price_changes;
-
-    return (
-        <div style={cartCard}>
-            {/* Supplier header */}
-            <div style={cartCardHeader}>
-                <div style={supplierBadge}>🏭</div>
+  return (
+    <Dialog
+      isOpen={isOpen}
+      onClose={onClose}
+      title={targetCarts.length > 1 ? `Review & Place ${targetCarts.length} Purchase Orders` : 'Review & Place Purchase Order'}
+      description="Review order specifications before transmitting POs to wholesale suppliers."
+      size="lg"
+    >
+      <form onSubmit={handleSubmit} className="space-y-5 pt-1">
+        {/* Supplier breakdown summary */}
+        <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+          {targetCarts.map((cart) => (
+            <div
+              key={cart.id}
+              className="p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#14161F] flex items-center justify-between"
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+                  <Building2 size={18} />
+                </div>
                 <div>
-                    <div style={supplierName}>{cart.supplier?.company_name ?? 'Unknown Supplier'}</div>
-                    <div style={supplierMeta}>{cart.item_count} item{cart.item_count !== 1 ? 's' : ''} in this cart</div>
+                  <h4 className="text-xs font-bold text-neutral-900 dark:text-white">
+                    {cart.supplier?.company_name ?? 'Wholesale Supplier'}
+                  </h4>
+                  <p className="text-xxs text-neutral-500 dark:text-neutral-400 mt-0.5 font-mono">
+                    {cart.item_count} SKU{cart.item_count !== 1 ? 's' : ''} • Subtotal: ₹{Number(cart.subtotal).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                  </p>
                 </div>
-                {hasPriceChanges && (
-                    <div style={priceChangedBadge}>⚠️ Price changed</div>
-                )}
+              </div>
+              <Badge variant="outline" className="text-xxs font-mono uppercase font-semibold">
+                PO Generation
+              </Badge>
             </div>
-
-            {/* Items */}
-            <div style={itemsSection}>
-                {cart.items.map(item => (
-                    <CartItemRow
-                        key={item.id}
-                        item={item}
-                        localQty={localQtys[item.id] ?? item.quantity}
-                        onQtyChange={(qty) => setLocalQtys(prev => ({ ...prev, [item.id]: qty }))}
-                        onQtyBlur={() => handleQtyBlur(item.id)}
-                        onRemove={() => onRemoveItem(item.id)}
-                    />
-                ))}
-            </div>
-
-            {/* Footer */}
-            <div style={cartFooter}>
-                <div style={subtotalSection}>
-                    <span style={subtotalLabel}>Subtotal</span>
-                    <span style={subtotalAmount}>
-                        ₹{Number(cart.subtotal).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                    </span>
-                </div>
-                <button
-                    style={{ ...checkoutBtn, opacity: loading ? 0.6 : 1 }}
-                    onClick={() => onCheckout(cart.id)}
-                    disabled={loading}
-                >
-                    {loading ? 'Placing Order...' : 'Checkout →'}
-                </button>
-            </div>
+          ))}
         </div>
-    );
-}
 
-// ─── Cart Item Row ─────────────────────────────────────────────────────────────
-interface CartItemRowProps {
-    item: CartItem;
-    localQty: number;
-    onQtyChange: (qty: number) => void;
-    onQtyBlur: () => void;
-    onRemove: () => void;
-}
-
-function CartItemRow({ item, localQty, onQtyChange, onQtyBlur, onRemove }: CartItemRowProps) {
-    const product = item.product;
-    return (
-        <div style={itemRow}>
-            {/* Product info */}
-            <div style={itemInfo}>
-                <div style={itemName}>{product?.name ?? 'Unknown Product'}</div>
-                <div style={itemMeta}>
-                    {product?.sku && <span style={itemSku}>{product.sku}</span>}
-                    <span style={itemUnit}>{product?.unit}</span>
-                    {item.price_changed && (
-                        <span style={priceChangedTag}>was ₹{Number(item.unit_price).toFixed(2)}</span>
-                    )}
-                </div>
-            </div>
-
-            {/* Price */}
-            <div style={itemPriceCol}>
-                <div style={itemCurrentPrice}>₹{Number(item.current_price ?? item.unit_price).toFixed(2)}</div>
-                <div style={itemPerUnit}>per {product?.unit}</div>
-            </div>
-
-            {/* Quantity control */}
-            <div style={qtyControl}>
-                <button
-                    style={qtyBtn}
-                    onClick={() => { if (localQty > 1) { onQtyChange(localQty - 1); onQtyBlur(); } }}
-                    disabled={localQty <= 1}
-                >−</button>
-                <input
-                    type="number"
-                    min={1}
-                    style={qtyInput}
-                    value={localQty}
-                    onChange={e => onQtyChange(parseInt(e.target.value, 10) || 1)}
-                    onBlur={onQtyBlur}
-                />
-                <button
-                    style={qtyBtn}
-                    onClick={() => { onQtyChange(localQty + 1); onQtyBlur(); }}
-                >+</button>
-            </div>
-
-            {/* Subtotal */}
-            <div style={itemSubtotal}>
-                ₹{(Number(item.current_price ?? item.unit_price) * localQty).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-            </div>
-
-            {/* Remove */}
-            <button style={removeBtn} onClick={onRemove} title="Remove item">✕</button>
+        {/* Total Financial Summary Box */}
+        <div className="p-4 rounded-xl bg-neutral-950 text-white dark:bg-[#12141A] border border-neutral-800 space-y-2 font-mono">
+          <div className="flex justify-between text-xs text-neutral-400">
+            <span>Total Item Count</span>
+            <span className="text-white font-bold">{totalItems} units</span>
+          </div>
+          <div className="flex justify-between text-xs text-neutral-400">
+            <span>Taxable PO Value</span>
+            <span className="text-white font-bold">
+              ₹{totalSubtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="border-t border-neutral-800 pt-2 flex justify-between items-center">
+            <span className="text-xs uppercase font-bold tracking-wider text-amber-400">
+              Total Procurement Amount
+            </span>
+            <span className="text-lg font-black text-amber-400">
+              ₹{totalSubtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+            </span>
+          </div>
         </div>
-    );
-}
 
-// ─── Main Page ─────────────────────────────────────────────────────────────────
-export default function VendorCart() {
-    const [carts, setCarts] = useState<Cart[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
-    const [checkoutSuccess, setCheckoutSuccess] = useState<CheckoutResult | null>(null);
-    const [checkoutError, setCheckoutError] = useState<string>('');
+        {/* Fulfillment fields */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-mono font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+              Expected Delivery Date (Optional)
+            </label>
+            <input
+              type="date"
+              value={deliveryDate}
+              onChange={(e) => setDeliveryDate(e.target.value)}
+              className="w-full h-9 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#14161F] px-3 text-xs text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 font-mono"
+            />
+          </div>
 
-    const fetchCarts = useCallback(async () => {
-        setLoading(true);
-        setError('');
-        try {
-            const res = await cartService.listCarts();
-            setCarts(res.data.carts);
-        } catch (err: any) {
-            setError(err?.response?.data?.error?.message ?? 'Failed to load carts.');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+          <div>
+            <label className="block text-xs font-mono font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+              Delivery Dock / Location (Optional)
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Warehouse Dock #3, Main Gate"
+              value={deliveryAddress}
+              onChange={(e) => setDeliveryAddress(e.target.value)}
+              className="w-full h-9 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#14161F] px-3 text-xs text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+            />
+          </div>
+        </div>
 
-    useEffect(() => { fetchCarts(); }, [fetchCarts]);
+        <div>
+          <label className="block text-xs font-mono font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+            Purchase Order Instructions / Notes (Optional)
+          </label>
+          <textarea
+            rows={2}
+            placeholder="Special packing notes, batch constraints, or delivery timing..."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#14161F] p-2.5 text-xs text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+          />
+        </div>
 
-    const handleQuantityChange = async (itemId: string, qty: number) => {
-        try {
-            const res = await cartService.updateItem(itemId, qty);
-            setCarts(prev => prev.map(c => c.id === res.data.id ? res.data : c));
-        } catch (err: any) {
-            console.error('Quantity update failed:', err);
-        }
-    };
-
-    const handleRemoveItem = async (itemId: string) => {
-        try {
-            const res = await cartService.removeItem(itemId);
-            setCarts(prev => {
-                const updatedCart = res.data;
-                if (updatedCart.item_count === 0) {
-                    return prev.filter(c => c.id !== updatedCart.id);
-                }
-                return prev.map(c => c.id === updatedCart.id ? updatedCart : c);
-            });
-        } catch (err: any) {
-            console.error('Remove item failed:', err);
-        }
-    };
-
-    const handleCheckout = async (cartId: string) => {
-        setCheckoutError('');
-        setCheckoutLoading(cartId);
-        try {
-            const res = await cartService.checkout(cartId, {});
-            setCarts(prev => prev.filter(c => c.id !== cartId));
-            setCheckoutSuccess(res.data);
-        } catch (err: any) {
-            const msg = err?.response?.data?.error?.message ?? 'Checkout failed. Please try again.';
-            setCheckoutError(msg);
-        } finally {
-            setCheckoutLoading(null);
-        }
-    };
-
-    const totalItems = carts.reduce((sum, c) => sum + c.item_count, 0);
-    const grandTotal = carts.reduce((sum, c) => sum + Number(c.subtotal), 0);
-
-    return (
-        <div style={page}>
-            {/* Header */}
-            <div style={pageHeader}>
-                <div>
-                    <h1 style={pageTitle}>My Cart</h1>
-                    <p style={pageSubtitle}>
-                        {carts.length} supplier cart{carts.length !== 1 ? 's' : ''} · {totalItems} item{totalItems !== 1 ? 's' : ''}
-                    </p>
-                </div>
-                {carts.length > 0 && (
-                    <div style={grandTotalBadge}>
-                        Grand Total: <strong>₹{grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</strong>
-                    </div>
-                )}
-            </div>
-
-            {/* Checkout error */}
-            {checkoutError && (
-                <div style={errorBanner}>
-                    ⚠️ {checkoutError}
-                    <button style={dismissBtn} onClick={() => setCheckoutError('')}>✕</button>
-                </div>
-            )}
-
-            {/* States */}
-            {loading ? (
-                <div style={centerMsg}>
-                    <div style={spinner} />
-                    <p style={{ color: '#94a3b8', marginTop: 16 }}>Loading your carts...</p>
-                </div>
-            ) : error ? (
-                <div style={errorBannerFull}>{error}</div>
-            ) : carts.length === 0 ? (
-                <EmptyCartState />
+        {/* Footer Actions */}
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200 dark:border-neutral-800">
+          <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={isLoading} className="font-mono text-xs">
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            size="sm"
+            disabled={isLoading}
+            className="bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs px-5"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> Transmitting POs...
+              </>
             ) : (
-                <div style={cartsLayout}>
-                    {carts.map(cart => (
-                        <CartGroup
-                            key={cart.id}
-                            cart={cart}
-                            onQuantityChange={handleQuantityChange}
-                            onRemoveItem={handleRemoveItem}
-                            onCheckout={handleCheckout}
-                            loading={checkoutLoading === cart.id}
-                        />
-                    ))}
-                </div>
+              <>
+                Confirm & Place Order ({targetCarts.length} PO{targetCarts.length !== 1 ? 's' : ''}) →
+              </>
             )}
-
-            {/* Success modal */}
-            {checkoutSuccess && (
-                <CheckoutSuccessModal
-                    result={checkoutSuccess}
-                    onClose={() => { setCheckoutSuccess(null); fetchCarts(); }}
-                />
-            )}
+          </Button>
         </div>
-    );
+      </form>
+    </Dialog>
+  );
 }
 
-function EmptyCartState() {
-    const navigate = useNavigate();
-    return (
-        <div style={emptyWrap}>
-            <div style={{ fontSize: 64, marginBottom: 16 }}>🛒</div>
-            <h3 style={{ color: '#c7d2fe', margin: '0 0 8px' }}>Your cart is empty</h3>
-            <p style={{ color: '#64748b', marginBottom: 24, textAlign: 'center', maxWidth: 320 }}>
-                Browse the product catalog and add items to start a purchase order with a supplier.
+// ─── Order Placement Success Modal ───────────────────────────────────────────
+interface SuccessModalProps {
+  results: CheckoutResult[];
+  onClose: () => void;
+}
+
+function CheckoutSuccessModal({ results, onClose }: SuccessModalProps) {
+  const navigate = useNavigate();
+  const totalAmount = results.reduce((sum, r) => sum + Number(r.total), 0);
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-200">
+        <div className="text-center space-y-2">
+          <div className="h-14 w-14 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center mx-auto shadow-inner">
+            <CheckCircle2 size={28} />
+          </div>
+          <h2 className="text-xl font-extrabold text-neutral-950 dark:text-white font-heading">
+            {results.length > 1 ? `${results.length} Purchase Orders Placed!` : 'Purchase Order Transmitted!'}
+          </h2>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto">
+            Stock reservations have been locked. Suppliers have received real-time notifications for fulfillment.
+          </p>
+        </div>
+
+        {/* List of generated POs */}
+        <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+          {results.map((res, idx) => (
+            <div
+              key={idx}
+              className="p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#14161F] flex items-center justify-between"
+            >
+              <div>
+                <span className="text-xxs font-mono font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">
+                  {res.order_number}
+                </span>
+                <p className="text-xs font-bold text-neutral-900 dark:text-white mt-0.5">{res.supplier_company}</p>
+                <p className="text-xxs text-neutral-500 font-mono mt-0.5">
+                  {res.item_count} items • Status: <span className="uppercase text-amber-600 dark:text-amber-400 font-semibold">{res.status}</span>
+                </p>
+              </div>
+              <div className="text-right">
+                <span className="text-xs font-black font-mono text-neutral-950 dark:text-white">
+                  ₹{Number(res.total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Total Summary */}
+        <div className="p-3.5 rounded-xl bg-neutral-950 text-white dark:bg-[#181B24] border border-neutral-800 flex justify-between items-center font-mono">
+          <span className="text-xs text-neutral-400 uppercase tracking-wider font-semibold">Total Order Value</span>
+          <span className="text-base font-black text-amber-400">
+            ₹{totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+          </span>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="flex-1 font-mono text-xs"
+          >
+            Continue Procurement
+          </Button>
+          <Button
+            onClick={() => {
+              onClose();
+              navigate('/dashboard/vendor/orders');
+            }}
+            className="flex-1 bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs"
+          >
+            <FileText size={14} className="mr-1.5" /> View Order History
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Cart Page Component ────────────────────────────────────────────────
+export default function VendorCart() {
+  const navigate = useNavigate();
+  const [carts, setCarts] = useState<Cart[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // Checkout modal states
+  const [checkoutTargetCarts, setCheckoutTargetCarts] = useState<Cart[]>([]);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutSuccessResults, setCheckoutSuccessResults] = useState<CheckoutResult[] | null>(null);
+
+  // Fetch all carts
+  const fetchCarts = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await cartService.listCarts();
+      setCarts(res.data.carts);
+    } catch (err: any) {
+      setError(err?.response?.data?.error?.message ?? 'Failed to load procurement cart.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCarts();
+  }, [fetchCarts]);
+
+  // Quantity updates
+  const handleQuantityChange = async (itemId: string, qty: number) => {
+    try {
+      const res = await cartService.updateItem(itemId, qty);
+      setCarts((prev) => prev.map((c) => (c.id === res.data.id ? res.data : c)));
+    } catch (err: any) {
+      toast.error(err?.response?.data?.error?.message ?? 'Failed to update item quantity.');
+    }
+  };
+
+  // Remove item
+  const handleRemoveItem = async (itemId: string) => {
+    try {
+      const res = await cartService.removeItem(itemId);
+      toast.success('Item removed from cart');
+      setCarts((prev) => {
+        const updatedCart = res.data;
+        if (updatedCart.item_count === 0) {
+          return prev.filter((c) => c.id !== updatedCart.id);
+        }
+        return prev.map((c) => (c.id === updatedCart.id ? updatedCart : c));
+      });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.error?.message ?? 'Failed to remove item.');
+    }
+  };
+
+  // Open checkout for a single cart
+  const handleOpenSingleCheckout = (cart: Cart) => {
+    setCheckoutTargetCarts([cart]);
+    setIsCheckoutModalOpen(true);
+  };
+
+  // Open checkout for all carts
+  const handleOpenAllCheckout = () => {
+    if (carts.length === 0) return;
+    setCheckoutTargetCarts(carts);
+    setIsCheckoutModalOpen(true);
+  };
+
+  // Execute checkout
+  const handleExecuteCheckout = async (
+    cartIds: string[],
+    deliveryDate?: string,
+    deliveryAddress?: string,
+    notes?: string
+  ) => {
+    setCheckoutLoading(true);
+    const results: CheckoutResult[] = [];
+    const failedErrors: string[] = [];
+
+    try {
+      for (const cartId of cartIds) {
+        try {
+          const res = await cartService.checkout(cartId, {
+            delivery_date: deliveryDate,
+            delivery_address: deliveryAddress,
+            notes: notes,
+          });
+          results.push(res.data);
+        } catch (err: any) {
+          const msg = err?.response?.data?.error?.message ?? `Failed to checkout cart ${cartId}`;
+          failedErrors.push(msg);
+        }
+      }
+
+      if (results.length > 0) {
+        setIsCheckoutModalOpen(false);
+        setCheckoutSuccessResults(results);
+        await fetchCarts();
+      }
+
+      if (failedErrors.length > 0) {
+        toast.error(`Checkout note: ${failedErrors.join('; ')}`);
+      }
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  const totalItems = carts.reduce((sum, c) => sum + c.item_count, 0);
+  const grandTotal = carts.reduce((sum, c) => sum + Number(c.subtotal), 0);
+
+  return (
+    <div className="space-y-6 max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 pb-16">
+      {/* ── Page Header ────────────────────────────────────────────── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-5">
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-heading flex items-center gap-2">
+              <ShoppingCart className="w-6 h-6 text-amber-500" />
+              Procurement Cart
+            </h1>
+            {carts.length > 0 && (
+              <span className="px-2.5 py-0.5 rounded-full text-xxs font-mono font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                {carts.length} Supplier Group{carts.length !== 1 ? 's' : ''} • {totalItems} Item{totalItems !== 1 ? 's' : ''}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+            Review your procurement lines, adjust quantities, and transmit purchase orders to wholesale suppliers.
+          </p>
+        </div>
+
+        {/* Global Summary & Checkout All Button */}
+        {carts.length > 0 && (
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 px-4 rounded-xl bg-white dark:bg-[#12141A] border border-neutral-200 dark:border-neutral-800 text-right font-mono shadow-xs">
+              <span className="text-[10px] uppercase font-bold text-neutral-400 block">Grand Total</span>
+              <span className="text-base font-black text-neutral-950 dark:text-white">
+                ₹{grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+            <Button
+              onClick={handleOpenAllCheckout}
+              className="bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs h-11 px-5 shadow-xs"
+            >
+              Checkout All ({carts.length} PO{carts.length !== 1 ? 's' : ''}) →
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* ── Explainer Banner ────────────────────────────────────────── */}
+      {carts.length > 0 && (
+        <div className="p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-[#14161F]/80 flex items-start gap-3 text-xs text-neutral-600 dark:text-neutral-300">
+          <Info size={16} className="text-amber-500 shrink-0 mt-0.5" />
+          <div>
+            <span className="font-bold text-neutral-950 dark:text-white">Multi-Supplier Procurement Notice:</span>{' '}
+            Products from different wholesale suppliers are grouped into separate supplier purchase orders. You can
+            checkout each supplier individually or click <strong>"Checkout All"</strong> to issue all POs at once.
+          </div>
+        </div>
+      )}
+
+      {/* ── Content States ─────────────────────────────────────────── */}
+      {loading ? (
+        <div className="p-16 text-center space-y-3">
+          <Loader2 className="w-8 h-8 animate-spin text-amber-500 mx-auto" />
+          <p className="text-xs font-mono text-neutral-400">Loading procurement cart...</p>
+        </div>
+      ) : error ? (
+        <div className="p-6 rounded-xl border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/30 text-xs text-rose-700 dark:text-rose-300">
+          {error}
+        </div>
+      ) : carts.length === 0 ? (
+        /* Empty Cart State */
+        <div className="p-16 text-center rounded-2xl border border-dashed border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-4">
+          <div className="h-16 w-16 rounded-2xl bg-neutral-100 dark:bg-[#181B24] border border-neutral-200 dark:border-neutral-800 text-neutral-400 flex items-center justify-center mx-auto shadow-inner">
+            <ShoppingCart size={28} />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-base font-extrabold text-neutral-900 dark:text-white font-heading">
+              Your procurement cart is empty
+            </h3>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto">
+              Browse verified wholesale catalogs to add items, compare prices, and draft purchase orders.
             </p>
-            <button style={primaryBtn} onClick={() => navigate('/vendor/catalog')}>
-                Browse Catalog →
-            </button>
+          </div>
+          <Button
+            onClick={() => navigate('/dashboard/vendor/products')}
+            className="bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs px-6"
+          >
+            Browse Wholesale Catalog →
+          </Button>
         </div>
-    );
-}
+      ) : (
+        /* Supplier Carts List */
+        <div className="space-y-6">
+          {carts.map((cart) => (
+            <Card
+              key={cart.id}
+              className="border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] overflow-hidden rounded-2xl shadow-xs"
+            >
+              {/* Supplier Header */}
+              <div className="p-4 sm:p-5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/70 dark:bg-[#151720] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center">
+                    <Building2 size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-extrabold text-neutral-950 dark:text-white font-heading flex items-center gap-2">
+                      {cart.supplier?.company_name ?? 'Wholesale Supplier'}
+                    </h3>
+                    <p className="text-xxs text-neutral-500 dark:text-neutral-400 mt-0.5 font-mono">
+                      Supplier Order Group • {cart.item_count} SKU{cart.item_count !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                </div>
 
-// ─── Inline styles ─────────────────────────────────────────────────────────────
-const page: React.CSSProperties = {
-    padding: '32px 28px',
-    maxWidth: 900,
-    margin: '0 auto',
-    fontFamily: "'Inter', 'Segoe UI', sans-serif",
-};
-const pageHeader: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 28,
-};
-const pageTitle: React.CSSProperties = {
-    fontSize: 26,
-    fontWeight: 800,
-    background: 'linear-gradient(135deg, #c7d2fe, #818cf8)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    margin: 0,
-};
-const pageSubtitle: React.CSSProperties = { color: '#64748b', margin: '6px 0 0', fontSize: 14 };
-const grandTotalBadge: React.CSSProperties = {
-    background: 'rgba(34,197,94,0.12)',
-    border: '1px solid rgba(34,197,94,0.3)',
-    borderRadius: 10,
-    padding: '10px 18px',
-    color: '#86efac',
-    fontSize: 14,
-};
-const cartsLayout: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 20 };
-const cartCard: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.09)',
-    borderRadius: 16,
-    overflow: 'hidden',
-};
-const cartCardHeader: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 14,
-    padding: '18px 20px',
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
-    background: 'rgba(255,255,255,0.03)',
-};
-const supplierBadge: React.CSSProperties = {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    background: 'rgba(99,102,241,0.2)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: 18,
-    flexShrink: 0,
-};
-const supplierName: React.CSSProperties = { fontWeight: 700, fontSize: 15, color: '#c7d2fe' };
-const supplierMeta: React.CSSProperties = { fontSize: 12, color: '#64748b', marginTop: 2 };
-const priceChangedBadge: React.CSSProperties = {
-    marginLeft: 'auto',
-    padding: '4px 12px',
-    borderRadius: 20,
-    fontSize: 11,
-    fontWeight: 700,
-    background: 'rgba(245,158,11,0.15)',
-    color: '#fbbf24',
-    border: '1px solid rgba(245,158,11,0.3)',
-};
-const itemsSection: React.CSSProperties = { padding: '0 20px' };
-const itemRow: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 16,
-    padding: '16px 0',
-    borderBottom: '1px solid rgba(255,255,255,0.05)',
-};
-const itemInfo: React.CSSProperties = { flex: 1, minWidth: 0 };
-const itemName: React.CSSProperties = { fontWeight: 600, color: '#e2e8f0', fontSize: 14, lineHeight: 1.3 };
-const itemMeta: React.CSSProperties = { display: 'flex', gap: 8, alignItems: 'center', marginTop: 4, flexWrap: 'wrap' };
-const itemSku: React.CSSProperties = { fontSize: 11, color: '#475569', fontFamily: 'monospace' };
-const itemUnit: React.CSSProperties = {
-    fontSize: 11, color: '#475569',
-    background: 'rgba(255,255,255,0.05)',
-    padding: '1px 7px', borderRadius: 4,
-};
-const priceChangedTag: React.CSSProperties = {
-    fontSize: 11, color: '#f59e0b',
-    background: 'rgba(245,158,11,0.12)',
-    padding: '1px 7px', borderRadius: 4,
-    textDecoration: 'line-through',
-};
-const itemPriceCol: React.CSSProperties = { textAlign: 'right', minWidth: 80 };
-const itemCurrentPrice: React.CSSProperties = { fontWeight: 700, color: '#a5b4fc', fontSize: 14 };
-const itemPerUnit: React.CSSProperties = { fontSize: 11, color: '#475569', marginTop: 2 };
-const qtyControl: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 0 };
-const qtyBtn: React.CSSProperties = {
-    width: 30,
-    height: 30,
-    background: 'rgba(255,255,255,0.07)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    color: '#94a3b8',
-    cursor: 'pointer',
-    fontSize: 16,
-    lineHeight: 1,
-    borderRadius: 0,
-};
-const qtyInput: React.CSSProperties = {
-    width: 48,
-    height: 30,
-    textAlign: 'center',
-    background: 'rgba(255,255,255,0.05)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderLeft: 'none',
-    borderRight: 'none',
-    color: '#e2e8f0',
-    fontSize: 13,
-    fontFamily: 'inherit',
-    outline: 'none',
-};
-const itemSubtotal: React.CSSProperties = {
-    minWidth: 90,
-    textAlign: 'right',
-    fontWeight: 700,
-    color: '#f1f5f9',
-    fontSize: 14,
-};
-const removeBtn: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
-    color: '#475569',
-    cursor: 'pointer',
-    fontSize: 14,
-    padding: '4px 8px',
-    borderRadius: 6,
-    transition: 'color 0.15s',
-};
-const cartFooter: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '16px 20px',
-    background: 'rgba(255,255,255,0.03)',
-    borderTop: '1px solid rgba(255,255,255,0.06)',
-};
-const subtotalSection: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 2 };
-const subtotalLabel: React.CSSProperties = { fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' };
-const subtotalAmount: React.CSSProperties = { fontSize: 20, fontWeight: 800, color: '#e2e8f0' };
-const checkoutBtn: React.CSSProperties = {
-    padding: '12px 28px',
-    borderRadius: 10,
-    border: 'none',
-    background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-    color: '#fff',
-    fontWeight: 700,
-    fontSize: 14,
-    cursor: 'pointer',
-    boxShadow: '0 4px 16px rgba(79,70,229,0.4)',
-    transition: 'all 0.15s',
-    fontFamily: 'inherit',
-};
-const centerMsg: React.CSSProperties = {
-    display: 'flex', flexDirection: 'column', alignItems: 'center',
-    justifyContent: 'center', padding: 80,
-};
-const spinner: React.CSSProperties = {
-    width: 36, height: 36,
-    border: '3px solid rgba(99,102,241,0.2)',
-    borderTop: '3px solid #818cf8',
-    borderRadius: '50%',
-    animation: 'spin 0.8s linear infinite',
-};
-const errorBanner: React.CSSProperties = {
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    background: 'rgba(239,68,68,0.1)',
-    border: '1px solid rgba(239,68,68,0.25)',
-    borderRadius: 10, padding: '14px 18px',
-    color: '#fca5a5', fontSize: 14, marginBottom: 20,
-};
-const errorBannerFull: React.CSSProperties = {
-    background: 'rgba(239,68,68,0.1)',
-    border: '1px solid rgba(239,68,68,0.25)',
-    borderRadius: 10, padding: '14px 18px',
-    color: '#fca5a5', fontSize: 14,
-};
-const dismissBtn: React.CSSProperties = {
-    background: 'none', border: 'none',
-    color: '#ef4444', cursor: 'pointer', fontSize: 15,
-};
-const emptyWrap: React.CSSProperties = {
-    display: 'flex', flexDirection: 'column',
-    alignItems: 'center', justifyContent: 'center',
-    padding: '80px 20px',
-};
-const primaryBtn: React.CSSProperties = {
-    padding: '12px 28px', borderRadius: 10, border: 'none',
-    background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-    color: '#fff', fontWeight: 700, fontSize: 14,
-    cursor: 'pointer', fontFamily: 'inherit',
-};
-const primaryBtnGreen: React.CSSProperties = {
-    ...primaryBtn,
-    background: 'linear-gradient(135deg, #059669, #10b981)',
-    flex: 1,
-};
-const cancelBtn: React.CSSProperties = {
-    ...primaryBtn,
-    background: 'rgba(255,255,255,0.07)',
-    border: '1px solid rgba(255,255,255,0.12)',
-    color: '#94a3b8',
-    flex: 1,
-};
-// Success modal
-const overlay: React.CSSProperties = {
-    position: 'fixed', inset: 0,
-    background: 'rgba(0,0,0,0.65)',
-    backdropFilter: 'blur(6px)',
-    zIndex: 1000,
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    padding: 20,
-};
-const successModal: React.CSSProperties = {
-    background: 'linear-gradient(135deg, #0f172a, #1e1e3a)',
-    border: '1px solid rgba(34,197,94,0.3)',
-    borderRadius: 20, padding: '36px 32px',
-    width: '100%', maxWidth: 440,
-    boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
-    textAlign: 'center',
-};
-const successIcon: React.CSSProperties = { fontSize: 52, marginBottom: 16 };
-const successTitle: React.CSSProperties = {
-    fontSize: 24, fontWeight: 800,
-    color: '#86efac', margin: '0 0 8px',
-};
-const successSub: React.CSSProperties = { color: '#64748b', fontSize: 14, marginBottom: 22 };
-const successCard: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: 12, padding: '16px 20px',
-    display: 'flex', flexDirection: 'column', gap: 10,
-};
-const successRow: React.CSSProperties = {
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-};
-const successLabel: React.CSSProperties = { fontSize: 12, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' };
-const successValue: React.CSSProperties = { fontSize: 14, fontWeight: 600, color: '#e2e8f0' };
+                {cart.has_price_changes && (
+                  <Badge variant="amber" className="text-xxs font-mono font-bold">
+                    <AlertTriangle size={12} className="mr-1 text-amber-500" /> Price Updated by Supplier
+                  </Badge>
+                )}
+              </div>
+
+              {/* Items Table / List */}
+              <div className="divide-y divide-neutral-100 dark:divide-neutral-800/60 p-2 sm:p-4">
+                {cart.items.map((item) => {
+                  const product = item.product;
+                  const currentPrice = Number(item.current_price ?? item.unit_price);
+                  const lineTotal = currentPrice * item.quantity;
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/20 rounded-xl transition-all"
+                    >
+                      {/* Product details */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-xs font-bold text-neutral-900 dark:text-white truncate">
+                          {product?.name ?? 'Wholesale Product'}
+                        </h4>
+                        <div className="flex items-center gap-2 mt-1 text-xxs text-neutral-500 dark:text-neutral-400 font-mono">
+                          {product?.sku && (
+                            <span className="bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded text-neutral-600 dark:text-neutral-300">
+                              SKU: {product.sku}
+                            </span>
+                          )}
+                          <span>Unit: {product?.unit ?? 'unit'}</span>
+                          {item.price_changed && (
+                            <span className="text-amber-600 line-through">
+                              was ₹{Number(item.unit_price).toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Unit Price */}
+                      <div className="text-right sm:min-w-[100px] font-mono">
+                        <span className="text-xs font-bold text-neutral-900 dark:text-white block">
+                          ₹{currentPrice.toFixed(2)}
+                        </span>
+                        <span className="text-[10px] text-neutral-400">per {product?.unit ?? 'unit'}</span>
+                      </div>
+
+                      {/* Quantity Controller */}
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => {
+                            if (item.quantity > 1) {
+                              handleQuantityChange(item.id, item.quantity - 1);
+                            }
+                          }}
+                          disabled={item.quantity <= 1}
+                          className="h-8 w-8 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#181B24] flex items-center justify-center text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-40 transition-colors cursor-pointer"
+                        >
+                          <Minus size={13} />
+                        </button>
+                        <span className="w-10 text-center font-mono font-bold text-xs text-neutral-950 dark:text-white">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                          className="h-8 w-8 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#181B24] flex items-center justify-center text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                        >
+                          <Plus size={13} />
+                        </button>
+                      </div>
+
+                      {/* Line Subtotal */}
+                      <div className="text-right sm:min-w-[110px] font-mono">
+                        <span className="text-xs font-black text-neutral-950 dark:text-white">
+                          ₹{lineTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        </span>
+                      </div>
+
+                      {/* Remove Button */}
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="h-8 w-8 rounded-lg text-neutral-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-center transition-colors cursor-pointer self-end sm:self-center"
+                        title="Remove product"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Cart Footer */}
+              <div className="p-4 sm:p-5 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50/40 dark:bg-[#14161F]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-neutral-500 uppercase tracking-wider font-semibold">
+                    Supplier Subtotal:
+                  </span>
+                  <span className="text-base font-black text-neutral-950 dark:text-white">
+                    ₹{Number(cart.subtotal).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/dashboard/vendor/products')}
+                    className="text-xs font-mono"
+                  >
+                    + Add More Items
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => handleOpenSingleCheckout(cart)}
+                    className="bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs px-4"
+                  >
+                    Checkout {cart.supplier?.company_name ?? 'Supplier'} →
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* ── Checkout Confirmation Modal ────────────────────────────── */}
+      {isCheckoutModalOpen && (
+        <CheckoutModal
+          isOpen={isCheckoutModalOpen}
+          onClose={() => setIsCheckoutModalOpen(false)}
+          targetCarts={checkoutTargetCarts}
+          onConfirm={handleExecuteCheckout}
+          isLoading={checkoutLoading}
+        />
+      )}
+
+      {/* ── Order Placement Success Modal ──────────────────────────── */}
+      {checkoutSuccessResults && (
+        <CheckoutSuccessModal
+          results={checkoutSuccessResults}
+          onClose={() => setCheckoutSuccessResults(null)}
+        />
+      )}
+    </div>
+  );
+}

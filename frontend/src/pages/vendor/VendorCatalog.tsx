@@ -103,23 +103,31 @@ export const VendorCatalog: React.FC = () => {
         <PageWrapper>
             <div className="space-y-6 max-w-6xl mx-auto pb-16">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-200 dark:border-neutral-800 pb-4">
                     <div>
-                        <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                            Supplier Product Catalog
+                        <h1 className="text-2xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-heading flex items-center gap-2">
+                            <Package className="w-6 h-6 text-amber-500" />
+                            Wholesale Product Catalog
                         </h1>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                            Browse and search products offered by verified suppliers in the network
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                            Browse verified supplier inventories, compare line prices, and build procurement purchase orders.
                         </p>
                     </div>
+
+                    <Button
+                        onClick={() => navigate('/dashboard/vendor/cart')}
+                        className="bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs self-start sm:self-auto flex items-center gap-1.5"
+                    >
+                        <ShoppingCart size={14} /> View Procurement Cart →
+                    </Button>
                 </div>
 
                 {/* Filters & Search */}
-                <div className="bg-white dark:bg-[#0c111d] rounded-xl border border-slate-200 dark:border-[#1e293b] p-4 space-y-3 shadow-xs">
+                <div className="bg-white dark:bg-[#12141A] rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 space-y-3 shadow-xs">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {/* Search */}
                         <div className="relative">
-                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
                             <Input
                                 placeholder="Search by product name or SKU..."
                                 value={searchQuery}
@@ -127,7 +135,7 @@ export const VendorCatalog: React.FC = () => {
                                     setSearchQuery(e.target.value);
                                     setPage(1);
                                 }}
-                                className="pl-9 text-xs h-9 bg-slate-50 dark:bg-[#111827]"
+                                className="pl-9 text-xs h-9 bg-neutral-50 dark:bg-[#151720]"
                             />
                         </div>
 
@@ -140,7 +148,7 @@ export const VendorCatalog: React.FC = () => {
                                     setCategoryFilter(e.target.value);
                                     setPage(1);
                                 }}
-                                className="text-xs h-9 bg-slate-50 dark:bg-[#111827]"
+                                className="text-xs h-9 bg-neutral-50 dark:bg-[#151720]"
                             />
                         </div>
 
@@ -152,9 +160,9 @@ export const VendorCatalog: React.FC = () => {
                                     setSupplierFilter(e.target.value);
                                     setPage(1);
                                 }}
-                                className="w-full rounded-lg border border-slate-300 dark:border-[#1e293b] bg-slate-50 dark:bg-[#111827] px-3 py-2 text-xs font-semibold text-slate-800 dark:text-white cursor-pointer h-9 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                className="w-full rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-[#151720] px-3 py-2 text-xs font-semibold text-neutral-800 dark:text-neutral-100 cursor-pointer h-9 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                             >
-                                <option value="">All Suppliers</option>
+                                <option value="">All Wholesale Suppliers</option>
                                 {suppliers.map((s) => (
                                     <option key={s.company_id || s.id} value={s.company_id || ''}>
                                         {s.company_name}
@@ -191,11 +199,11 @@ export const VendorCatalog: React.FC = () => {
                             {products.map((product) => (
                                 <Card
                                     key={product.id}
-                                    className="border-slate-200 dark:border-[#1e293b] hover:shadow-md transition-all overflow-hidden flex flex-col group cursor-pointer"
+                                    className="border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] hover:border-amber-500/40 hover:shadow-md transition-all overflow-hidden flex flex-col group cursor-pointer rounded-xl"
                                     onClick={() => handleOpenDetail(product)}
                                 >
                                     {/* Image Container */}
-                                    <div className="h-40 bg-slate-100 dark:bg-[#151d2e] border-b border-slate-200 dark:border-[#1e293b] relative flex items-center justify-center overflow-hidden shrink-0">
+                                    <div className="h-40 bg-neutral-100 dark:bg-[#151720] border-b border-neutral-200 dark:border-neutral-800 relative flex items-center justify-center overflow-hidden shrink-0">
                                         {product.image_url ? (
                                             <img
                                                 src={product.image_url}
@@ -206,10 +214,10 @@ export const VendorCatalog: React.FC = () => {
                                                 }}
                                             />
                                         ) : (
-                                            <ImageIcon size={32} className="text-slate-400" />
+                                            <ImageIcon size={32} className="text-neutral-400" />
                                         )}
                                         {product.category && (
-                                            <Badge className="absolute top-2 left-2 text-xxs bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-slate-200 font-bold border border-slate-200 dark:border-slate-800">
+                                            <Badge className="absolute top-2 left-2 text-xxs bg-white/95 dark:bg-neutral-900/95 text-neutral-800 dark:text-neutral-200 font-bold border border-neutral-200 dark:border-neutral-800">
                                                 {product.category}
                                             </Badge>
                                         )}
@@ -218,31 +226,31 @@ export const VendorCatalog: React.FC = () => {
                                     {/* Content */}
                                     <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                                         <div className="space-y-1">
-                                            <h3 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                            <h3 className="text-xs font-bold text-neutral-950 dark:text-white line-clamp-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors font-heading">
                                                 {product.name}
                                             </h3>
                                             {product.sku && (
-                                                <p className="text-xxs text-slate-400 font-mono">SKU: {product.sku}</p>
+                                                <p className="text-xxs text-neutral-400 font-mono">SKU: {product.sku}</p>
                                             )}
                                         </div>
 
                                         {/* Supplier Info */}
-                                        <div className="flex items-center gap-2 text-xxs text-slate-500 dark:text-slate-400 font-semibold">
-                                            <Building size={12} className="text-slate-400 shrink-0" />
+                                        <div className="flex items-center gap-2 text-xxs text-neutral-500 dark:text-neutral-400 font-semibold">
+                                            <Building size={12} className="text-amber-500 shrink-0" />
                                             <span className="truncate">{product.company?.company_name || 'Unknown Supplier'}</span>
                                         </div>
 
                                         {/* Price & Action */}
-                                        <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-[#1e293b]">
-                                            <div className="font-mono text-sm font-black text-blue-600 dark:text-blue-400">
+                                        <div className="flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-neutral-800">
+                                            <div className="font-mono text-sm font-black text-neutral-950 dark:text-white">
                                                 ₹{Number(product.price).toFixed(2)}
-                                                <span className="text-xxs font-normal text-slate-400"> / {product.unit}</span>
+                                                <span className="text-xxs font-normal text-neutral-400"> / {product.unit}</span>
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Button
                                                     size="sm"
                                                     variant="ghost"
-                                                    className="p-1 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                                                    className="p-1.5 text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         handleOpenDetail(product);
@@ -252,12 +260,16 @@ export const VendorCatalog: React.FC = () => {
                                                 </Button>
                                                 <Button
                                                     size="sm"
-                                                    variant="ghost"
-                                                    className="p-1 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/20"
+                                                    variant="outline"
+                                                    className="p-1.5 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/20 border-neutral-200 dark:border-neutral-800 font-mono text-xs"
                                                     disabled={addingProductId === product.id}
                                                     onClick={(e) => handleAddToCart(product, e)}
                                                 >
-                                                    <ShoppingCart size={14} />
+                                                    {addingProductId === product.id ? (
+                                                        <div className="h-3.5 w-3.5 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+                                                    ) : (
+                                                        <ShoppingCart size={14} />
+                                                    )}
                                                 </Button>
                                             </div>
                                         </div>
@@ -268,8 +280,8 @@ export const VendorCatalog: React.FC = () => {
 
                         {/* Pagination */}
                         {pagination && pagination.total_pages > 1 && (
-                            <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-[#1e293b]">
-                                <p className="text-xxs text-slate-500">
+                            <div className="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-800 font-mono text-xs">
+                                <p className="text-xxs text-neutral-500">
                                     Showing page {pagination.page} of {pagination.total_pages} ({pagination.total} total products)
                                 </p>
                                 <div className="flex items-center gap-2">
@@ -278,7 +290,7 @@ export const VendorCatalog: React.FC = () => {
                                         size="sm"
                                         disabled={page === 1}
                                         onClick={() => setPage((p) => p - 1)}
-                                        className="text-xs"
+                                        className="text-xs font-mono"
                                     >
                                         Previous
                                     </Button>
@@ -287,7 +299,7 @@ export const VendorCatalog: React.FC = () => {
                                         size="sm"
                                         disabled={page === pagination.total_pages}
                                         onClick={() => setPage((p) => p + 1)}
-                                        className="text-xs"
+                                        className="text-xs font-mono"
                                     >
                                         Next
                                     </Button>
@@ -309,7 +321,7 @@ export const VendorCatalog: React.FC = () => {
                         <div className="space-y-6 pt-2">
                             <div className="flex flex-col md:flex-row gap-6">
                                 {/* Image */}
-                                <div className="w-full md:w-48 h-48 rounded-xl bg-slate-100 dark:bg-[#151d2e] border border-slate-200 dark:border-[#1e293b] flex items-center justify-center overflow-hidden shrink-0">
+                                <div className="w-full md:w-48 h-48 rounded-xl bg-neutral-100 dark:bg-[#151720] border border-neutral-200 dark:border-neutral-800 flex items-center justify-center overflow-hidden shrink-0">
                                     {selectedProduct.image_url ? (
                                         <img
                                             src={selectedProduct.image_url}
@@ -320,14 +332,14 @@ export const VendorCatalog: React.FC = () => {
                                             }}
                                         />
                                     ) : (
-                                        <ImageIcon size={48} className="text-slate-400" />
+                                        <ImageIcon size={48} className="text-neutral-400" />
                                     )}
                                 </div>
 
                                 {/* Details */}
                                 <div className="flex-1 space-y-4">
                                     <div>
-                                        <h2 className="text-lg font-extrabold text-slate-900 dark:text-white">
+                                        <h2 className="text-lg font-extrabold text-neutral-950 dark:text-white font-heading">
                                             {selectedProduct.name}
                                         </h2>
                                         <div className="flex flex-wrap gap-2 mt-2">
@@ -344,22 +356,22 @@ export const VendorCatalog: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <div className="p-3 rounded-lg bg-blue-50/50 dark:bg-blue-950/10 border border-blue-100 dark:border-blue-900/30 flex items-center justify-between">
+                                    <div className="p-3.5 rounded-xl bg-neutral-100 dark:bg-[#14161F] border border-neutral-200 dark:border-neutral-800 flex items-center justify-between font-mono">
                                         <div>
-                                            <span className="text-xxs font-bold text-slate-400 uppercase tracking-wider block">Price</span>
-                                            <span className="font-mono text-lg font-black text-blue-600 dark:text-blue-400">
+                                            <span className="text-xxs font-bold text-neutral-400 uppercase tracking-wider block">Unit Price</span>
+                                            <span className="text-lg font-black text-neutral-950 dark:text-white">
                                                 ₹{Number(selectedProduct.price).toFixed(2)}
                                             </span>
-                                            <span className="text-xs text-slate-500 dark:text-slate-400"> / {selectedProduct.unit}</span>
+                                            <span className="text-xs text-neutral-500 dark:text-neutral-400"> / {selectedProduct.unit}</span>
                                         </div>
                                     </div>
 
                                     {selectedProduct.description && (
                                         <div>
-                                            <span className="text-xxs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                                            <span className="text-xxs font-bold text-neutral-400 uppercase tracking-wider block mb-1">
                                                 Description
                                             </span>
-                                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-[#111827] p-3 rounded-lg border border-slate-200/60 dark:border-[#1e293b]">
+                                            <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed bg-neutral-50 dark:bg-[#14161F] p-3 rounded-lg border border-neutral-200 dark:border-neutral-800">
                                                 {selectedProduct.description}
                                             </p>
                                         </div>
@@ -368,19 +380,19 @@ export const VendorCatalog: React.FC = () => {
                             </div>
 
                             {/* Supplier Card */}
-                            <div className="p-4 rounded-xl border border-slate-200 dark:border-[#1e293b] bg-slate-50 dark:bg-[#111827] space-y-3">
-                                <span className="text-xxs font-extrabold uppercase tracking-wider text-slate-400 block">
-                                    Supplier Information
+                            <div className="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#14161F] space-y-3">
+                                <span className="text-xxs font-mono font-extrabold uppercase tracking-wider text-neutral-400 block">
+                                    Wholesale Supplier Information
                                 </span>
                                 <div className="flex items-start gap-3">
-                                    <div className="h-10 w-10 rounded-lg bg-blue-600/10 text-blue-600 dark:text-blue-400 font-bold text-sm flex items-center justify-center shrink-0">
+                                    <div className="h-10 w-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-sm flex items-center justify-center shrink-0 border border-amber-500/20 font-mono">
                                         {selectedProduct.company?.company_name?.slice(0, 2).toUpperCase() || 'SP'}
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                                        <h4 className="text-xs font-bold text-neutral-950 dark:text-white truncate">
                                             {selectedProduct.company?.company_name}
                                         </h4>
-                                        <p className="text-xxs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                                        <p className="text-xxs text-neutral-500 dark:text-neutral-400 mt-0.5 line-clamp-1">
                                             {selectedProduct.company?.description || 'Verified supplier network merchant.'}
                                         </p>
                                     </div>
@@ -388,8 +400,8 @@ export const VendorCatalog: React.FC = () => {
                             </div>
 
                             {/* Actions */}
-                            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-[#1e293b]">
-                                <Button variant="outline" size="sm" onClick={() => setIsDetailModalOpen(false)}>
+                            <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+                                <Button variant="outline" size="sm" onClick={() => setIsDetailModalOpen(false)} className="font-mono text-xs">
                                     Close
                                 </Button>
                                 <Button
@@ -399,9 +411,9 @@ export const VendorCatalog: React.FC = () => {
                                         setIsDetailModalOpen(false);
                                         handleCreateOrderRequest(selectedProduct);
                                     }}
-                                    className="flex items-center gap-1.5"
+                                    className="flex items-center gap-1.5 font-mono text-xs"
                                 >
-                                    Request Order
+                                    Direct PO
                                 </Button>
                                 <Button
                                     size="sm"
@@ -410,7 +422,7 @@ export const VendorCatalog: React.FC = () => {
                                         setIsDetailModalOpen(false);
                                         handleAddToCart(selectedProduct);
                                     }}
-                                    className="flex items-center gap-1.5"
+                                    className="bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 font-mono font-bold text-xs flex items-center gap-1.5"
                                 >
                                     <ShoppingCart size={14} />
                                     Add to Cart
