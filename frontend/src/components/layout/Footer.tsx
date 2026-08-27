@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Heart, Zap, ArrowUpRight } from 'lucide-react';
 import { FlowzaLogo } from '../common/FlowzaLogo';
 
 export const Footer: React.FC = () => {
@@ -29,47 +29,56 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-xs">
               <li>
-                <a href="#how-it-works" className="hover:text-neutral-950 dark:hover:text-white transition-colors">How It Works</a>
+                <a href="/#how-it-works" className="hover:text-neutral-950 dark:hover:text-white transition-colors">How It Works</a>
               </li>
               <li>
-                <a href="#retailers" className="hover:text-neutral-950 dark:hover:text-white transition-colors">For Retailers</a>
+                <a href="/#roles" className="hover:text-neutral-950 dark:hover:text-white transition-colors">For Retailers & Suppliers</a>
               </li>
               <li>
-                <a href="#suppliers" className="hover:text-neutral-950 dark:hover:text-white transition-colors">For Wholesale Suppliers</a>
+                <a href="/#comparison" className="hover:text-neutral-950 dark:hover:text-white transition-colors">Why Flowza</a>
               </li>
               <li>
-                <a href="#simulator" className="hover:text-neutral-950 dark:hover:text-white transition-colors">Order Lifecycle Simulator</a>
+                <a href="/#simulator" className="hover:text-neutral-950 dark:hover:text-white transition-colors">Order Lifecycle Simulator</a>
+              </li>
+              <li>
+                <Link to="/about" className="text-amber-700 dark:text-amber-400 font-semibold hover:underline inline-flex items-center gap-1">
+                  <span>About Team &amp; Credits</span>
+                  <ArrowUpRight size={11} />
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Links: Security */}
+          {/* Links: Security & Team */}
           <div>
             <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-200 tracking-wider uppercase mb-3.5">
-              Compliance & Safety
+              Engineering &amp; Team
             </h4>
             <ul className="space-y-2.5 text-xs">
               <li className="flex items-center gap-1.5 text-neutral-700 dark:text-neutral-300">
-                <ShieldCheck size={14} className="text-amber-600 dark:text-amber-400" />
+                <Zap size={14} className="text-amber-600 dark:text-amber-400" />
+                <span>Crafted by <strong>Team ThunderBoltz</strong></span>
+              </li>
+              <li className="flex items-center gap-1.5 text-neutral-700 dark:text-neutral-300">
+                <ShieldCheck size={14} className="text-emerald-600 dark:text-emerald-400" />
                 <span>15-Digit GSTIN Verification</span>
               </li>
               <li>
                 <span className="text-neutral-500">Atomic Stock Reservations</span>
               </li>
               <li>
-                <span className="text-neutral-500">OAuth2 JWT + Encrypted Passwords</span>
-              </li>
-              <li>
-                <span className="text-neutral-500">Immutable Audit Records</span>
+                <Link to="/about#ideation" className="text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Founding Ideation Credits →
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
-          <p>&copy; {new Date().getFullYear()} Flowza B2B Procurement. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Flowza B2B Procurement. Engineered by Team <strong>ThunderBoltz</strong>.</p>
           <div className="flex space-x-4 font-mono text-[11px]">
-            <span>FastAPI • PostgreSQL • Production Workspace</span>
+            <span>FastAPI • PostgreSQL • Production Ready</span>
           </div>
         </div>
       </div>

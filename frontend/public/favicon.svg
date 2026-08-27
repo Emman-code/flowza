@@ -1,0 +1,53 @@
+<svg width="64" height="64" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="36" height="36" rx="8" fill="#12141A" />
+  <defs>
+    <linearGradient id="flowza-amber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#F59E0B" />
+      <stop offset="100%" stopColor="#D97706" />
+    </linearGradient>
+  </defs>
+
+  <!-- Top Horizontal Bar -->
+  <rect
+    x="6"
+    y="7"
+    width="24"
+    height="4.5"
+    rx="2"
+    fill="#FFFFFF"
+  />
+  
+  <!-- Middle Offset Flow Beam with Amber Gradient -->
+  <rect
+    x="6"
+    y="15"
+    width="16"
+    height="4.5"
+    rx="2"
+    fill="url(#flowza-amber-grad)"
+  />
+
+  <!-- Vertical Anchor Stem -->
+  <rect
+    x="6"
+    y="7"
+    width="4.5"
+    height="22"
+    rx="2"
+    fill="#FFFFFF"
+  />
+
+  <!-- Precision Geometric Pulse Node -->
+  <circle
+    cx="27"
+    cy="21.5"
+    r="3.5"
+    fill="url(#flowza-amber-grad)"
+  />
+  <circle
+    cx="27"
+    cy="21.5"
+    r="1.5"
+    fill="#12141A"
+  />
+</svg>

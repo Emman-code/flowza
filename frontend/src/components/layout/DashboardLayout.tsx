@@ -120,15 +120,6 @@ export const DashboardLayout: React.FC = () => {
             {/* Real-time Notifications Bell */}
             <NotificationBell />
 
-            {/* Theme Toggle */}
-            <button
-              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/60 dark:hover:bg-neutral-800 transition-all cursor-pointer"
-              aria-label="Toggle theme"
-            >
-              {resolvedTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
-
             {/* User Profile Dropdown Pill */}
             <div className="relative">
               <button
@@ -180,13 +171,27 @@ export const DashboardLayout: React.FC = () => {
                       <Sparkles size={15} />
                       <span>Flowza AI Assistant</span>
                     </Link>
-                    <div className="border-t border-slate-100 dark:border-slate-800/60 my-1" />
+                    <button
+                      onClick={() => {
+                        setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+                      }}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 transition-colors cursor-pointer"
+                    >
+                      <span className="flex items-center gap-2.5">
+                        {resolvedTheme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+                        <span>Appearance</span>
+                      </span>
+                      <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-500">
+                        {resolvedTheme}
+                      </span>
+                    </button>
+                    <div className="border-t border-neutral-100 dark:border-neutral-800/60 my-1" />
                     <button
                       onClick={() => {
                         setDropdownOpen(false);
                         handleLogout();
                       }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
                     >
                       <LogOut size={15} />
                       <span>Sign Out</span>

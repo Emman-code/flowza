@@ -338,13 +338,6 @@ export const Register: React.FC = () => {
         >
           <ArrowLeft size={14} /> Back to Overview
         </Link>
-        <button
-          onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-          className="p-2 rounded text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 transition-all cursor-pointer"
-          title="Toggle theme"
-        >
-          {resolvedTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-        </button>
       </div>
 
       <div className="w-full max-w-2xl space-y-6 relative z-10 pt-8">

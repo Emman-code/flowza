@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth';
-import { useThemeStore } from '../../store/theme';
 import { FlowzaLogo } from '../common/FlowzaLogo';
 import {
-  Sun,
-  Moon,
   LogOut,
   ArrowRight,
   Menu,
@@ -14,8 +11,8 @@ import {
 
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated, user, logout } = useAuthStore();
-  const { resolvedTheme, setTheme } = useThemeStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const getDashboardPath = () => {
@@ -28,6 +25,8 @@ export const Navbar: React.FC = () => {
     navigate('/');
   };
 
+  const isAboutPage = location.pathname === '/about';
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#F7F6F2]/95 dark:bg-[#0D0E12]/95 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
@@ -39,50 +38,57 @@ export const Navbar: React.FC = () => {
 
           {/* Desktop Business Navigation Links */}
           <nav className="hidden md:flex items-center space-x-6 text-xs font-medium text-neutral-600 dark:text-neutral-400">
-            <a
-              href="#how-it-works"
-              className="hover:text-neutral-950 dark:hover:text-white transition-colors"
+            {!isAboutPage ? (
+              <>
+                <a
+                  href="#how-it-works"
+                  className="hover:text-neutral-950 dark:hover:text-white transition-colors"
+                >
+                  How It Works
+                </a>
+                <a
+                  href="#roles"
+                  className="hover:text-neutral-950 dark:hover:text-white transition-colors"
+                >
+                  Workspaces
+                </a>
+                <a
+                  href="#comparison"
+                  className="hover:text-neutral-950 dark:hover:text-white transition-colors"
+                >
+                  Why Flowza
+                </a>
+                <a
+                  href="#simulator"
+                  className="hover:text-neutral-950 dark:hover:text-white transition-colors"
+                >
+                  Simulator
+                </a>
+              </>
+            ) : (
+              <Link
+                to="/"
+                className="hover:text-neutral-950 dark:hover:text-white transition-colors"
+              >
+                ← Back to Home
+              </Link>
+            )}
+
+            <Link
+              to="/about"
+              className={`transition-colors ${
+                isAboutPage
+                  ? 'text-amber-700 dark:text-amber-400 font-bold'
+                  : 'hover:text-neutral-950 dark:hover:text-white'
+              }`}
             >
-              How It Works
-            </a>
-            <a
-              href="#retailers"
-              className="hover:text-neutral-950 dark:hover:text-white transition-colors"
-            >
-              For Retailers
-            </a>
-            <a
-              href="#suppliers"
-              className="hover:text-neutral-950 dark:hover:text-white transition-colors"
-            >
-              For Suppliers
-            </a>
-            <a
-              href="#trust"
-              className="hover:text-neutral-950 dark:hover:text-white transition-colors"
-            >
-              GST & Trust
-            </a>
-            <a
-              href="#simulator"
-              className="hover:text-neutral-950 dark:hover:text-white transition-colors"
-            >
-              Order Simulator
-            </a>
+              About Team
+            </Link>
           </nav>
         </div>
 
-        {/* Right Side: Theme Toggle & Actions */}
+        {/* Right Side: Actions */}
         <div className="flex items-center space-x-3">
-          {/* Theme Toggle */}
-          <button
-            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-            className="p-1.5 rounded text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/60 dark:hover:bg-neutral-800 transition-all cursor-pointer"
-            aria-label="Toggle theme"
-          >
-            {resolvedTheme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
-
           {isAuthenticated && user ? (
             <div className="flex items-center space-x-2">
               <button
@@ -109,7 +115,7 @@ export const Navbar: React.FC = () => {
               </Link>
               <Link
                 to="/login"
-                className="px-3 py-1.5 rounded-md font-semibold bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 transition-colors inline-flex items-center gap-1 cursor-pointer shadow-xs"
+                className="px-3.5 py-1.5 rounded-md font-semibold font-mono text-xs bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 transition-colors inline-flex items-center gap-1 cursor-pointer shadow-xs"
               >
                 <span>Get Started</span>
                 <ArrowRight size={12} />
@@ -130,41 +136,53 @@ export const Navbar: React.FC = () => {
       {/* Mobile Nav Drawer */}
       {isOpen && (
         <div className="md:hidden border-t border-neutral-200 dark:border-neutral-800 bg-[#F7F6F2] dark:bg-[#0D0E12] px-4 py-4 space-y-3 text-xs font-medium">
-          <a
-            href="#how-it-works"
+          {!isAboutPage ? (
+            <>
+              <a
+                href="#how-it-works"
+                onClick={() => setIsOpen(false)}
+                className="block py-1 text-neutral-700 dark:text-neutral-300"
+              >
+                How It Works
+              </a>
+              <a
+                href="#roles"
+                onClick={() => setIsOpen(false)}
+                className="block py-1 text-neutral-700 dark:text-neutral-300"
+              >
+                Workspaces
+              </a>
+              <a
+                href="#comparison"
+                onClick={() => setIsOpen(false)}
+                className="block py-1 text-neutral-700 dark:text-neutral-300"
+              >
+                Why Flowza
+              </a>
+              <a
+                href="#simulator"
+                onClick={() => setIsOpen(false)}
+                className="block py-1 text-neutral-700 dark:text-neutral-300"
+              >
+                Simulator
+              </a>
+            </>
+          ) : (
+            <Link
+              to="/"
+              onClick={() => setIsOpen(false)}
+              className="block py-1 text-neutral-700 dark:text-neutral-300"
+            >
+              ← Back to Home
+            </Link>
+          )}
+          <Link
+            to="/about"
             onClick={() => setIsOpen(false)}
-            className="block py-1 text-neutral-700 dark:text-neutral-300"
+            className="block py-1 text-amber-700 dark:text-amber-400 font-bold"
           >
-            How It Works
-          </a>
-          <a
-            href="#retailers"
-            onClick={() => setIsOpen(false)}
-            className="block py-1 text-neutral-700 dark:text-neutral-300"
-          >
-            For Retailers
-          </a>
-          <a
-            href="#suppliers"
-            onClick={() => setIsOpen(false)}
-            className="block py-1 text-neutral-700 dark:text-neutral-300"
-          >
-            For Suppliers
-          </a>
-          <a
-            href="#trust"
-            onClick={() => setIsOpen(false)}
-            className="block py-1 text-neutral-700 dark:text-neutral-300"
-          >
-            GST & Trust
-          </a>
-          <a
-            href="#simulator"
-            onClick={() => setIsOpen(false)}
-            className="block py-1 text-neutral-700 dark:text-neutral-300"
-          >
-            Order Simulator
-          </a>
+            About Team ThunderBoltz
+          </Link>
         </div>
       )}
     </header>

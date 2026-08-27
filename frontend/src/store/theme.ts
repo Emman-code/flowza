@@ -9,8 +9,8 @@ interface ThemeState {
   initialize: () => void;
 }
 
-export const useThemeStore = create<ThemeState>((set, get) => ({
-  theme: 'system',
+export const useThemeStore = create<ThemeState>((set) => ({
+  theme: 'light',
   resolvedTheme: 'light',
   setTheme: (theme) => {
     localStorage.setItem('flowza-theme', theme);
@@ -19,30 +19,20 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     set({ theme, resolvedTheme: resolved });
   },
   initialize: () => {
-    const savedTheme = (localStorage.getItem('flowza-theme') as Theme) || 'system';
-    const resolved = resolveTheme(savedTheme);
+    const savedTheme = (localStorage.getItem('flowza-theme') as Theme);
+    // Strict light mode default: only activate dark if explicitly set to 'dark' by user
+    const initialTheme: Theme = savedTheme === 'dark' ? 'dark' : 'light';
+    const resolved = resolveTheme(initialTheme);
     updateHtmlClass(resolved);
-    set({ theme: savedTheme, resolvedTheme: resolved });
-
-    // Listen for system changes if system theme is selected
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleSystemChange = () => {
-      if (get().theme === 'system') {
-        const resolvedSystem = resolveTheme('system');
-        updateHtmlClass(resolvedSystem);
-        set({ resolvedTheme: resolvedSystem });
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleSystemChange);
+    set({ theme: initialTheme, resolvedTheme: resolved });
   },
 }));
 
 function resolveTheme(theme: Theme): 'light' | 'dark' {
-  if (theme === 'system') {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  if (theme === 'dark') {
+    return 'dark';
   }
-  return theme;
+  return 'light';
 }
 
 function updateHtmlClass(resolvedTheme: 'light' | 'dark') {
