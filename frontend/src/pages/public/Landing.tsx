@@ -135,34 +135,35 @@ export const Landing: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] dark:bg-[#0D0E12] text-[#111216] dark:text-[#F8F8FA] selection:bg-amber-500/20 selection:text-amber-950 dark:selection:text-amber-200 font-sans">
+    <div className="min-h-screen bg-[#F7F6F2] dark:bg-[#0D0E12] text-[#111216] dark:text-[#F8F8FA] selection:bg-amber-500/20 selection:text-amber-950 dark:selection:text-amber-200 font-sans relative overflow-hidden">
       {/* Top Floating Navbar */}
       <Navbar />
+
+      {/* Full-Width Interactive Hero ColorBends Background */}
+      <div className="absolute top-0 left-0 right-0 h-[720px] pointer-events-none z-0 opacity-75 dark:opacity-30 overflow-hidden">
+        <ColorBends
+          colors={['#ff5c7a', '#8a5cff', '#00ffd1']}
+          rotation={90}
+          speed={0.2}
+          scale={1}
+          frequency={1}
+          warpStrength={1}
+          mouseInfluence={1}
+          noise={0.15}
+          parallax={0.5}
+          iterations={1}
+          intensity={1.5}
+          bandWidth={6}
+          transparent={true}
+          className="w-full h-full"
+        />
+      </div>
 
       {/* ========================================================= */}
       {/* 1. HERO SECTION — ASYMMETRICAL SPLIT SCREEN               */}
       {/* ========================================================= */}
-      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-14 md:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-        {/* Ambient Interactive ColorBends Background (Light Theme Warm Amber Canvas) */}
-        <div className="absolute inset-0 -z-10 pointer-events-none opacity-60 dark:opacity-20 overflow-hidden">
-          <ColorBends
-            colors={['#F59E0B', '#FBBF24', '#FDE68A', '#FED7AA', '#FFFBEB']}
-            rotation={90}
-            speed={0.2}
-            scale={1}
-            frequency={1}
-            warpStrength={1}
-            mouseInfluence={1}
-            noise={0.08}
-            parallax={0.5}
-            iterations={1}
-            intensity={1.4}
-            bandWidth={6}
-            transparent={true}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center relative z-10">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-14 md:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center">
           {/* LEFT 48%: Core Positioning Narrative */}
           <div className="lg:col-span-5 space-y-6">
             {/* Primary Headline with Handcrafted SVG Underline */}
