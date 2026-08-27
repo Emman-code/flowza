@@ -4,7 +4,7 @@ import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
 import ColorBends from '../../components/ui/ColorBends';
 import MaskedHeading from '../../components/ui/MaskedHeading';
-import amberGradient from '../../assets/amber-gradient.svg';
+import heroTexture from '../../assets/hero-texture.jpg';
 import {
   ArrowRight,
   Check,
