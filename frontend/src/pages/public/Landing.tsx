@@ -119,19 +119,19 @@ export const Landing: React.FC = () => {
 
   const faqs = [
     {
-      q: 'Do I need to find new suppliers on Flowza, or can I use my existing partners?',
-      a: 'You can start immediately with your existing trading partners. Retailers and wholesale suppliers invite their current partners to coordinate purchase orders in one shared workspace without any new network setup.',
+      q: 'How does stock reservation prevent overselling?',
+      a: 'When a retailer places an order, the supplier’s inventory is immediately soft-locked atomically in PostgreSQL. If the supplier confirms, it locks as reserved stock; if rejected, stock is released instantly—eliminating overselling and double booking.',
     },
     {
-      q: 'How does stock reservation prevent duplicate sales?',
-      a: 'The moment a wholesale supplier confirms an order, the required line items are locked in reserve in the database. This prevents other buyers from ordering stock that is already committed for fulfillment.',
+      q: 'Are invoices GST compliant for Indian tax filing?',
+      a: 'Yes. Every confirmed order generates an immutable invoice record calculating exact CGST (2.5%), SGST (2.5%), or IGST (5%) with verified 15-digit GSTINs, valid HSN codes, and auto-computed tax breakdowns.',
     },
     {
-      q: 'Are the invoices GST-ready for Indian business filing?',
-      a: 'Yes. Invoices include verified 15-character GSTINs, supplier/retailer business details, line item HSN details, and calculated CGST/SGST or IGST breakdowns, available for instant PDF export.',
+      q: 'Can retailers and suppliers see each other’s internal data?',
+      a: 'No. Flowza enforces strict tenant boundaries. Retailers only see their own placed purchase orders and supplier status. Suppliers only see orders assigned to their catalog and their own warehouse stock.',
     },
     {
-      q: 'How does the grounded AI Assistant help my business?',
+      q: 'What is the role of the Flowza AI Assistant?',
       a: 'The AI assistant is a tenant-scoped, read-only copilot that queries live database records to answer practical questions such as "Which items are low in stock?", "Show me active orders from Apex FMCG", or "List unpaid invoices this month" without manual spreadsheet lookups.',
     },
   ];
@@ -141,20 +141,20 @@ export const Landing: React.FC = () => {
       {/* Top Floating Navbar */}
       <Navbar />
 
-      {/* Full-Width Interactive Hero ColorBends Background */}
-      <div className="absolute top-0 left-0 right-0 h-[720px] pointer-events-none z-0 opacity-55 dark:opacity-20 overflow-hidden">
+      {/* Full-Width Interactive Hero ColorBends Background (Subtle Warm Ambient Glow) */}
+      <div className="absolute top-0 left-0 right-0 h-[720px] pointer-events-none z-0 opacity-35 dark:opacity-15 overflow-hidden">
         <ColorBends
           colors={['#F59E0B', '#FB923C', '#FBBF24', '#D97706', '#FDE68A']}
           rotation={90}
-          speed={0.18}
+          speed={0.16}
           scale={1.1}
           frequency={0.9}
-          warpStrength={1.1}
-          mouseInfluence={0.8}
-          noise={0.08}
-          parallax={0.4}
+          warpStrength={1.0}
+          mouseInfluence={0.6}
+          noise={0.06}
+          parallax={0.3}
           iterations={1}
-          intensity={1.3}
+          intensity={1.05}
           bandWidth={7}
           transparent={true}
           className="w-full h-full"
@@ -173,15 +173,15 @@ export const Landing: React.FC = () => {
               <MaskedHeading
                 tag="h1"
                 text="One wholesale order. Both sides in sync."
-                src={amberGradient}
+                src={heroTexture}
                 align="left"
                 weight={900}
-                tracking={-0.03}
-                lineHeight={1.08}
-                textScale={0.096}
-                fillScale={1.3}
-                parallax={24}
-                drift={14}
+                tracking={-0.035}
+                lineHeight={1.02}
+                textScale={0.122}
+                fillScale={1.35}
+                parallax={28}
+                drift={15}
                 reveal="rise"
                 trigger="view"
                 duration={1.1}

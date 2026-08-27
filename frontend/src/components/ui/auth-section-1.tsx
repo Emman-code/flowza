@@ -352,49 +352,52 @@ export default function AuthSectionOne({
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Interactive Light-Theme ColorBends Ambient Visual Panel */}
-        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden rounded-2xl bg-[#FAF9F5] dark:bg-neutral-900/60 p-8 xl:p-10 text-neutral-900 dark:text-white min-h-[500px] border-[1.5px] border-neutral-300/90 dark:border-neutral-800 shadow-sm">
-          {/* ColorBends Ambient Light Background */}
+        {/* RIGHT COLUMN: High-Contrast Obsidian Black Visual Showcase with Vibrant ColorBends */}
+        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden rounded-2xl bg-[#090A0E] p-8 xl:p-10 text-white min-h-[500px] border border-neutral-800 shadow-2xl">
+          {/* ColorBends Radiant Amber Glow Effect */}
           <ColorBends
-            colors={['#F59E0B', '#FB923C', '#FBBF24', '#D97706', '#FDE68A']}
+            colors={['#FF6B35', '#F59E0B', '#FFD166', '#D97706', '#FFF0B3']}
             rotation={90}
-            speed={0.18}
-            scale={1.1}
-            frequency={0.9}
-            warpStrength={1.1}
+            speed={0.2}
+            scale={1.05}
+            frequency={0.95}
+            warpStrength={1.2}
             mouseInfluence={0.8}
-            noise={0.08}
+            noise={0.1}
             parallax={0.4}
             iterations={1}
-            intensity={1.3}
-            bandWidth={7}
+            intensity={1.5}
+            bandWidth={6}
             transparent={true}
-            className="absolute inset-0 z-0 opacity-60 dark:opacity-25 pointer-events-none"
+            className="absolute inset-0 z-0 opacity-75 pointer-events-none"
           />
 
-          {/* Minimal Overlay Content */}
+          {/* Minimal High-Contrast Overlay Content */}
           <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
             <div className="flex items-center justify-between">
-              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/90 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border border-neutral-300/80 dark:border-neutral-700 shadow-2xs backdrop-blur-xs">
+              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/10 text-neutral-200 border border-white/15 shadow-sm backdrop-blur-md">
                 Flowza B2B Network
               </span>
-              <span className="text-xs font-mono text-neutral-500 dark:text-neutral-400 font-semibold">v1.0.0</span>
+              <span className="text-xs font-mono text-neutral-400 font-semibold">v1.0.0</span>
             </div>
 
             <div className="space-y-3 max-w-md">
-              <h2 className="text-3xl xl:text-4xl font-black tracking-tight font-heading text-neutral-950 dark:text-white leading-tight">
+              <h2 className="text-3xl xl:text-4xl font-black tracking-tight font-heading text-white leading-tight">
                 One wholesale order.
                 <br />
-                <span className="text-amber-600 dark:text-amber-400">Both sides in sync.</span>
+                <span className="text-amber-400">Both sides in sync.</span>
               </h2>
-              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+              <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed font-normal">
                 Replace WhatsApp fragmentation with structured purchase orders, live stock reserves, and GST-ready invoices.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-white/90 dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700 flex items-center justify-between text-xs font-mono shadow-2xs backdrop-blur-xs">
-              <span className="text-neutral-600 dark:text-neutral-400 font-medium">Live Workspace Status</span>
-              <span className="text-emerald-700 dark:text-emerald-400 font-bold">● 100% AUDIT READY</span>
+            <div className="p-3.5 rounded-xl bg-white/10 border border-white/15 flex items-center justify-between text-xs font-mono shadow-sm backdrop-blur-md">
+              <span className="text-neutral-300 font-medium">Live Workspace Status</span>
+              <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                100% AUDIT READY
+              </span>
             </div>
           </div>
         </div>
