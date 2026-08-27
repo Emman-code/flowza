@@ -206,7 +206,7 @@ export const Landing: React.FC = () => {
                 onClick={() => navigate('/register?role=supplier')}
                 className="px-3.5 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 border-[1.5px] border-neutral-300 dark:border-neutral-700 font-semibold transition-colors cursor-pointer"
               >
-                Sign up as Wholesale Supplier →
+                Sign up as Supplier →
               </button>
             </div>
           </div>

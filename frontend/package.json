@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.0.0",
+    "@paper-design/shaders-react": "^0.0.80",
     "@tanstack/react-query": "^5.0.0",
     "axios": "^1.7.0",
     "class-variance-authority": "^0.7.0",
