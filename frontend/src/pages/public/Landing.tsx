@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
@@ -25,6 +25,28 @@ export const Landing: React.FC = () => {
   const navigate = useNavigate();
   const [activeSimStep, setActiveSimStep] = useState<number>(2);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  useEffect(() => {
+    const observerCallback: IntersectionObserverCallback = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+          entry.target.classList.remove('opacity-0', 'translate-y-6');
+          observer.unobserve(entry.target);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -40px 0px',
+    });
+
+    const elements = document.querySelectorAll('.scroll-reveal');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
 
   const simulationSteps = [
     {
@@ -113,7 +135,7 @@ export const Landing: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F7F6F2] dark:bg-[#0D0E12] text-[#111216] dark:text-[#F8F8FA] selection:bg-amber-500/20 selection:text-amber-950 dark:selection:text-amber-200 font-sans">
-      {/* Top Navigation */}
+      {/* Top Floating Navbar */}
       <Navbar />
 
       {/* ========================================================= */}
@@ -165,36 +187,35 @@ export const Landing: React.FC = () => {
 
               <a
                 href="#comparison"
-                className="px-4 py-2.5 rounded-full text-xs font-mono font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white bg-white dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700 hover:border-neutral-400 transition-all inline-flex items-center gap-1.5 shadow-xs"
+                className="px-4 py-2.5 rounded-full text-xs font-mono font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white bg-white dark:bg-neutral-800/80 border-[1.5px] border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 transition-all inline-flex items-center gap-1.5 shadow-xs"
               >
                 <span>Why Flowza</span>
                 <ArrowDown size={12} />
               </a>
             </div>
 
-            {/* Direct Sign-In Links */}
-            <div className="pt-2 flex flex-wrap items-center gap-2.5 text-xs font-mono">
-              <span className="text-neutral-400">Sign in directly:</span>
+            {/* Direct Sign-Up Links */}
+            <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-mono">
               <button
-                onClick={() => navigate('/login')}
-                className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 border border-neutral-300/80 dark:border-neutral-700 font-semibold transition-colors cursor-pointer"
+                onClick={() => navigate('/register?role=vendor')}
+                className="px-3.5 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 border-[1.5px] border-neutral-300 dark:border-neutral-700 font-semibold transition-colors cursor-pointer"
               >
-                Sign in as Retailer →
+                Sign up as Retailer →
               </button>
               <button
-                onClick={() => navigate('/login')}
-                className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 border border-neutral-300/80 dark:border-neutral-700 font-semibold transition-colors cursor-pointer"
+                onClick={() => navigate('/register?role=supplier')}
+                className="px-3.5 py-2 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 border-[1.5px] border-neutral-300 dark:border-neutral-700 font-semibold transition-colors cursor-pointer"
               >
-                Sign in as Wholesale Supplier →
+                Sign up as Wholesale Supplier →
               </button>
             </div>
           </div>
 
           {/* RIGHT 52%: Clean Structural Purchase Order & Tax Invoice Manifest */}
           <div className="lg:col-span-7">
-            <div className="rounded-2xl border border-neutral-300/90 dark:border-neutral-800 bg-white dark:bg-[#12141A] text-neutral-900 dark:text-neutral-100 shadow-lg overflow-hidden">
+            <div className="rounded-2xl border-[1.5px] border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#12141A] text-neutral-900 dark:text-neutral-100 shadow-md overflow-hidden">
               {/* Manifest Header Row */}
-              <div className="px-5 py-4 bg-[#FAF9F5] dark:bg-[#161822] border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+              <div className="px-5 py-4 bg-[#FAF9F5] dark:bg-[#161822] border-b-[1.5px] border-neutral-300 dark:border-neutral-700 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-500 font-bold block">
                     Shared Purchase Order Manifest
@@ -205,14 +226,14 @@ export const Landing: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-md text-[11px] font-mono font-bold bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
+                  <span className="px-3 py-1 rounded-md text-[11px] font-mono font-bold bg-amber-500/15 text-amber-800 dark:text-amber-300 border-[1.5px] border-amber-500/30">
                     STOCK RESERVED
                   </span>
                 </div>
               </div>
 
               {/* Counterparties Structured 2-Column Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200 dark:divide-neutral-800 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y-[1.5px] sm:divide-y-0 sm:divide-x-[1.5px] divide-neutral-300 dark:divide-neutral-700 border-b-[1.5px] border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#12141A]">
                 {/* Retailer Info */}
                 <div className="p-4 space-y-1">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block">
@@ -240,32 +261,11 @@ export const Landing: React.FC = () => {
                 </div>
               </div>
 
-              {/* 4-Step Lifecycle Status Bar */}
-              <div className="px-4 sm:px-5 py-3 bg-[#FAF9F5] dark:bg-[#161822] border-b border-neutral-200 dark:border-neutral-800">
-                <div className="grid grid-cols-4 gap-2 text-center text-[10px] sm:text-xs font-mono">
-                  <div className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/25 font-bold flex items-center justify-center gap-1">
-                    <CheckCircle2 size={12} className="shrink-0" />
-                    <span className="truncate">01 Placed</span>
-                  </div>
-                  <div className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/25 font-bold flex items-center justify-center gap-1">
-                    <CheckCircle2 size={12} className="shrink-0" />
-                    <span className="truncate">02 Confirmed</span>
-                  </div>
-                  <div className="p-1.5 rounded-md bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold flex items-center justify-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600 dark:bg-amber-400 shrink-0" />
-                    <span className="truncate">03 Reserved</span>
-                  </div>
-                  <div className="p-1.5 rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-500 border border-neutral-200 dark:border-neutral-700 font-medium flex items-center justify-center gap-1">
-                    <span className="truncate">04 GST Invoiced</span>
-                  </div>
-                </div>
-              </div>
-
               {/* Itemized Order Table */}
               <div className="p-4 sm:p-5 space-y-4">
-                <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden text-xs">
+                <div className="rounded-xl border-[1.5px] border-neutral-300 dark:border-neutral-700 overflow-hidden text-xs">
                   <table className="w-full text-left">
-                    <thead className="bg-[#FAF9F5] dark:bg-[#161822] text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-800 text-[10px] uppercase font-mono tracking-wider font-bold">
+                    <thead className="bg-[#FAF9F5] dark:bg-[#161822] text-neutral-500 dark:text-neutral-400 border-b-[1.5px] border-neutral-300 dark:border-neutral-700 text-[10px] uppercase font-mono tracking-wider font-bold">
                       <tr>
                         <th className="p-3">Item Description</th>
                         <th className="p-3">Quantity</th>
@@ -273,7 +273,7 @@ export const Landing: React.FC = () => {
                         <th className="p-3 text-right">Taxable Amount</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800 text-neutral-800 dark:text-neutral-200">
+                    <tbody className="divide-y-[1.5px] divide-neutral-300 dark:divide-neutral-700 text-neutral-800 dark:text-neutral-200">
                       <tr>
                         <td className="p-3">
                           <p className="font-bold text-neutral-950 dark:text-white">Organic Basmati Rice (25kg)</p>
@@ -301,7 +301,7 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Tax Breakdown & Total Strip */}
-                <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#FAF9F5] dark:bg-[#161822] p-4 space-y-3 font-mono text-xs">
+                <div className="rounded-xl border-[1.5px] border-neutral-300 dark:border-neutral-700 bg-[#FAF9F5] dark:bg-[#161822] p-4 space-y-3 font-mono text-xs">
                   <div className="space-y-1.5 text-neutral-600 dark:text-neutral-400">
                     <div className="flex justify-between">
                       <span>Subtotal (Taxable Value):</span>
@@ -317,7 +317,7 @@ export const Landing: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="pt-2.5 border-t border-neutral-200 dark:border-neutral-700/80 flex items-center justify-between">
+                  <div className="pt-2.5 border-t-[1.5px] border-neutral-300 dark:border-neutral-700 flex items-center justify-between">
                     <div>
                       <span className="text-[9px] uppercase tracking-wider text-neutral-500 font-bold block">
                         Total Invoice Payable
@@ -327,7 +327,7 @@ export const Landing: React.FC = () => {
                       </span>
                     </div>
 
-                    <div className="px-2.5 py-1 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold tracking-wider flex items-center gap-1.5">
+                    <div className="px-2.5 py-1 rounded border-[1.5px] border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold tracking-wider flex items-center gap-1.5">
                       <ShieldCheck size={13} className="text-emerald-600 shrink-0" />
                       <span>GSTIN COMPLIANT</span>
                     </div>
@@ -342,7 +342,7 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 2. BUILT FOR BOTH SIDES OF WHOLESALE                      */}
       {/* ========================================================= */}
-      <section id="roles" className="py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
+      <section id="roles" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
         <div className="mb-10 text-center max-w-3xl mx-auto space-y-2">
           <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
             Dual Workspace Architecture
@@ -455,7 +455,7 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 3. REPLACE THE BACK-AND-FORTH (WHY FLOWZA SECTION)         */}
       {/* ========================================================= */}
-      <section id="comparison" className="py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
+      <section id="comparison" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
         <div className="mb-10 text-center max-w-3xl mx-auto space-y-2">
           <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
             Why Flowza
@@ -525,7 +525,7 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 4. HOW IT WORKS (4-STEP REFINED PROCESS)                  */}
       {/* ========================================================= */}
-      <section id="how-it-works" className="py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
+      <section id="how-it-works" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
         <div className="mb-10 space-y-2">
           <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
             Clear 4-Step Workflow
@@ -593,7 +593,7 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 5. INTERACTIVE ORDER SIMULATOR (TEST-DRIVE WORKFLOW)      */}
       {/* ========================================================= */}
-      <section id="simulator" className="py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
+      <section id="simulator" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
         <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-2">
             <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
@@ -676,7 +676,7 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 6. GST, INVENTORY & GROUNDED AI SCOPE                     */}
       {/* ========================================================= */}
-      <section id="trust" className="py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
+      <section id="trust" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           <div className="p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-3">
             <div className="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
@@ -719,7 +719,7 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 7. FAQS                                                  */}
       {/* ========================================================= */}
-      <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
+      <section className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
         <div className="mb-8 space-y-2">
           <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
             Frequently Asked Questions
@@ -763,7 +763,7 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 8. FINAL CALL TO ACTION                                   */}
       {/* ========================================================= */}
-      <section className="py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
+      <section className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
         <div className="rounded-2xl p-8 sm:p-12 bg-neutral-950 text-white dark:bg-[#14161F] border border-neutral-800 text-center space-y-6 max-w-4xl mx-auto">
           <h2 className="font-heading text-2xl sm:text-4xl font-extrabold tracking-tight">
             Ready to simplify wholesale ordering?
