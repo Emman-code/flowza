@@ -352,49 +352,34 @@ export default function AuthSectionOne({
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Interactive ColorBends Three.js Ambient Visual Panel */}
-        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden rounded-2xl bg-neutral-950 p-8 xl:p-10 text-white min-h-[500px] border-[1.5px] border-neutral-900 shadow-md">
-          {/* ColorBends Background Shader */}
-          <ColorBends
-            colors={['#F59E0B', '#D97706', '#B45309', '#1C1917', '#111216']}
-            rotation={45}
-            speed={0.25}
-            scale={1.1}
-            frequency={1}
-            warpStrength={1.2}
-            mouseInfluence={0.8}
-            noise={0.12}
-            parallax={0.4}
-            iterations={2}
-            intensity={1.4}
-            bandWidth={6}
-            transparent={false}
-            className="absolute inset-0 z-0"
-          />
+        {/* RIGHT COLUMN: Interactive Light-Theme Ambient Visual Panel */}
+        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-neutral-100 dark:bg-neutral-900/50 p-8 xl:p-10 text-neutral-900 dark:text-white min-h-[500px] border-[1.5px] border-neutral-300/80 dark:border-neutral-800 shadow-sm">
+          {/* Subtle Ambient Background Gradient */}
+          <div className="absolute inset-0 bg-radial-[circle_at_top_right] from-amber-400/20 via-transparent to-transparent pointer-events-none" />
 
           {/* Minimal Overlay Content */}
           <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
             <div className="flex items-center justify-between">
-              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-black/40 text-white/95 border border-white/20 backdrop-blur-md">
+              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/80 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border border-neutral-300/80 dark:border-neutral-700 shadow-2xs">
                 Flowza B2B Network
               </span>
-              <span className="text-xs font-mono text-white/70">v1.0.0</span>
+              <span className="text-xs font-mono text-neutral-500 dark:text-neutral-400 font-semibold">v1.0.0</span>
             </div>
 
             <div className="space-y-3 max-w-md">
-              <h2 className="text-3xl xl:text-4xl font-black tracking-tight font-heading text-white leading-tight">
+              <h2 className="text-3xl xl:text-4xl font-black tracking-tight font-heading text-neutral-950 dark:text-white leading-tight">
                 One wholesale order.
                 <br />
-                <span className="text-amber-400">Both sides in sync.</span>
+                <span className="text-amber-600 dark:text-amber-400">Both sides in sync.</span>
               </h2>
-              <p className="text-xs sm:text-sm text-neutral-200 leading-relaxed drop-shadow-xs">
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
                 Replace WhatsApp fragmentation with structured purchase orders, live stock reserves, and GST-ready invoices.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-between text-xs font-mono shadow-sm">
-              <span className="text-neutral-300">Live Workspace Status</span>
-              <span className="text-emerald-400 font-bold">● 100% AUDIT READY</span>
+            <div className="p-3.5 rounded-xl bg-white/90 dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700 flex items-center justify-between text-xs font-mono shadow-2xs">
+              <span className="text-neutral-600 dark:text-neutral-400 font-medium">Live Workspace Status</span>
+              <span className="text-emerald-700 dark:text-emerald-400 font-bold">● 100% AUDIT READY</span>
             </div>
           </div>
         </div>

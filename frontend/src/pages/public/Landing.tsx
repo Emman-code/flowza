@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
+import ColorBends from '../../components/ui/ColorBends';
+import MaskedHeading from '../../components/ui/MaskedHeading';
 import {
   ArrowRight,
   Check,
@@ -141,8 +143,27 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 1. HERO SECTION — ASYMMETRICAL SPLIT SCREEN               */}
       {/* ========================================================= */}
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-14 md:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-14 md:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+        {/* Ambient Interactive ColorBends Background (Light Theme Warm Glow) */}
+        <div className="absolute inset-0 -z-10 pointer-events-none opacity-35 dark:opacity-15 overflow-hidden">
+          <ColorBends
+            colors={['#FDE68A', '#F59E0B', '#FBBF24', '#FED7AA', '#FEF3C7']}
+            rotation={45}
+            speed={0.15}
+            scale={1.2}
+            frequency={0.8}
+            warpStrength={0.9}
+            mouseInfluence={0.5}
+            noise={0.06}
+            parallax={0.3}
+            iterations={1}
+            intensity={1.2}
+            bandWidth={7}
+            transparent={true}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center relative z-10">
           {/* LEFT 48%: Core Positioning Narrative */}
           <div className="lg:col-span-5 space-y-6">
             {/* Primary Headline with Handcrafted SVG Underline */}
@@ -438,13 +459,22 @@ export const Landing: React.FC = () => {
       {/* 3. REPLACE THE BACK-AND-FORTH (WHY FLOWZA SECTION)         */}
       {/* ========================================================= */}
       <section id="comparison" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
-        <div className="mb-10 text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
+        <div className="mb-10 text-center max-w-2xl mx-auto space-y-3">
+          <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold block">
             Why Flowza
           </span>
-          <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
-            Replace the back-and-forth.
-          </h2>
+          <MaskedHeading
+            text="Replace the back-and-forth."
+            tag="h2"
+            reveal="rise"
+            align="center"
+            fillScale={1.3}
+            parallax={24}
+            src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"
+            brightness={0.9}
+            saturation={1.3}
+            className="font-heading text-2xl sm:text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight"
+          />
           <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">
             Compare manual WhatsApp ordering with Flowza's shared workspace.
           </p>
