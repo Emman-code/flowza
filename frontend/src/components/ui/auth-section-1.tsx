@@ -352,15 +352,30 @@ export default function AuthSectionOne({
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Interactive Light-Theme Ambient Visual Panel */}
-        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-neutral-100 dark:bg-neutral-900/50 p-8 xl:p-10 text-neutral-900 dark:text-white min-h-[500px] border-[1.5px] border-neutral-300/80 dark:border-neutral-800 shadow-sm">
-          {/* Subtle Ambient Background Gradient */}
-          <div className="absolute inset-0 bg-radial-[circle_at_top_right] from-amber-400/20 via-transparent to-transparent pointer-events-none" />
+        {/* RIGHT COLUMN: Interactive Light-Theme ColorBends Ambient Visual Panel */}
+        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden rounded-2xl bg-[#FAF9F5] dark:bg-neutral-900/60 p-8 xl:p-10 text-neutral-900 dark:text-white min-h-[500px] border-[1.5px] border-neutral-300/90 dark:border-neutral-800 shadow-sm">
+          {/* ColorBends Ambient Light Background */}
+          <ColorBends
+            colors={['#F59E0B', '#FBBF24', '#FDE68A', '#FED7AA', '#FFFBEB']}
+            rotation={90}
+            speed={0.2}
+            scale={1}
+            frequency={1}
+            warpStrength={1}
+            mouseInfluence={1}
+            noise={0.08}
+            parallax={0.5}
+            iterations={1}
+            intensity={1.3}
+            bandWidth={6}
+            transparent={true}
+            className="absolute inset-0 z-0 opacity-60 dark:opacity-25 pointer-events-none"
+          />
 
           {/* Minimal Overlay Content */}
           <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
             <div className="flex items-center justify-between">
-              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/80 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border border-neutral-300/80 dark:border-neutral-700 shadow-2xs">
+              <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-white/90 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border border-neutral-300/80 dark:border-neutral-700 shadow-2xs backdrop-blur-xs">
                 Flowza B2B Network
               </span>
               <span className="text-xs font-mono text-neutral-500 dark:text-neutral-400 font-semibold">v1.0.0</span>
@@ -377,7 +392,7 @@ export default function AuthSectionOne({
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-white/90 dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700 flex items-center justify-between text-xs font-mono shadow-2xs">
+            <div className="p-3.5 rounded-xl bg-white/90 dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700 flex items-center justify-between text-xs font-mono shadow-2xs backdrop-blur-xs">
               <span className="text-neutral-600 dark:text-neutral-400 font-medium">Live Workspace Status</span>
               <span className="text-emerald-700 dark:text-emerald-400 font-bold">● 100% AUDIT READY</span>
             </div>
