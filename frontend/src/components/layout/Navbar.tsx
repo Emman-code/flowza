@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth';
 import { FlowzaLogo } from '../common/FlowzaLogo';
+import GlassSurface from '../ui/GlassSurface';
 import {
   LogOut,
   ArrowRight,
@@ -39,14 +40,16 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="fixed top-3 sm:top-4 inset-x-0 mx-auto w-[calc(100%-1.5rem)] sm:w-[calc(100%-2.5rem)] max-w-5xl z-50 transition-all duration-300">
-      {/* Floating Island Pill Enclosure */}
-      <div
-        className={`rounded-full transition-all duration-300 ${
-          scrolled
-            ? 'bg-[#F7F6F2]/90 dark:bg-[#12141A]/90 backdrop-blur-2xl border border-neutral-300/80 dark:border-neutral-800 shadow-[0_12px_40px_rgba(0,0,0,0.08)] py-2 px-3 sm:px-5'
-            : 'bg-[#F7F6F2]/80 dark:bg-[#12141A]/80 backdrop-blur-xl border border-neutral-200/90 dark:border-neutral-800 shadow-[0_8px_30px_rgba(0,0,0,0.04)] py-2 px-3.5 sm:px-5'
-        } flex items-center justify-between`}
+      {/* Floating Island GlassSurface Pill */}
+      <GlassSurface
+        width="100%"
+        height="auto"
+        borderRadius={9999}
+        className={`transition-all duration-300 ${
+          scrolled ? 'shadow-lg shadow-black/5' : 'shadow-md shadow-black/3'
+        }`}
       >
+        <div className="w-full flex items-center justify-between py-0.5 px-1 sm:px-2">
         {/* Left Side: Brand Logo */}
         <div className="flex items-center gap-6 sm:gap-8">
           <Link to="/" className="flex items-center group py-0.5">
@@ -152,6 +155,7 @@ export const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
+      </GlassSurface>
 
       {/* Mobile Floating Drawer */}
       {isOpen && (
