@@ -119,179 +119,180 @@ export const Landing: React.FC = () => {
       {/* ========================================================= */}
       {/* 1. HERO SECTION — ASYMMETRICAL SPLIT SCREEN               */}
       {/* ========================================================= */}
-      <section className="pt-24 md:pt-30 pb-12 md:pb-18 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+      <section className="pt-24 sm:pt-28 md:pt-32 pb-14 md:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center">
           {/* LEFT 48%: Core Positioning Narrative */}
-          <div className="lg:col-span-5 space-y-5">
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
-              <span className="w-2 h-2 bg-amber-500 rounded-xs" />
-              <span>Retailer & Wholesale Supplier Workspace</span>
-            </div>
-
-            {/* Clear Primary Headline */}
-            <h1 className="font-heading text-3xl sm:text-4xl lg:text-[46px] font-black tracking-tight text-neutral-950 dark:text-white leading-[1.1]">
-              One wholesale order. Both sides in sync.
+          <div className="lg:col-span-5 space-y-6">
+            {/* Primary Headline with Handcrafted SVG Underline */}
+            <h1 className="font-heading text-3xl sm:text-4xl lg:text-[48px] font-black tracking-[-0.03em] text-neutral-950 dark:text-white leading-[1.08]">
+              One wholesale order.{' '}
+              <span className="relative inline-block whitespace-nowrap">
+                <span className="relative z-10">Both sides in sync.</span>
+                {/* Handcrafted curved vector underline */}
+                <svg
+                  className="absolute -bottom-1.5 left-0 w-full h-3 text-amber-500 overflow-visible pointer-events-none"
+                  viewBox="0 0 260 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 9.5C55 2.5 160 -1.5 257 7.5C195 11.5 85 12.5 14 11.5"
+                    stroke="currentColor"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    className="text-amber-500"
+                  />
+                </svg>
+              </span>
             </h1>
 
             {/* Practical Value Copy */}
-            <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 leading-relaxed">
-              Flowza replaces WhatsApp messages, spreadsheets, and phone calls with a shared purchase-order workflow. Retailers place orders, wholesale suppliers confirm availability, and both sides track stock, fulfilment, and GST-ready invoices in one place.
+            <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
+              Flowza replaces WhatsApp messages, spreadsheets, and phone calls with a shared purchase-order workspace. Retailers place orders, wholesale suppliers confirm availability, and both sides track stock, fulfilment, and GST-ready invoices in one place.
             </p>
 
-            {/* Primary Action Buttons */}
+            {/* Primary Action Buttons (Nested Button-in-Button Architecture) */}
             <div className="pt-1 flex flex-wrap items-center gap-3">
               <button
                 onClick={() => navigate('/login')}
-                className="px-6 py-3 rounded-lg text-xs sm:text-sm font-bold font-mono bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 transition-all flex items-center gap-2 cursor-pointer shadow-sm hover:shadow-md"
+                className="group pl-6 pr-2.5 py-2.5 rounded-full text-xs sm:text-sm font-bold font-mono bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 transition-all flex items-center gap-3 shadow-md shadow-black/10 active:scale-[0.98] cursor-pointer"
               >
-                <span>Choose your workspace →</span>
+                <span>Choose your workspace</span>
+                <span className="w-7 h-7 rounded-full bg-white/20 dark:bg-black/15 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+                  <ArrowRight size={13} />
+                </span>
               </button>
 
               <a
                 href="#comparison"
-                className="text-xs font-mono font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white inline-flex items-center gap-1.5 transition-colors px-2 py-2"
+                className="px-4 py-2.5 rounded-full text-xs font-mono font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white bg-white dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700 hover:border-neutral-400 transition-all inline-flex items-center gap-1.5 shadow-xs"
               >
                 <span>Why Flowza</span>
-                <ArrowDown size={13} />
+                <ArrowDown size={12} />
               </a>
             </div>
 
-            {/* Role Demo Shortcuts */}
-            <div className="flex items-center gap-2 text-xs font-mono pt-1 text-neutral-500">
-              <span>Try Demo:</span>
+            {/* Direct Sign-In Links */}
+            <div className="pt-2 flex flex-wrap items-center gap-2.5 text-xs font-mono">
+              <span className="text-neutral-400">Sign in directly:</span>
               <button
                 onClick={() => navigate('/login')}
-                className="text-amber-700 dark:text-amber-400 hover:underline font-bold"
+                className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 border border-neutral-300/80 dark:border-neutral-700 font-semibold transition-colors cursor-pointer"
               >
-                As Retailer
+                Sign in as Retailer →
               </button>
-              <span>•</span>
               <button
                 onClick={() => navigate('/login')}
-                className="text-amber-700 dark:text-amber-400 hover:underline font-bold"
+                className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 border border-neutral-300/80 dark:border-neutral-700 font-semibold transition-colors cursor-pointer"
               >
-                As Wholesale Supplier
+                Sign in as Wholesale Supplier →
               </button>
-            </div>
-
-            {/* Proof Badges */}
-            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center gap-y-2 gap-x-5 text-xs text-neutral-600 dark:text-neutral-400 font-medium">
-              <span className="inline-flex items-center gap-1.5">
-                <Check size={14} className="text-emerald-600 dark:text-emerald-400" />
-                Atomic stock reservations
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Check size={14} className="text-emerald-600 dark:text-emerald-400" />
-                GST-ready invoicing
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Check size={14} className="text-emerald-600 dark:text-emerald-400" />
-                Single auditable record
-              </span>
             </div>
           </div>
 
-          {/* RIGHT 52%: Shared Purchase Order Workspace Card (Above the fold fit) */}
+          {/* RIGHT 52%: Clean Structural Purchase Order & Tax Invoice Manifest */}
           <div className="lg:col-span-7">
-            <div className="rounded-xl border border-neutral-200/90 dark:border-neutral-800 bg-white dark:bg-[#12141A] text-neutral-900 dark:text-neutral-100 shadow-lg overflow-hidden">
-              {/* Workspace Card Header */}
-              <div className="px-4 py-3 bg-neutral-50 dark:bg-[#161820] border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+            <div className="rounded-2xl border border-neutral-300/90 dark:border-neutral-800 bg-white dark:bg-[#12141A] text-neutral-900 dark:text-neutral-100 shadow-lg overflow-hidden">
+              {/* Manifest Header Row */}
+              <div className="px-5 py-4 bg-[#FAF9F5] dark:bg-[#161822] border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-neutral-500 block font-bold">
-                    Shared Purchase Order
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-500 font-bold block">
+                    Shared Purchase Order Manifest
                   </span>
-                  <span className="text-xs sm:text-sm font-mono font-extrabold text-neutral-950 dark:text-white">
+                  <span className="text-sm sm:text-base font-mono font-black text-neutral-950 dark:text-white">
                     #PO-2084
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                  <span className="px-3 py-1 rounded-md text-[11px] font-mono font-bold bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                     STOCK RESERVED
                   </span>
                 </div>
               </div>
 
-              {/* Connecting Parties Bar */}
-              <div className="p-3.5 border-b border-neutral-100 dark:border-neutral-800/80 bg-neutral-50/50 dark:bg-[#14161D]">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 items-center">
-                  <div className="p-2.5 rounded-lg bg-white dark:bg-[#181A22] border border-neutral-200/80 dark:border-neutral-800 space-y-0.5">
-                    <span className="text-[9px] font-mono font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
-                      RETAILER
-                    </span>
-                    <p className="text-xs font-bold text-neutral-950 dark:text-white truncate">
-                      Fresh Mart Supermarket
-                    </p>
-                    <p className="text-[10px] text-neutral-500 font-mono">GSTIN: 33AAAAA0000A1Z5 (Coimbatore)</p>
-                  </div>
+              {/* Counterparties Structured 2-Column Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200 dark:divide-neutral-800 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A]">
+                {/* Retailer Info */}
+                <div className="p-4 space-y-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block">
+                    Buyer (Retail Store)
+                  </span>
+                  <p className="text-xs sm:text-sm font-bold text-neutral-950 dark:text-white">
+                    Fresh Mart Supermarket
+                  </p>
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+                    GSTIN: 33AAAAA0000A1Z5 • Coimbatore, TN
+                  </p>
+                </div>
 
-                  <div className="p-2.5 rounded-lg bg-white dark:bg-[#181A22] border border-neutral-200/80 dark:border-neutral-800 space-y-0.5">
-                    <span className="text-[9px] font-mono font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
-                      WHOLESALE SUPPLIER
-                    </span>
-                    <p className="text-xs font-bold text-neutral-950 dark:text-white truncate">
-                      Apex FMCG Wholesalers
-                    </p>
-                    <p className="text-[10px] text-neutral-500 font-mono">GSTIN: 33BBBBB1111B2Z6 (Salem)</p>
+                {/* Wholesale Supplier Info */}
+                <div className="p-4 space-y-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block">
+                    Seller (Wholesale Supplier)
+                  </span>
+                  <p className="text-xs sm:text-sm font-bold text-neutral-950 dark:text-white">
+                    Apex FMCG Wholesalers
+                  </p>
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+                    GSTIN: 33BBBBB1111B2Z6 • Salem, TN
+                  </p>
+                </div>
+              </div>
+
+              {/* 4-Step Lifecycle Status Bar */}
+              <div className="px-4 sm:px-5 py-3 bg-[#FAF9F5] dark:bg-[#161822] border-b border-neutral-200 dark:border-neutral-800">
+                <div className="grid grid-cols-4 gap-2 text-center text-[10px] sm:text-xs font-mono">
+                  <div className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/25 font-bold flex items-center justify-center gap-1">
+                    <CheckCircle2 size={12} className="shrink-0" />
+                    <span className="truncate">01 Placed</span>
+                  </div>
+                  <div className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/25 font-bold flex items-center justify-center gap-1">
+                    <CheckCircle2 size={12} className="shrink-0" />
+                    <span className="truncate">02 Confirmed</span>
+                  </div>
+                  <div className="p-1.5 rounded-md bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 font-bold flex items-center justify-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600 dark:bg-amber-400 shrink-0" />
+                    <span className="truncate">03 Reserved</span>
+                  </div>
+                  <div className="p-1.5 rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-500 border border-neutral-200 dark:border-neutral-700 font-medium flex items-center justify-center gap-1">
+                    <span className="truncate">04 GST Invoiced</span>
                   </div>
                 </div>
               </div>
 
-              {/* Order Status Stepper */}
-              <div className="px-4 py-2.5 bg-white dark:bg-[#12141A] border-b border-neutral-100 dark:border-neutral-800/80">
-                <div className="flex items-center justify-between text-[11px] font-mono text-neutral-600 dark:text-neutral-400">
-                  <span className="flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
-                    <CheckCircle2 size={12} /> Placed
-                  </span>
-                  <span className="h-px w-4 sm:w-6 bg-neutral-200 dark:bg-neutral-800" />
-                  <span className="flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
-                    <CheckCircle2 size={12} /> Confirmed
-                  </span>
-                  <span className="h-px w-4 sm:w-6 bg-neutral-200 dark:bg-neutral-800" />
-                  <span className="flex items-center gap-1 font-bold text-amber-600 dark:text-amber-400">
-                    <span className="w-3 h-3 rounded-full bg-amber-500 text-neutral-950 flex items-center justify-center text-[8px] font-bold">3</span>
-                    Stock Reserved
-                  </span>
-                  <span className="h-px w-4 sm:w-6 bg-neutral-200 dark:bg-neutral-800" />
-                  <span className="flex items-center gap-1 text-neutral-400 dark:text-neutral-500">
-                    <span className="w-3 h-3 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-[8px]">4</span>
-                    GST Prepared
-                  </span>
-                </div>
-              </div>
-
-              {/* Order Line Items Table */}
-              <div className="p-4 space-y-3">
-                <div className="rounded-lg border border-neutral-200/80 dark:border-neutral-800 overflow-hidden text-xs">
+              {/* Itemized Order Table */}
+              <div className="p-4 sm:p-5 space-y-4">
+                <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden text-xs">
                   <table className="w-full text-left">
-                    <thead className="bg-neutral-50 dark:bg-[#161820] text-neutral-500 border-b border-neutral-200/80 dark:border-neutral-800 text-[10px] uppercase font-mono">
+                    <thead className="bg-[#FAF9F5] dark:bg-[#161822] text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-800 text-[10px] uppercase font-mono tracking-wider font-bold">
                       <tr>
-                        <th className="p-2 font-semibold">Line Item</th>
-                        <th className="p-2 font-semibold">Quantity</th>
-                        <th className="p-2 font-semibold text-right">Unit Price</th>
-                        <th className="p-2 font-semibold text-right">Amount</th>
+                        <th className="p-3">Item Description</th>
+                        <th className="p-3">Quantity</th>
+                        <th className="p-3 text-right">Unit Rate</th>
+                        <th className="p-3 text-right">Taxable Amount</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800 text-neutral-700 dark:text-neutral-300">
+                    <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800 text-neutral-800 dark:text-neutral-200">
                       <tr>
-                        <td className="p-2 font-semibold text-neutral-950 dark:text-white">
-                          Organic Basmati Rice (25kg)
+                        <td className="p-3">
+                          <p className="font-bold text-neutral-950 dark:text-white">Organic Basmati Rice (25kg)</p>
+                          <p className="text-[10px] text-neutral-500 font-mono">HSN: 10063020 • Tax Rate: 5% GST</p>
                         </td>
-                        <td className="p-2 font-mono">20 bags</td>
-                        <td className="p-2 text-right font-mono">₹200.00</td>
-                        <td className="p-2 text-right font-mono font-bold text-neutral-950 dark:text-white">
+                        <td className="p-3 font-mono">20 bags</td>
+                        <td className="p-3 text-right font-mono">₹200.00</td>
+                        <td className="p-3 text-right font-mono font-bold text-neutral-950 dark:text-white">
                           ₹4,000.00
                         </td>
                       </tr>
                       <tr>
-                        <td className="p-2 font-semibold text-neutral-950 dark:text-white">
-                          Refined Sunflower Oil (15L)
+                        <td className="p-3">
+                          <p className="font-bold text-neutral-950 dark:text-white">Refined Sunflower Oil (15L)</p>
+                          <p className="text-[10px] text-neutral-500 font-mono">HSN: 15121910 • Tax Rate: 5% GST</p>
                         </td>
-                        <td className="p-2 font-mono">6 tins</td>
-                        <td className="p-2 text-right font-mono">₹150.00</td>
-                        <td className="p-2 text-right font-mono font-bold text-neutral-950 dark:text-white">
+                        <td className="p-3 font-mono">6 tins</td>
+                        <td className="p-3 text-right font-mono">₹150.00</td>
+                        <td className="p-3 text-right font-mono font-bold text-neutral-950 dark:text-white">
                           ₹900.00
                         </td>
                       </tr>
@@ -299,37 +300,37 @@ export const Landing: React.FC = () => {
                   </table>
                 </div>
 
-                {/* Real-time Confirmation Highlights */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 space-y-0.5 font-mono">
-                    <span className="text-[9px] uppercase font-bold text-amber-700 dark:text-amber-400 block">
-                      Inventory Status
-                    </span>
-                    <p className="font-semibold text-neutral-950 dark:text-white text-[11px] flex items-center gap-1.5">
-                      <Check size={13} className="text-amber-600 dark:text-amber-400" />
-                      20 bags reserved · 80 available
-                    </p>
+                {/* Tax Breakdown & Total Strip */}
+                <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#FAF9F5] dark:bg-[#161822] p-4 space-y-3 font-mono text-xs">
+                  <div className="space-y-1.5 text-neutral-600 dark:text-neutral-400">
+                    <div className="flex justify-between">
+                      <span>Subtotal (Taxable Value):</span>
+                      <span className="font-semibold text-neutral-950 dark:text-white">₹4,900.00</span>
+                    </div>
+                    <div className="flex justify-between text-[11px]">
+                      <span>CGST (2.5%):</span>
+                      <span className="text-neutral-950 dark:text-white">₹122.50</span>
+                    </div>
+                    <div className="flex justify-between text-[11px]">
+                      <span>SGST (2.5%):</span>
+                      <span className="text-neutral-950 dark:text-white">₹122.50</span>
+                    </div>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 space-y-0.5 font-mono">
-                    <span className="text-[9px] uppercase font-bold text-emerald-700 dark:text-emerald-400 block">
-                      GST Invoicing
-                    </span>
-                    <p className="font-semibold text-neutral-950 dark:text-white text-[11px] flex items-center gap-1.5">
-                      <Check size={13} className="text-emerald-600 dark:text-emerald-400" />
-                      CGST 2.5% + SGST 2.5% prepared
-                    </p>
-                  </div>
-                </div>
+                  <div className="pt-2.5 border-t border-neutral-200 dark:border-neutral-700/80 flex items-center justify-between">
+                    <div>
+                      <span className="text-[9px] uppercase tracking-wider text-neutral-500 font-bold block">
+                        Total Invoice Payable
+                      </span>
+                      <span className="text-base sm:text-lg font-black text-neutral-950 dark:text-amber-400">
+                        ₹5,145.00
+                      </span>
+                    </div>
 
-                {/* Total Line */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-neutral-950 text-white dark:bg-[#181A22] border border-neutral-800 font-mono">
-                  <span className="text-xs text-neutral-300">
-                    Subtotal ₹4,900.00 + 5% GST (₹245.00)
-                  </span>
-                  <div className="text-right">
-                    <span className="text-[9px] text-neutral-400 uppercase block">Total Due</span>
-                    <span className="text-sm sm:text-base font-bold text-amber-400">₹5,145.00</span>
+                    <div className="px-2.5 py-1 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold tracking-wider flex items-center gap-1.5">
+                      <ShieldCheck size={13} className="text-emerald-600 shrink-0" />
+                      <span>GSTIN COMPLIANT</span>
+                    </div>
                   </div>
                 </div>
               </div>
