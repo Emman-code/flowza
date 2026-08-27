@@ -140,20 +140,20 @@ export const Landing: React.FC = () => {
       <Navbar />
 
       {/* Full-Width Interactive Hero ColorBends Background */}
-      <div className="absolute top-0 left-0 right-0 h-[720px] pointer-events-none z-0 opacity-75 dark:opacity-30 overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-[720px] pointer-events-none z-0 opacity-55 dark:opacity-20 overflow-hidden">
         <ColorBends
-          colors={['#ff5c7a', '#8a5cff', '#00ffd1']}
+          colors={['#F59E0B', '#FB923C', '#FBBF24', '#D97706', '#FDE68A']}
           rotation={90}
-          speed={0.2}
-          scale={1}
-          frequency={1}
-          warpStrength={1}
-          mouseInfluence={1}
-          noise={0.15}
-          parallax={0.5}
+          speed={0.18}
+          scale={1.1}
+          frequency={0.9}
+          warpStrength={1.1}
+          mouseInfluence={0.8}
+          noise={0.08}
+          parallax={0.4}
           iterations={1}
-          intensity={1.5}
-          bandWidth={6}
+          intensity={1.3}
+          bandWidth={7}
           transparent={true}
           className="w-full h-full"
         />

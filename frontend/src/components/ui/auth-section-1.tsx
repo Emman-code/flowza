@@ -356,20 +356,20 @@ export default function AuthSectionOne({
         <div className="relative hidden lg:flex flex-col justify-between overflow-hidden rounded-2xl bg-[#FAF9F5] dark:bg-neutral-900/60 p-8 xl:p-10 text-neutral-900 dark:text-white min-h-[500px] border-[1.5px] border-neutral-300/90 dark:border-neutral-800 shadow-sm">
           {/* ColorBends Ambient Light Background */}
           <ColorBends
-            colors={['#ff5c7a', '#8a5cff', '#00ffd1']}
+            colors={['#F59E0B', '#FB923C', '#FBBF24', '#D97706', '#FDE68A']}
             rotation={90}
-            speed={0.2}
-            scale={1}
-            frequency={1}
-            warpStrength={1}
-            mouseInfluence={1}
-            noise={0.15}
-            parallax={0.5}
+            speed={0.18}
+            scale={1.1}
+            frequency={0.9}
+            warpStrength={1.1}
+            mouseInfluence={0.8}
+            noise={0.08}
+            parallax={0.4}
             iterations={1}
-            intensity={1.5}
-            bandWidth={6}
+            intensity={1.3}
+            bandWidth={7}
             transparent={true}
-            className="absolute inset-0 z-0 opacity-75 dark:opacity-30 pointer-events-none"
+            className="absolute inset-0 z-0 opacity-60 dark:opacity-25 pointer-events-none"
           />
 
           {/* Minimal Overlay Content */}
