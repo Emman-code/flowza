@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
 import ColorBends from '../../components/ui/ColorBends';
+import MaskedHeading from '../../components/ui/MaskedHeading';
+import amberGradient from '../../assets/amber-gradient.svg';
 import {
   ArrowRight,
   Check,
@@ -166,28 +168,41 @@ export const Landing: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center">
           {/* LEFT 48%: Core Positioning Narrative */}
           <div className="lg:col-span-5 space-y-6">
-            {/* Primary Headline with Handcrafted SVG Underline */}
-            <h1 className="font-heading text-3xl sm:text-4xl lg:text-[48px] font-black tracking-[-0.03em] text-neutral-950 dark:text-white leading-[1.08]">
-              One wholesale order.{' '}
-              <span className="relative inline-block whitespace-nowrap">
-                <span className="relative z-10">Both sides in sync.</span>
-                {/* Handcrafted curved vector underline */}
-                <svg
-                  className="absolute -bottom-1.5 left-0 w-full h-3 text-amber-500 overflow-visible pointer-events-none"
-                  viewBox="0 0 260 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3 9.5C55 2.5 160 -1.5 257 7.5C195 11.5 85 12.5 14 11.5"
-                    stroke="currentColor"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                    className="text-amber-500"
-                  />
-                </svg>
-              </span>
-            </h1>
+            {/* Primary Headline with React Bits MaskedHeading & Handcrafted SVG Underline */}
+            <div className="space-y-2">
+              <MaskedHeading
+                tag="h1"
+                text="One wholesale order. Both sides in sync."
+                src={amberGradient}
+                align="left"
+                weight={900}
+                tracking={-0.03}
+                lineHeight={1.08}
+                textScale={0.096}
+                fillScale={1.3}
+                parallax={24}
+                drift={14}
+                reveal="rise"
+                trigger="view"
+                duration={1.1}
+                stagger={0.08}
+                className="font-heading font-black text-neutral-950 dark:text-white"
+              />
+              <svg
+                className="w-48 sm:w-60 h-3 text-amber-500 overflow-visible pointer-events-none"
+                viewBox="0 0 260 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 9.5C55 2.5 160 -1.5 257 7.5C195 11.5 85 12.5 14 11.5"
+                  stroke="currentColor"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  className="text-amber-500"
+                />
+              </svg>
+            </div>
 
             {/* Practical Value Copy */}
             <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
