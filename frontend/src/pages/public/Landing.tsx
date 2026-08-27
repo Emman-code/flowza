@@ -170,7 +170,7 @@ export const Landing: React.FC = () => {
 
             {/* Practical Value Copy */}
             <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 leading-relaxed font-normal">
-              Flowza replaces WhatsApp messages, spreadsheets, and phone calls with a shared purchase-order workspace. Retailers place orders, wholesale suppliers confirm availability, and both sides track stock, fulfilment, and GST-ready invoices in one place.
+              A shared wholesale ordering workspace for retailers and suppliers with live stock reserves and GST-ready invoices.
             </p>
 
             {/* Primary Action Buttons (Nested Button-in-Button Architecture) */}
@@ -343,60 +343,51 @@ export const Landing: React.FC = () => {
       {/* 2. BUILT FOR BOTH SIDES OF WHOLESALE                      */}
       {/* ========================================================= */}
       <section id="roles" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
-        <div className="mb-10 text-center max-w-3xl mx-auto space-y-2">
+        <div className="mb-10 text-center max-w-2xl mx-auto space-y-2">
           <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
             Dual Workspace Architecture
           </span>
-          <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
+          <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
             Built for both sides of wholesale.
           </h2>
           <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">
-            Whether you buy for a store or supply one, Flowza keeps every order clear and organised.
+            Clean orders for stores. Confirmed fulfilment for suppliers.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {/* Card 1: For Retailers */}
-          <div className="p-6 sm:p-8 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-5 shadow-xs">
+          <div className="p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-4 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">
-                For Retailers
+              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">
+                Retail Stores
               </span>
-              <Store className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+              <Store className="w-4 h-4 text-amber-600 dark:text-amber-400" />
             </div>
 
-            <div className="space-y-1">
-              <h3 className="font-heading text-xl sm:text-2xl font-bold text-neutral-950 dark:text-white">
-                Order with clarity.
-              </h3>
-              <p className="text-xs text-neutral-500">
-                Stop guessing stock availability or losing track of WhatsApp order trails.
-              </p>
-            </div>
+            <h3 className="font-heading text-lg sm:text-xl font-bold text-neutral-950 dark:text-white">
+              Order with precision.
+            </h3>
 
-            <ul className="space-y-3 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300">
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span><strong>Send structured purchase orders in minutes</strong> — clean line items with pricing and delivery terms.</span>
+            <ul className="space-y-2 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300">
+              <li className="flex items-center gap-2">
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span>Structured purchase orders with clean line items & rates</span>
               </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span><strong>See confirmed stock before dispatch</strong> — know exactly what is reserved and shipped.</span>
+              <li className="flex items-center gap-2">
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span>Confirmed inventory locks before shipment</span>
               </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span><strong>Track order progress from confirmation to delivery</strong> — live fulfillment updates at every step.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span><strong>Receive GST-ready invoice records automatically</strong> — clean tax breakdowns with instant PDF downloads.</span>
+              <li className="flex items-center gap-2">
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span>Automated GST tax invoices with instant PDF downloads</span>
               </li>
             </ul>
 
-            <div className="pt-2">
+            <div className="pt-1">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-950 dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-1 text-xs font-mono font-bold text-neutral-950 dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
               >
                 <span>Launch Retailer Workspace →</span>
               </Link>
@@ -404,46 +395,37 @@ export const Landing: React.FC = () => {
           </div>
 
           {/* Card 2: For Wholesale Suppliers */}
-          <div className="p-6 sm:p-8 rounded-xl border border-neutral-950/20 dark:border-amber-500/30 bg-neutral-50 dark:bg-[#151720] space-y-5 shadow-xs">
+          <div className="p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-4 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-                For Wholesale Suppliers
+              <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                Wholesale Suppliers
               </span>
               <Truck className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             </div>
 
-            <div className="space-y-1">
-              <h3 className="font-heading text-xl sm:text-2xl font-bold text-neutral-950 dark:text-white">
-                Fulfil with confidence.
-              </h3>
-              <p className="text-xs text-neutral-500">
-                Eliminate unconfirmed orders, missed requests, and manual billing errors.
-              </p>
-            </div>
+            <h3 className="font-heading text-lg sm:text-xl font-bold text-neutral-950 dark:text-white">
+              Fulfil with confidence.
+            </h3>
 
-            <ul className="space-y-3 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300">
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span><strong>Receive clean, complete purchase orders</strong> — verified buyer details, quantities, and GSTINs.</span>
+            <ul className="space-y-2 text-xs sm:text-sm text-neutral-700 dark:text-neutral-300">
+              <li className="flex items-center gap-2">
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span>Verified buyer details, quantities, and GSTINs</span>
               </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span><strong>Confirm availability without phone calls</strong> — accept or adjust quantities with one click.</span>
+              <li className="flex items-center gap-2">
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span>One-click availability confirmation & inventory reserve</span>
               </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span><strong>Reserve stock as orders are accepted</strong> — prevent duplicate sales across multiple stores.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                <span><strong>Keep order records and invoices organised</strong> — permanent, searchable, auditable transaction history.</span>
+              <li className="flex items-center gap-2">
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span>Auditable transaction records & payment tracking</span>
               </li>
             </ul>
 
-            <div className="pt-2">
+            <div className="pt-1">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-950 dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-1 text-xs font-mono font-bold text-neutral-950 dark:text-white hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
               >
                 <span>Launch Supplier Workspace →</span>
               </Link>
@@ -456,27 +438,27 @@ export const Landing: React.FC = () => {
       {/* 3. REPLACE THE BACK-AND-FORTH (WHY FLOWZA SECTION)         */}
       {/* ========================================================= */}
       <section id="comparison" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
-        <div className="mb-10 text-center max-w-3xl mx-auto space-y-2">
+        <div className="mb-10 text-center max-w-2xl mx-auto space-y-2">
           <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
             Why Flowza
           </span>
-          <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
+          <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
             Replace the back-and-forth.
           </h2>
           <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">
-            Compare manual WhatsApp ordering with Flowza's shared purchase-order workspace.
+            Compare manual WhatsApp ordering with Flowza's shared workspace.
           </p>
         </div>
 
         {/* Structured Comparison Table */}
         <div className="max-w-4xl mx-auto rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] overflow-hidden shadow-xs">
           <div className="grid grid-cols-1 md:grid-cols-2 bg-neutral-100 dark:bg-[#161820] border-b border-neutral-200 dark:border-neutral-800 text-xs font-mono font-bold">
-            <div className="p-3.5 text-neutral-500 dark:text-neutral-400 uppercase tracking-wider flex items-center gap-2">
-              <X className="w-4 h-4 text-rose-500" />
+            <div className="p-3 text-neutral-500 dark:text-neutral-400 uppercase tracking-wider flex items-center gap-2">
+              <X className="w-3.5 h-3.5 text-rose-500" />
               <span>Without Flowza (WhatsApp & Calls)</span>
             </div>
-            <div className="p-3.5 text-neutral-950 dark:text-white uppercase tracking-wider flex items-center gap-2 border-t md:border-t-0 md:border-l border-neutral-200 dark:border-neutral-800 bg-amber-500/5">
-              <Check className="w-4 h-4 text-emerald-500" />
+            <div className="p-3 text-neutral-950 dark:text-white uppercase tracking-wider flex items-center gap-2 border-t md:border-t-0 md:border-l border-neutral-200 dark:border-neutral-800 bg-amber-500/5">
+              <Check className="w-3.5 h-3.5 text-emerald-500" />
               <span>With Flowza Shared Workspace</span>
             </div>
           </div>
@@ -484,41 +466,17 @@ export const Landing: React.FC = () => {
           <div className="divide-y divide-neutral-100 dark:divide-neutral-800 text-xs sm:text-sm">
             {comparisonRows.map((row, idx) => (
               <div key={idx} className="grid grid-cols-1 md:grid-cols-2">
-                <div className="p-4 text-neutral-600 dark:text-neutral-400 flex items-start gap-2.5">
+                <div className="p-3.5 text-neutral-600 dark:text-neutral-400 flex items-start gap-2">
                   <span className="text-rose-500 font-bold shrink-0 mt-0.5">•</span>
                   <span>{row.problem}</span>
                 </div>
-                <div className="p-4 text-neutral-950 dark:text-neutral-100 font-medium flex items-start gap-2.5 border-t md:border-t-0 md:border-l border-neutral-200/80 dark:border-neutral-800 bg-neutral-50/50 dark:bg-[#14161F]/50">
-                  <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                <div className="p-3.5 text-neutral-950 dark:text-neutral-100 font-medium flex items-start gap-2 border-t md:border-t-0 md:border-l border-neutral-200/80 dark:border-neutral-800 bg-neutral-50/50 dark:bg-[#14161F]/50">
+                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                   <span>{row.solution}</span>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Existing Partner Onboarding Callout */}
-        <div className="mt-8 max-w-4xl mx-auto p-4 sm:p-5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0">
-              <Users className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-xs sm:text-sm font-bold text-neutral-950 dark:text-white font-heading">
-                Start with your existing trading partners.
-              </h4>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                Invite your current retailers or wholesale suppliers and coordinate your next purchase order in minutes.
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => navigate('/login')}
-            className="px-4 py-2 rounded-lg bg-neutral-950 text-white dark:bg-amber-500 dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-amber-400 text-xs font-mono font-bold shrink-0 cursor-pointer shadow-xs"
-          >
-            Get Started →
-          </button>
         </div>
       </section>
 
@@ -526,65 +484,65 @@ export const Landing: React.FC = () => {
       {/* 4. HOW IT WORKS (4-STEP REFINED PROCESS)                  */}
       {/* ========================================================= */}
       <section id="how-it-works" className="scroll-reveal opacity-0 translate-y-6 transition-all duration-700 ease-out py-14 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-200 dark:border-neutral-800">
-        <div className="mb-10 space-y-2">
+        <div className="mb-10 text-center max-w-2xl mx-auto space-y-2">
           <span className="text-[11px] font-mono uppercase tracking-widest text-amber-700 dark:text-amber-400 font-bold">
-            Clear 4-Step Workflow
+            Order Lifecycle
           </span>
-          <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
-            From order to invoice, without the back-and-forth.
+          <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
+            How Flowza Works
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Step 1 */}
-          <div className="p-5 sm:p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-3 shadow-xs">
+          <div className="p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-2 shadow-xs">
             <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 block">
               01 / PLACE
             </span>
-            <h3 className="font-heading text-base sm:text-lg font-bold text-neutral-950 dark:text-white">
-              Retailer places order
+            <h3 className="font-heading text-base font-bold text-neutral-950 dark:text-white">
+              Retailer sends PO
             </h3>
             <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-              Select products and send a structured purchase order with quantities, unit prices, and delivery terms.
+              Create structured purchase order with line items, quantities, and pricing.
             </p>
           </div>
 
           {/* Step 2 */}
-          <div className="p-5 sm:p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-3 shadow-xs">
+          <div className="p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-2 shadow-xs">
             <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 block">
               02 / CONFIRM
             </span>
-            <h3 className="font-heading text-base sm:text-lg font-bold text-neutral-950 dark:text-white">
-              Supplier confirms availability
+            <h3 className="font-heading text-base font-bold text-neutral-950 dark:text-white">
+              Supplier confirms
             </h3>
             <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-              Review line items, confirm available quantities, and lock stock in database reserve immediately.
+              Review items and lock inventory in reserve immediately.
             </p>
           </div>
 
           {/* Step 3 */}
-          <div className="p-5 sm:p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-3 shadow-xs">
+          <div className="p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-2 shadow-xs">
             <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 block">
               03 / FULFIL
             </span>
-            <h3 className="font-heading text-base sm:text-lg font-bold text-neutral-950 dark:text-white">
-              Supplier prepares order
+            <h3 className="font-heading text-base font-bold text-neutral-950 dark:text-white">
+              Order dispatched
             </h3>
             <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-              Track state transitions as the order is picked, packed, and dispatched for destination delivery.
+              Track picking, packing, and destination delivery in real time.
             </p>
           </div>
 
           {/* Step 4 */}
-          <div className="p-5 sm:p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-3 shadow-xs">
+          <div className="p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12141A] space-y-2 shadow-xs">
             <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 block">
               04 / CLOSE
             </span>
-            <h3 className="font-heading text-base sm:text-lg font-bold text-neutral-950 dark:text-white">
-              Both sides receive record
+            <h3 className="font-heading text-base font-bold text-neutral-950 dark:text-white">
+              GST Invoice ready
             </h3>
             <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-              Confirm receipt, settle stock balances permanently, and download the GST-ready PDF invoice.
+              Settle balances and download compliant tax invoice PDF.
             </p>
           </div>
         </div>
